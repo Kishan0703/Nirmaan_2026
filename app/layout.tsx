@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Units | Unique Student Homes",
-  description: "All-inclusive student accommodation with everything you need to live, study and connect."
+  title: "Nirmaan | Hackathon Hosting",
+  description: "Design-led hackathon hosting for colleges, clubs, communities, and sponsors."
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

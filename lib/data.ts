@@ -1,98 +1,112 @@
 export const menuItems = [
-  { index: "01", label: "Student Homes", href: "#units", color: "bg-blue" },
-  { index: "02", label: "Our way of living", href: "#living", color: "bg-yellow" },
-  { index: "03", label: "Community", href: "#community", color: "bg-orange" },
-  { index: "04", label: "Contact", href: "#contact", color: "bg-green" }
+  { index: "01", label: "Host", href: "#host", color: "bg-blue" },
+  { index: "02", label: "Tracks", href: "#tracks", color: "bg-yellow" },
+  { index: "03", label: "Schedule", href: "#schedule", color: "bg-orange" },
+  { index: "04", label: "Sponsors", href: "#sponsors", color: "bg-green" }
 ];
 
-export const livingCards = [
+export const hostingCards = [
   {
-    title: "Community living spaces",
-    subtitle: "Open access, 24/7",
-    image: "/assets/images/1__Community_Living_Spaces.jpg",
+    title: "Plan",
+    subtitle: "Shape the build brief",
+    image: "/assets/images/nirmaan-hero.png",
     speed: "fast",
-    details: ["Fully equipped gym", "Self-service laundry room", "Social areas"]
+    details: ["Tracks, rules, and rubrics", "Timeline and prize structure", "Sponsor-ready challenge pages"]
   },
   {
-    title: "Security",
-    subtitle: "Day and night",
-    image: "/assets/images/2.-Security-e1777987828492.jpg",
+    title: "Launch",
+    subtitle: "Open the event cleanly",
+    image: "/assets/images/nirmaan-mentors.png",
     speed: "slow",
-    details: [
-      "24/7 CCTV Surveillance",
-      "7/7 Night patrol",
-      "High-security entrance door with electronic lock",
-      "Smart and secure access control"
-    ]
+    details: ["Landing page and registration", "Team creation and announcements", "Participant onboarding flow"]
   },
   {
-    title: "Support",
-    subtitle: "We've got you covered",
-    image: "/assets/images/3.-Support-1-e1768497722592.jpg",
+    title: "Run",
+    subtitle: "Keep the floor moving",
+    image: "/assets/images/nirmaan-demo-day.png",
     speed: "fast",
-    details: [
-      "24/7 Resident support",
-      "Check-in & Onboarding assistance",
-      "Fast request handling",
-      "Fast maintenance support",
-      "Continuous experience improvements"
-    ]
+    details: ["Check-ins and mentor slots", "Live support and checkpoints", "Submission windows that stay clear"]
   },
   {
-    title: "Smart Living",
-    subtitle: "Designed for everyday ease",
-    image: "/assets/images/Asset-1@2x-100.jpg",
+    title: "Judge",
+    subtitle: "Score without chaos",
+    image: "/assets/images/nirmaan-mentors.png",
     speed: "slow",
-    details: [
-      "Digital mobile key",
-      "Shared spaces reservations",
-      "Maintenance ticketing system",
-      "Laundry - EasyPay",
-      "Digital intercom"
-    ]
+    details: ["Reviewer assignment", "Rubric-led scoring", "Finalist selection and scoreboards"]
+  },
+  {
+    title: "Showcase",
+    subtitle: "Turn projects into proof",
+    image: "/assets/images/nirmaan-demo-day.png",
+    speed: "fast",
+    details: ["Project gallery and demo links", "Winner archive", "Certificates and community follow-up"]
   }
 ];
 
-export const unitFeatures = [
-  ["Fully furnished", "/assets/icons/mdi_living-room-outline-1.svg"],
-  ["Private workspace", "/assets/icons/streamline_workspace-desk-1.svg"],
-  ["Private kitchen", "/assets/icons/noun-kitchen-6600449-1-1.svg"],
-  ["Private bathroom", "/assets/icons/iconoir_bathroom-1.svg"],
-  ["Smart TV", "/assets/icons/hugeicons_tv-smart-1.svg"],
-  ["Air-Conditioning", "/assets/icons/mynaui_air-conditioner-1.svg"],
-  ["Super-Fast WiFi", "/assets/icons/humbleicons_wifi-1.svg"],
-  ["Balcony", "/assets/icons/material-symbols-light_balcony-rounded-1.svg"]
+export const eventStats = [
+  { value: "36 hrs", label: "Build sprint" },
+  { value: "420", label: "Builders capacity" },
+  { value: "18", label: "Mentors on call" },
+  { value: "₹8L", label: "Prize pool template" }
 ];
 
-export const galleryImages = [
-  "Flex_1-1-300x200.jpg",
-  "Vibe_4-1-300x200.jpg",
-  "Flex_2-1-300x200.jpg",
-  "Boost_4-1-300x200.jpg",
-  "02_Boost_1-300x200.jpg",
-  "5_Laundry-272x300.jpg",
-  "2_Gym-300x183.jpg",
-  "Flex_1-300x200.jpg",
-  "04_Vibe_2-300x200.jpg",
-  "02_Boost_4-300x200.jpg",
-  "03_Flex_3-300x200.jpg",
-  "01_Kick_1-300x200.jpg"
-].map((name) => `/assets/gallery/${name}`);
+export const liveMetrics = [
+  ["Registrations", "312 / 420"],
+  ["Teams formed", "64"],
+  ["Submissions", "118 drafts"],
+  ["Judges assigned", "24"]
+];
+
+export const scheduleItems = [
+  { time: "09:00", title: "Check-in opens", detail: "QR desk, badge pickup, team zones unlock", color: "bg-yellow" },
+  { time: "10:30", title: "Opening brief", detail: "Rules, tracks, sponsor prompts, judging rubric", color: "bg-blue text-white" },
+  { time: "13:00", title: "Team formation lock", detail: "Solo builders matched, team pages generated", color: "bg-green-light" },
+  { time: "18:00", title: "Mentor circuit", detail: "Design, AI, pitch, hardware, and business rooms", color: "bg-orange" },
+  { time: "23:30", title: "Checkpoint 01", detail: "Problem, prototype plan, risk notes, next actions", color: "bg-red text-white" },
+  { time: "09:30", title: "Submission freeze", detail: "Repos, decks, demo links, and project gallery", color: "bg-purple" },
+  { time: "12:00", title: "Judging sprint", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
+  { time: "16:00", title: "Demo day", detail: "Final pitches, winners, certificates, archive", color: "bg-green text-white" }
+];
+
+export const sponsorTiers = [
+  { name: "Blueprint Partner", slots: "2 slots", perks: ["Named challenge track", "Final judging seat", "Talent shortlist"] },
+  { name: "Build Floor Sponsor", slots: "4 slots", perks: ["Mentor room", "Booth module", "Dataset/API brief"] },
+  { name: "Community Backer", slots: "8 slots", perks: ["Prize support", "Workshop slot", "Project archive badge"] }
+];
+
+export const projectSubmissions = [
+  { team: "Team Cantilever", track: "Climate + Cities", status: "Prototype live", score: "86" },
+  { team: "Null Junction", track: "AI + Automation", status: "Judge review", score: "91" },
+  { team: "Ledger Lane", track: "FinTech", status: "Demo ready", score: "78" },
+  { team: "CareGrid", track: "Health", status: "Needs mentor", score: "72" },
+  { team: "Signal Forge", track: "Hardware", status: "Prototype live", score: "84" }
+];
+
+export const trackCards = [
+  { title: "AI + Automation", prompt: "Agents, workflows, and operational leverage", color: "bg-blue" },
+  { title: "Climate + Cities", prompt: "Resilient campuses, mobility, and public systems", color: "bg-green" },
+  { title: "FinTech", prompt: "Payments, trust, credit, and accessible finance", color: "bg-yellow" },
+  { title: "Health", prompt: "Care access, triage, wellness, and diagnostics", color: "bg-red" },
+  { title: "Open Innovation", prompt: "Wildcard builds with clear outcome metrics", color: "bg-purple" },
+  { title: "Design Systems", prompt: "Reusable interfaces, tokens, and product craft", color: "bg-orange" },
+  { title: "Hardware", prompt: "Connected devices, sensors, and physical prototypes", color: "bg-green-light" },
+  { title: "Social Impact", prompt: "Community tools with measurable local value", color: "bg-paper" }
+];
 
 export const values = [
   {
-    title: "For People",
-    image: "/assets/icons/people.svg",
-    copy: "Everything starts with how it feels to live here. From private spaces to shared experiences, people always come first."
+    title: "Built for Hosts",
+    mark: "01",
+    copy: "Reusable event templates, clean admin flows, and sponsor-ready pages help teams launch with structure from day one."
   },
   {
-    title: "By Design",
-    image: "/assets/icons/home-pencil-1.svg",
-    copy: "Nothing is accidental. Every detail is designed to support the way you live and the way you feel, every day."
+    title: "Built for Builders",
+    mark: "02",
+    copy: "Participants get clear rules, team formation, track context, and submissions that feel simple under pressure."
   },
   {
-    title: "With Care",
-    image: "/assets/icons/home-Hart-1.svg",
-    copy: "At the heart of everything we do. We care for the people who live here, the spaces we create, and the city we're part of."
+    title: "Built for Outcomes",
+    mark: "03",
+    copy: "Judging, demos, winner archives, and follow-up community loops turn one event into durable momentum."
   }
 ];
