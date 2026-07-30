@@ -1,24 +1,24 @@
 export const menuItems = [
-  { index: "01", label: "Host", href: "#host", color: "bg-blue" },
+  { index: "01", label: "Overview", href: "#overview", color: "bg-blue" },
   { index: "02", label: "Tracks", href: "#tracks", color: "bg-yellow" },
   { index: "03", label: "Schedule", href: "#schedule", color: "bg-orange" },
   { index: "04", label: "Sponsors", href: "#sponsors", color: "bg-green" }
 ];
 
-export const hostingCards = [
+export const eventFlowCards = [
   {
     title: "Plan",
     subtitle: "Shape the build brief",
     image: "/assets/images/nirmaan-hero.png",
     speed: "fast",
-    details: ["Tracks, rules, and rubrics", "Timeline and prize structure", "Sponsor-ready challenge pages"]
+    details: ["Tracks, rules, and rubrics", "Timeline and prize structure", "Challenge briefs published"]
   },
   {
     title: "Launch",
     subtitle: "Open the event cleanly",
     image: "/assets/images/nirmaan-mentors.png",
     speed: "slow",
-    details: ["Landing page and registration", "Team creation and announcements", "Participant onboarding flow"]
+    details: ["Registration opens", "Team creation and announcements", "Participant onboarding flow"]
   },
   {
     title: "Run",
@@ -47,7 +47,7 @@ export const eventStats = [
   { value: "36 hrs", label: "Build sprint" },
   { value: "420", label: "Builders capacity" },
   { value: "18", label: "Mentors on call" },
-  { value: "₹8L", label: "Prize pool template" }
+  { value: "₹8L", label: "Prize pool" }
 ];
 
 export const liveMetrics = [
@@ -95,9 +95,9 @@ export const trackCards = [
 
 export const values = [
   {
-    title: "Built for Hosts",
+    title: "Built for Teams",
     mark: "01",
-    copy: "Reusable event templates, clean admin flows, and sponsor-ready pages help teams launch with structure from day one."
+    copy: "Clear tracks, rules, mentor checkpoints, and submission expectations help teams build with focus from day one."
   },
   {
     title: "Built for Builders",

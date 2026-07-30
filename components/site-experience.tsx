@@ -4,7 +4,7 @@ import Image from "next/image";
 import { CSSProperties, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   eventStats,
-  hostingCards,
+  eventFlowCards,
   liveMetrics,
   menuItems,
   projectSubmissions,
@@ -59,14 +59,14 @@ function Rail({ onBook }: { onBook: () => void }) {
         onClick={onBook}
         className="mt-[14px] min-h-[86px] rounded-[10px] bg-purple px-4 text-center font-aeonik text-rail transition-transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-ink"
       >
-        Start Hosting
+        Join Nirmaan
       </button>
       <a href="#top" className="mt-[14px] flex h-[58px] items-center justify-between rounded-[10px] bg-ink px-[22px] text-white">
         <span className="font-aeonik text-rail">Nirmaan 2026</span>
         <GlobeIcon />
       </a>
       <div className="mt-[14px] flex h-[58px] items-center justify-around rounded-[10px] bg-ink text-white" aria-label="Social links">
-        <a href="#host" aria-label="Hosting" className="social-icon">h</a>
+        <a href="#overview" aria-label="Overview" className="social-icon">o</a>
         <a href="#tracks" aria-label="Tracks" className="social-icon">t</a>
         <a href="#contact" aria-label="Contact" className="social-icon">c</a>
       </div>
@@ -80,7 +80,7 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
       <Logo />
       <div className="flex items-center gap-2">
         <button type="button" onClick={onBook} className="rounded-pill bg-purple px-4 py-3 text-sm font-bold text-ink">
-          Start
+          Join
         </button>
         <button
           type="button"
@@ -148,10 +148,10 @@ function Hero({ onBook }: { onBook: () => void }) {
             ))}
           </h1>
           <p className="mt-[17px] max-w-[900px] font-aeonik text-[clamp(24px,1.667vw,32px)] font-bold leading-[1.1]">
-            Run a 36-hour design-led hackathon with tracks, teams, mentor rooms, live submissions, judging, sponsor booths, and demo day in one clean hosting flow.
+            A 36-hour design-led hackathon with tracks, teams, mentor rooms, live submissions, judging, sponsor booths, and demo day built into one high-energy event.
           </p>
           <div className="mt-[32px] flex flex-wrap items-center gap-4">
-            <CTA onClick={onBook}>Start Hosting</CTA>
+            <CTA onClick={onBook}>Join Nirmaan</CTA>
             <a href="#schedule" className="rounded-pill border border-white bg-paper px-[30px] py-[17px] text-body-xl font-bold text-ink transition-transform hover:-translate-y-0.5">View Playbook</a>
           </div>
         </div>
@@ -193,19 +193,19 @@ function EventCommandBoard() {
   );
 }
 
-function HostingMap() {
+function EventOverview() {
   return (
-    <section id="host" className="grid gap-gap lg:grid-cols-[.7fr_1fr]" data-reveal>
+    <section id="overview" className="grid gap-gap lg:grid-cols-[.7fr_1fr]" data-reveal>
       <div className="flex min-h-[520px] flex-col rounded-brand bg-yellow p-box">
-        <span className="label">Hosting</span>
+        <span className="label">Overview</span>
         <div className="mt-auto">
           <h2 className="font-display text-section">From idea to<br />demo day</h2>
           <p className="mt-[30px] max-w-[620px] text-body-xl">
-            Nirmaan handles event setup, tracks, registration, team formation, mentor flow, submissions, judging, and showcase so organizers can focus on the build floor.
+            Nirmaan brings builders through registration, team formation, challenge tracks, mentor rooms, submissions, judging, and final demos in one packed hackathon journey.
           </p>
         </div>
         <div className="mt-[30px]">
-          <p className="text-body-xl font-bold">Run it as</p>
+          <p className="text-body-xl font-bold">Event format</p>
           <div className="mt-5 flex flex-wrap items-center gap-4">
             <span className="rounded-brand bg-blue px-4 py-2 font-bold text-white">Campus</span>
             <span className="rounded-brand bg-orange px-4 py-2 font-bold">Online</span>
@@ -213,7 +213,7 @@ function HostingMap() {
           </div>
         </div>
       </div>
-      <EventCommandBoard />
+          <EventCommandBoard />
     </section>
   );
 }
@@ -234,28 +234,28 @@ function Marquee({ color, textColor, items }: { color: string; textColor: string
   );
 }
 
-function HostingEngine() {
+function EventFlow() {
   const [active, setActive] = useState(0);
-  const card = hostingCards[active];
+  const card = eventFlowCards[active];
   return (
     <section id="schedule" className="my-gap overflow-hidden" data-reveal>
       <div className="flex min-h-[calc(100dvh-125px)] gap-gap max-lg:flex-col">
         <div className="flex w-full flex-col rounded-brand bg-red-light p-box lg:w-[29.688vw] lg:flex-none">
           <div className="flex items-start justify-between">
-            <span className="label">Hosting Engine</span>
+            <span className="label">Event Flow</span>
             <div className="construction-mark" aria-hidden="true" />
           </div>
           <div className="mt-auto max-lg:mt-10">
             <h2 className="font-display text-section">One flow.<br />Every event layer.</h2>
             <p className="mt-[15px] text-body-xl font-bold">{card.title}: {card.subtitle}</p>
             <p className="mt-[15px] text-body-xl">
-              Nirmaan gives organizers a repeatable operating system for planning, launching, running, judging, and showcasing a hackathon without losing the creative energy of the room.
+              Nirmaan moves from kickoff to demo day through clear event phases, live checkpoints, mentor support, judging rounds, and a final showcase without losing the creative energy of the room.
             </p>
           </div>
         </div>
         <div className="min-w-0 flex-1 overflow-hidden">
           <div className="flex h-full transition-transform duration-700 ease-out" style={{ transform: `translateX(-${active * 100}%)` }}>
-            {hostingCards.map((item) => (
+            {eventFlowCards.map((item) => (
               <article key={item.title} className="flex w-full flex-none flex-col gap-[15px] px-0 lg:w-[28.125vw] lg:pr-gap">
                 <div className="relative min-h-[300px] flex-1 overflow-hidden rounded-brand">
                   <Image src={item.image} alt={item.title} fill className={`object-cover ${item.speed === "fast" ? "animate-drift-up" : "animate-drift-down"}`} sizes="(min-width: 1024px) 28vw, 100vw" />
@@ -273,8 +273,8 @@ function HostingEngine() {
             ))}
           </div>
           <div className="mt-5 inline-flex rounded-pill bg-green p-1">
-            <button aria-label="Previous hosting card" className="grid h-12 w-12 place-content-center rounded-full hover:bg-white/30" onClick={() => setActive((active - 1 + hostingCards.length) % hostingCards.length)}>←</button>
-            <button aria-label="Next hosting card" className="grid h-12 w-12 place-content-center rounded-full hover:bg-white/30" onClick={() => setActive((active + 1) % hostingCards.length)}>→</button>
+            <button aria-label="Previous event flow card" className="grid h-12 w-12 place-content-center rounded-full hover:bg-white/30" onClick={() => setActive((active - 1 + eventFlowCards.length) % eventFlowCards.length)}>←</button>
+            <button aria-label="Next event flow card" className="grid h-12 w-12 place-content-center rounded-full hover:bg-white/30" onClick={() => setActive((active + 1) % eventFlowCards.length)}>→</button>
           </div>
         </div>
       </div>
@@ -304,7 +304,7 @@ function Tracks({ onBook }: { onBook: () => void }) {
         <div className="mt-auto max-lg:mt-[30px]">
           <h2 className="font-display text-section">Challenges with<br />structure</h2>
           <p className="mt-10 text-body-xl">
-            Host multiple challenge tracks with prompts, datasets or APIs, sponsor briefs, scoring criteria, and deliverables that keep every team aligned.
+            Nirmaan teams choose from challenge tracks with prompts, datasets or APIs, sponsor briefs, scoring criteria, and deliverables that keep every build aligned.
           </p>
           <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-2">
             {trackCards.slice(0, 8).map((track) => (
@@ -334,9 +334,9 @@ function ScheduleBoard() {
     <section className="my-gap grid gap-gap lg:grid-cols-[.9fr_1.1fr]" data-reveal>
       <div className="rounded-brand bg-orange p-box">
         <span className="label bg-paper">Schedule</span>
-        <h2 className="mt-[90px] font-display text-section">A run-of-show<br />that hosts can trust</h2>
+        <h2 className="mt-[90px] font-display text-section">A run-of-show<br />for every builder</h2>
         <p className="mt-6 max-w-[620px] text-body-xl">
-          Every Nirmaan event ships with a ready operating schedule: check-in, launch brief, team lock, mentor checkpoints, submission freeze, judging, and demo day.
+          The Nirmaan schedule keeps the hackathon moving: check-in, launch brief, team lock, mentor checkpoints, submission freeze, judging, and demo day.
         </p>
         <div className="mt-8 grid grid-cols-2 gap-3">
           {["36h sprint", "2 checkpoints", "5 mentor rooms", "1 demo stage"].map((item) => (
@@ -371,7 +371,7 @@ function SubmissionBoard() {
         <span className="label border-white bg-paper text-ink">Submissions</span>
         <h2 className="mt-[90px] font-display text-section">Projects move from draft to demo without chaos.</h2>
         <p className="mt-6 max-w-[680px] text-body-xl">
-          Teams upload repos, decks, videos, prototype links, and impact notes. Judges see rubric-ready work, hosts see the live event state.
+          Teams submit repos, decks, videos, prototype links, and impact notes. Judges see rubric-ready work while the leaderboard tracks the live event state.
         </p>
         <div className="mt-8 overflow-hidden rounded-[24px] border border-white/70">
           {projectSubmissions.map((project) => (
@@ -403,10 +403,10 @@ function SponsorWall() {
         <div className="flex flex-wrap items-end justify-between gap-5">
           <div>
             <span className="label bg-paper">Sponsors</span>
-            <h2 className="mt-10 font-display text-section">Sponsor modules ready before launch.</h2>
+            <h2 className="mt-10 font-display text-section">Sponsors shape the build floor.</h2>
           </div>
           <p className="max-w-[560px] text-body-xl font-bold">
-            Sponsor booths, challenge prompts, API/dataset briefs, prize pools, judging seats, and talent follow-up are packaged into reusable hosting modules.
+            Sponsor booths, challenge prompts, API or dataset briefs, prize pools, judging seats, and talent follow-up make Nirmaan useful beyond demo day.
           </p>
         </div>
         <div className="mt-10 grid gap-gap lg:grid-cols-3">
@@ -485,11 +485,11 @@ function Footer() {
       </div>
       <div className="mt-[30px] flex justify-between gap-5 max-lg:flex-col">
         <div>
-          <p className="font-display text-[20px] font-black leading-[1.1]">© 2026 Nirmaan Hackathon Hosting</p>
-          <p className="mt-[10px] text-sm font-bold">Design-led event infrastructure for colleges, clubs, communities, and sponsors.</p>
+          <p className="font-display text-[20px] font-black leading-[1.1]">© 2026 Nirmaan Hackathon</p>
+          <p className="mt-[10px] text-sm font-bold">A design-led hackathon for builders, mentors, sponsors, and campus communities.</p>
         </div>
         <ul className="flex list-none flex-wrap gap-[10px] p-0">
-          {["Host", "Tracks", "Schedule"].map((item) => (
+          {["Overview", "Tracks", "Schedule"].map((item) => (
             <li key={item}><a className="block rounded-pill border border-ink px-3 py-2 text-sm transition-colors hover:bg-ink hover:text-white" href="#top">{item}</a></li>
           ))}
         </ul>
@@ -498,7 +498,7 @@ function Footer() {
   );
 }
 
-function HostingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+function ParticipationModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const initialFocusRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -524,28 +524,28 @@ function HostingModal({ open, onClose }: { open: boolean; onClose: () => void })
 
   return (
     <aside aria-hidden={!open} className={`modal-shell ${open ? "open" : ""}`}>
-      <button type="button" className="absolute inset-0 bg-ink/50" aria-label="Close hosting form" onClick={onClose} />
-      <div role="dialog" aria-modal="true" aria-labelledby="hosting-title" className="modal-panel">
+      <button type="button" className="absolute inset-0 bg-ink/50" aria-label="Close participation form" onClick={onClose} />
+      <div role="dialog" aria-modal="true" aria-labelledby="participation-title" className="modal-panel">
         <button type="button" onClick={onClose} aria-label="Close" className="absolute right-6 top-6 z-20 grid h-14 w-14 place-content-center rounded-full bg-ink text-white">
           <CloseIcon />
         </button>
         <div className="flex items-center justify-between bg-orange px-6 py-[30px] text-yellow">
           <DownArrows />
-          <h2 id="hosting-title" className="font-display text-section text-ink">Start hosting</h2>
+          <h2 id="participation-title" className="font-display text-section text-ink">Join Nirmaan</h2>
           <DownArrows />
         </div>
         <form onSubmit={handleSubmit} className="grid gap-4 p-box">
-          <label className="field">Organizer name<input ref={initialFocusRef} name="organizerName" required /></label>
-          <label className="field">Organization / community<input name="organization" required /></label>
+          <label className="field">Name<input ref={initialFocusRef} name="name" required /></label>
+          <label className="field">College / organization / community<input name="organization" required /></label>
           <label className="field">Email<input name="email" type="email" required /></label>
           <div className="grid gap-4 md:grid-cols-2">
             <label className="field">Expected participants<input name="participants" type="number" min="1" required /></label>
             <label className="field">Target month<input name="targetMonth" type="month" required /></label>
           </div>
-          <label className="field">Mode<select name="mode" defaultValue="Campus"><option>Campus</option><option>Online</option><option>Hybrid</option></select></label>
-          <label className="field">Notes<textarea name="notes" rows={4} placeholder="Tell us about your tracks, sponsors, or event goals." /></label>
+          <label className="field">I want to join as<select name="role" defaultValue="Builder"><option>Builder</option><option>Mentor</option><option>Sponsor</option><option>Volunteer</option><option>Campus partner</option></select></label>
+          <label className="field">Notes<textarea name="notes" rows={4} placeholder="Tell us your track interest, team size, or how you want to support Nirmaan." /></label>
           <button className="mt-2 rounded-pill bg-green px-8 py-4 text-body-xl font-bold text-ink transition-transform hover:-translate-y-0.5" type="submit">
-            Request hosting setup
+            Submit interest
           </button>
         </form>
       </div>
@@ -567,9 +567,9 @@ export function SiteExperience() {
       <main className="relative ml-0 overflow-hidden px-0 pt-[75px] lg:ml-[calc(theme(spacing.rail)+25px)] lg:px-0 lg:pr-5 lg:pt-[30px]">
         <article className="home">
           <Hero onBook={() => setModalOpen(true)} />
-          <HostingMap />
+          <EventOverview />
           <Marquee color="bg-red" textColor="text-yellow" items={marqueeOne} />
-          <HostingEngine />
+          <EventFlow />
           <ScheduleBoard />
           <Marquee color="bg-blue" textColor="text-green-light" items={marqueeTwo} />
           <Tracks onBook={() => setModalOpen(true)} />
@@ -581,7 +581,7 @@ export function SiteExperience() {
           <Footer />
         </article>
       </main>
-      <HostingModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <ParticipationModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </>
   );
 }

@@ -1,5 +1,7 @@
 # Nirmaan Hackathon Website
 
+Nirmaan is a design-led hackathon event for builders, students, mentors, sponsors, and campus communities. This website presents the event experience, tracks, schedule, sponsors, submissions, and demo-day flow.
+
 The visual references for the site are available in the [`reference`](./reference) folder.
 
 ## Tech Stack
