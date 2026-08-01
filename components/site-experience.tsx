@@ -124,92 +124,100 @@ function InteractiveTiltCard({ children, className = "" }: { children: React.Rea
   );
 }
 
-// Side Rail Navigation
+// Side Rail Navigation (Claymorphic & Compact to prevent vertical overflow)
 function Rail({ onBook, isMuted, toggleMute }: { onBook: () => void; isMuted: boolean; toggleMute: () => void }) {
   return (
-    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[calc(theme(spacing.rail)+25px)] flex-col px-[22px] py-[30px] lg:flex">
-      <Logo className="mb-[20px]" sizeClass="text-[clamp(26px,1.8vw,34px)]" />
+    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[calc(theme(spacing.rail)+25px)] flex-col px-[22px] py-[25px] lg:flex justify-between border-r border-ink/5 bg-paper/20 backdrop-blur-md">
       
-      {/* Sound toggle button */}
-      <button
-        onClick={toggleMute}
-        onMouseEnter={() => playRetroSound("bleep", isMuted)}
-        className="mb-[14px] flex h-[50px] items-center justify-center gap-2 rounded-[10px] bg-ink text-white transition-all hover:bg-purple"
-        title={isMuted ? "Unmute Retro Sounds" : "Mute Retro Sounds"}
-      >
-        {isMuted ? (
-          <>
-            <VolumeX size={18} />
-            <span className="font-aeonik text-xs uppercase font-bold">Muted</span>
-          </>
-        ) : (
-          <>
-            <Volume2 size={18} className="animate-pulse" />
-            <span className="font-aeonik text-xs uppercase font-bold text-green-light">Audio ON</span>
-          </>
-        )}
-      </button>
+      {/* Top Header Section */}
+      <div className="flex flex-col gap-4">
+        <Logo className="w-full" />
+        
+        {/* Sound toggle button */}
+        <button
+          onClick={toggleMute}
+          onMouseEnter={() => playRetroSound("bleep", isMuted)}
+          className="clay-card flex h-[44px] items-center justify-center gap-2 rounded-[12px] bg-ink text-white hover:bg-purple"
+          title={isMuted ? "Unmute Retro Sounds" : "Mute Retro Sounds"}
+        >
+          {isMuted ? (
+            <>
+              <VolumeX size={14} />
+              <span className="font-aeonik text-[10px] uppercase font-bold tracking-wider">Muted</span>
+            </>
+          ) : (
+            <>
+              <Volume2 size={14} className="animate-pulse" />
+              <span className="font-aeonik text-[10px] uppercase font-bold tracking-wider text-green-light">Audio ON</span>
+            </>
+          )}
+        </button>
+      </div>
 
-      <nav aria-label="Main navigation" className="flex flex-col gap-[10px]">
+      {/* Main compact Navigation stack */}
+      <nav aria-label="Main navigation" className="flex flex-col gap-[8px] my-auto">
         {menuItems.map((item) => (
           <a
             key={item.index}
             href={item.href}
             onMouseEnter={() => playRetroSound("bleep", isMuted)}
             onClick={() => playRetroSound("select", isMuted)}
-            className={`${item.color} group arcade-panel flex h-[clamp(110px,8vw,140px)] flex-col justify-between rounded-[10px] px-[16px] py-[14px] text-ink`}
+            className={`${item.color} group clay-card flex h-[52px] items-center justify-between rounded-[12px] px-[16px] py-[8px] text-ink`}
           >
-            <span className="flex items-center justify-between font-aeonik text-rail">
-              {item.index}
-              <ArrowUpRight className="h-[16px] w-[16px] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </span>
-            <span className="max-w-[120px] font-aeonik text-rail uppercase font-bold tracking-tight">{item.label}</span>
+            <div className="flex items-center gap-3">
+              <span className="font-display text-xs opacity-60">{item.index}</span>
+              <span className="font-display text-[13px] uppercase font-black tracking-wider">{item.label}</span>
+            </div>
+            <ArrowUpRight className="h-[14px] w-[14px] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
         ))}
       </nav>
       
-      <button
-        type="button"
-        onClick={() => {
-          playRetroSound("coin", isMuted);
-          onBook();
-        }}
-        onMouseEnter={() => playRetroSound("bleep", isMuted)}
-        className="mt-[10px] min-h-[70px] arcade-panel rounded-[10px] bg-purple px-4 text-center font-display text-lg uppercase text-white hover:bg-purple-light hover:text-ink focus:outline-none"
-      >
-        Insert Coin
-      </button>
+      {/* Bottom controls */}
+      <div className="flex flex-col gap-[8px]">
+        <button
+          type="button"
+          onClick={() => {
+            playRetroSound("coin", isMuted);
+            onBook();
+          }}
+          onMouseEnter={() => playRetroSound("bleep", isMuted)}
+          className="h-[52px] clay-card rounded-[12px] bg-purple px-4 text-center font-display text-[14px] uppercase font-black text-white hover:bg-purple-light hover:text-ink focus:outline-none"
+        >
+          Insert Coin
+        </button>
 
-      <a
-        href="#top"
-        onMouseEnter={() => playRetroSound("bleep", isMuted)}
-        onClick={() => playRetroSound("select", isMuted)}
-        className="mt-[10px] flex h-[50px] items-center justify-between rounded-[10px] bg-ink px-[18px] text-white"
-      >
-        <span className="font-aeonik text-[11px] uppercase tracking-wider font-bold text-gray">Nirmaan 2026</span>
-        <GlobeIcon />
-      </a>
-      
-      <div className="mt-[10px] flex h-[50px] items-center justify-around rounded-[10px] bg-ink text-white" aria-label="Social links">
-        <a href="#overview" onClick={() => playRetroSound("select", isMuted)} className="hover:text-green-light transition-colors"><Gamepad2 size={16} /></a>
-        <a href="#tracks" onClick={() => playRetroSound("select", isMuted)} className="hover:text-yellow transition-colors"><Swords size={16} /></a>
-        <a href="#contact" onClick={() => playRetroSound("select", isMuted)} className="hover:text-pink transition-colors"><Coins size={16} /></a>
+        <a
+          href="#top"
+          onMouseEnter={() => playRetroSound("bleep", isMuted)}
+          onClick={() => playRetroSound("select", isMuted)}
+          className="flex h-[44px] items-center justify-between rounded-[12px] clay-card bg-paper text-ink px-[18px]"
+        >
+          <span className="font-aeonik text-[10px] uppercase tracking-wider font-bold text-gray-700">Nirmaan 2026</span>
+          <GlobeIcon />
+        </a>
+        
+        <div className="flex h-[44px] items-center justify-around rounded-[12px] clay-card bg-paper text-ink" aria-label="Social links">
+          <a href="#overview" onClick={() => playRetroSound("select", isMuted)} className="hover:text-green-light transition-colors"><Gamepad2 size={15} /></a>
+          <a href="#tracks" onClick={() => playRetroSound("select", isMuted)} className="hover:text-yellow transition-colors"><Swords size={15} /></a>
+          <a href="#contact" onClick={() => playRetroSound("select", isMuted)} className="hover:text-pink transition-colors"><Coins size={15} /></a>
+        </div>
       </div>
     </header>
   );
 }
 
-// Mobile Top Bar
+// Mobile Header (Claymorphic)
 function MobileHeader({ open, setOpen, onBook, isMuted, toggleMute }: { open: boolean; setOpen: (value: boolean) => void; onBook: () => void; isMuted: boolean; toggleMute: () => void }) {
   return (
-    <header className="fixed left-0 top-0 z-40 flex w-full items-center justify-between bg-paper border-b-4 border-ink px-5 py-4 lg:hidden">
+    <header className="fixed left-0 top-0 z-40 flex w-full items-center justify-between bg-paper/80 backdrop-blur-md border-b border-ink/5 px-5 py-3 lg:hidden">
       <Logo />
       <div className="flex items-center gap-2">
         <button
           onClick={toggleMute}
           className="rounded-full bg-ink p-2 text-white"
         >
-          {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
         </button>
         <button
           type="button"
@@ -217,7 +225,7 @@ function MobileHeader({ open, setOpen, onBook, isMuted, toggleMute }: { open: bo
             playRetroSound("coin", isMuted);
             onBook();
           }}
-          className="arcade-panel rounded-pill bg-purple px-4 py-2 text-xs font-bold uppercase text-white active:translate-y-0.5"
+          className="clay-card rounded-pill bg-purple px-4 py-2 text-xs font-display uppercase text-white font-black"
         >
           Insert Coin
         </button>
@@ -234,7 +242,7 @@ function MobileHeader({ open, setOpen, onBook, isMuted, toggleMute }: { open: bo
           <span className="hamburger" />
         </button>
       </div>
-      <div className={`mobile-menu ${open ? "open" : ""} border-b-4 border-ink`}>
+      <div className={`mobile-menu ${open ? "open" : ""} border-b border-ink/5`}>
         {menuItems.map((item) => (
           <a
             key={item.index}
@@ -243,7 +251,7 @@ function MobileHeader({ open, setOpen, onBook, isMuted, toggleMute }: { open: bo
               playRetroSound("select", isMuted);
               setOpen(false);
             }}
-            className={`${item.color} border-2 border-ink rounded-[10px] p-4 font-display text-xl uppercase`}
+            className={`${item.color} clay-card rounded-[12px] p-4 font-display text-lg uppercase`}
           >
             {item.label}
           </a>
@@ -253,10 +261,10 @@ function MobileHeader({ open, setOpen, onBook, isMuted, toggleMute }: { open: bo
   );
 }
 
-// Interactive Hero section with Joysticks and 3D Tilt panel
+// Hero section
 function Hero({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
   return (
-    <section id="top" className="relative grid min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-4 border-ink lg:min-h-[calc(100dvh-50px)]">
+    <section id="top" className="relative grid min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft lg:min-h-[calc(100dvh-50px)] bg-paper">
       <Image
         src="/assets/images/nirmaan-hero.png"
         alt="Hackathon teams building prototypes in a design studio"
@@ -265,8 +273,8 @@ function Hero({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
         className="object-cover opacity-60 filter grayscale contrast-125"
         sizes="(min-width: 1024px) 88vw, 100vw"
       />
-      <div className="arcade-grid absolute inset-0 mix-blend-multiply opacity-70" />
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+      <div className="arcade-grid absolute inset-0 mix-blend-multiply opacity-50" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent" />
       
       {/* Scanline overlay for retro effect */}
       <div className="crt-scanline" />
@@ -278,7 +286,7 @@ function Hero({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="rounded-pill border-2 border-white bg-ink px-5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-yellow"
+            className="rounded-pill border border-white/20 bg-ink/75 px-5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-yellow shadow-md"
           >
             <Radio size={14} className="animate-pulse text-red" />
             Nirmaan 2026 // Lobby Open
@@ -286,21 +294,21 @@ function Hero({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
 
           {/* Interactive 3D Live score panel */}
           <InteractiveTiltCard className="w-full max-w-[390px]">
-            <div className="crt-screen crt-flicker p-5 text-ink shadow-soft border-2 border-ink bg-[#051c09]">
+            <div className="crt-screen crt-flicker p-5 text-ink shadow-soft bg-[#051c09]">
               {/* Scanline inside CRT */}
               <div className="crt-scanline" />
               
               <div className="flex items-center justify-between">
-                <span className="label bg-green-light border-2 border-ink text-ink font-bold text-xs uppercase flex items-center gap-1.5 shadow-none">
+                <span className="rounded-pill bg-green-light border border-white/20 px-3 py-1 text-ink font-display text-[10px] uppercase font-black flex items-center gap-1.5 shadow-none">
                   <Gamepad2 size={12} className="animate-bounce" /> Live Stats
                 </span>
-                <span className="pulse-dot border-2 border-ink" aria-hidden="true" />
+                <span className="pulse-dot" aria-hidden="true" />
               </div>
               <div className="mt-5 grid grid-cols-2 gap-3">
                 {liveMetrics.map(([label, value]) => (
-                  <div key={label} className="rounded-[10px] border-2 border-ink bg-[#0e3b16] p-3 text-green-light">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-green-light/75">{label}</p>
-                    <p className="mt-1 font-display text-[20px] leading-none glow-green tracking-tighter uppercase">{value}</p>
+                  <div key={label} className="rounded-[12px] bg-[#0c2f12] p-3 text-green-light shadow-inner">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-green-light/70">{label}</p>
+                    <p className="mt-1 font-display text-[18px] leading-none glow-green tracking-tighter uppercase font-black">{value}</p>
                   </div>
                 ))}
               </div>
@@ -333,15 +341,14 @@ function Hero({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
                 onBook();
               }}
               onMouseEnter={() => playRetroSound("bleep", isMuted)}
-              className="arcade-panel group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-pill bg-purple px-[30px] py-[15px] text-white font-display text-lg uppercase active:translate-y-1"
+              className="clay-card rounded-pill bg-purple px-[30px] py-[15px] text-white font-display text-lg uppercase font-black"
             >
-              <Coins size={20} className="animate-spin" />
-              <span>Insert Coin</span>
+              Insert Coin
             </button>
             <a
               href="#schedule"
               onClick={() => playRetroSound("select", isMuted)}
-              className="rounded-pill border-2 border-white bg-paper/10 hover:bg-paper/25 backdrop-blur px-[30px] py-[15px] text-body-xl font-bold text-white transition-transform hover:-translate-y-0.5 text-center"
+              className="clay-card rounded-pill bg-paper text-ink px-[30px] py-[15px] text-body-xl font-bold transition-transform hover:-translate-y-0.5 text-center"
             >
               View Quests
             </a>
@@ -351,9 +358,9 @@ function Hero({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
         {/* bottom info board */}
         <div className="grid gap-3 lg:grid-cols-4">
           {eventStats.map((stat) => (
-            <div key={stat.label} className="rounded-[18px] border-2 border-white/60 bg-ink/75 px-5 py-4 backdrop-blur hover:border-yellow transition-colors group">
-              <p className="font-display text-[clamp(28px,2vw,36px)] leading-none text-yellow group-hover:text-green-light transition-colors">{stat.value}</p>
-              <p className="mt-2 text-xs font-bold uppercase tracking-wider text-gray">{stat.label}</p>
+            <div key={stat.label} className="clay-card rounded-[18px] bg-ink/65 backdrop-blur px-5 py-4 hover:border-yellow transition-colors group">
+              <p className="font-display text-[clamp(28px,2vw,36px)] leading-none text-yellow group-hover:text-green-light transition-colors uppercase">{stat.value}</p>
+              <p className="mt-2 text-xs font-bold uppercase tracking-wider text-gray-300">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -365,18 +372,18 @@ function Hero({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
 // Simulated map / command board styled like an arcade dungeon route
 function EventCommandBoard() {
   const nodes = [
-    { label: "Spawn", className: "left-[10%] top-[30%] bg-yellow border-2 border-ink shadow-[4px_4px_0_#000]" },
-    { label: "Lobby", className: "left-[32%] top-[15%] bg-blue text-white border-2 border-ink shadow-[4px_4px_0_#000]" },
-    { label: "Speedrun", className: "left-[50%] top-[60%] bg-red text-white border-2 border-ink shadow-[4px_4px_0_#000]" },
-    { label: "Boss fight", className: "left-[70%] top-[25%] bg-orange border-2 border-ink shadow-[4px_4px_0_#000]" },
-    { label: "Victory", className: "left-[86%] top-[65%] bg-green-light border-2 border-ink shadow-[4px_4px_0_#000]" }
+    { label: "Spawn", className: "left-[10%] top-[30%] bg-yellow border-white/20 shadow-md" },
+    { label: "Lobby", className: "left-[32%] top-[15%] bg-blue text-white border-white/20 shadow-md" },
+    { label: "Speedrun", className: "left-[50%] top-[60%] bg-red text-white border-white/20 shadow-md" },
+    { label: "Boss fight", className: "left-[70%] top-[25%] bg-orange border-white/20 shadow-md" },
+    { label: "Victory", className: "left-[86%] top-[65%] bg-green-light border-white/20 shadow-md" }
   ];
 
   return (
-    <div className="crt-screen crt-flicker relative min-h-[520px] overflow-hidden rounded-brand border-4 border-ink bg-[#0c180f]">
+    <div className="crt-screen crt-flicker relative min-h-[520px] overflow-hidden rounded-brand bg-[#0c180f]">
       {/* CRT scanline and grid */}
       <div className="crt-scanline" />
-      <div className="absolute inset-0 opacity-20 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)]" style={{ backgroundSize: "100% 8px" }} />
+      <div className="absolute inset-0 opacity-20 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.22)_50%)]" style={{ backgroundSize: "100% 8px" }} />
       <div className="map-grid absolute inset-0 opacity-25 mix-blend-screen" />
       
       {/* Route line */}
@@ -391,17 +398,17 @@ function EventCommandBoard() {
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: index * 0.15 }}
-          whileHover={{ scale: 1.1, rotate: 2 }}
-          className={`event-node absolute ${node.className} cursor-pointer`}
+          whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 1 : -1 }}
+          className={`clay-card absolute ${node.className} cursor-pointer px-4 py-2.5 rounded-full`}
           style={{ "--node-index": index } as CSSProperties}
         >
-          <span className="block text-[11px] font-display uppercase leading-none font-bold text-ink">{node.label}</span>
+          <span className="block text-[11px] font-display uppercase leading-none font-black text-ink">{node.label}</span>
         </motion.div>
       ))}
 
       {/* Retro joystick visual detail */}
-      <div className="absolute top-6 right-6 flex items-center gap-3 rounded-[12px] bg-[#142818] p-3 border-2 border-ink">
-        <div className="relative h-10 w-10 rounded-full bg-[#1b3320] border-2 border-ink">
+      <div className="absolute top-6 right-6 flex items-center gap-3 rounded-[12px] bg-[#142818] p-3 border border-white/5">
+        <div className="relative h-10 w-10 rounded-full bg-[#1b3320] shadow-inner">
           <motion.div
             animate={{
               x: [0, 8, -8, 4, -4, 0],
@@ -412,14 +419,14 @@ function EventCommandBoard() {
               duration: 4,
               ease: "easeInOut"
             }}
-            className="absolute top-1/2 left-1/2 -mt-3.5 -ml-3.5 h-7 w-7 rounded-full bg-red border-2 border-ink shadow-md cursor-grab active:scale-95"
+            className="absolute top-1/2 left-1/2 -mt-3 -ml-3 h-6 w-6 rounded-full bg-red border border-white/20 shadow-md cursor-grab active:scale-95"
           />
         </div>
         <span className="font-display text-[10px] text-green-light tracking-wide uppercase">Dungeon Map</span>
       </div>
 
-      <div className="absolute bottom-8 left-8 rounded-[12px] border-2 border-ink bg-paper px-5 py-4 text-ink shadow-soft">
-        <p className="font-display text-[14px] leading-tight uppercase flex items-center gap-1.5">
+      <div className="absolute bottom-8 left-8 rounded-[12px] clay-card bg-paper px-5 py-4 text-ink">
+        <p className="font-display text-[14px] leading-tight uppercase flex items-center gap-1.5 font-black">
           <Terminal size={14} /> LIVE BOARD
         </p>
         <span className="text-xs text-gray-700">Explore the game stages to qualify</span>
@@ -436,21 +443,21 @@ function EventOverview() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="flex min-h-[520px] flex-col rounded-brand bg-yellow border-4 border-ink p-box shadow-[8px_8px_0_#000]"
+        className="flex min-h-[520px] flex-col rounded-brand bg-yellow p-box clay-card"
       >
-        <span className="label bg-paper border-2 border-ink font-bold text-xs uppercase">Campaign</span>
+        <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Campaign</span>
         <div className="mt-auto">
           <h2 className="font-display text-section uppercase tracking-tight text-ink">From spawn to victory</h2>
-          <p className="mt-[20px] max-w-[620px] text-body-xl text-ink font-medium">
+          <p className="mt-[20px] max-w-[620px] text-body-xl text-ink font-semibold leading-snug">
             Nirmaan maps out the entire build cycle. Level up your team from lobby matchmakers to final arena pitchers.
           </p>
         </div>
-        <div className="mt-[30px]">
+        <div className="mt-[30px] border-t border-ink/10 pt-5">
           <p className="text-sm font-bold uppercase tracking-wider text-ink/70">Console formats</p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <span className="rounded-[10px] border-2 border-ink bg-blue px-4 py-2 font-display text-xs uppercase text-white shadow-[2px_2px_0_#000]">Campus</span>
-            <span className="rounded-[10px] border-2 border-ink bg-orange px-4 py-2 font-display text-xs uppercase text-ink shadow-[2px_2px_0_#000]">Online</span>
-            <span className="rounded-[10px] border-2 border-ink bg-green px-4 py-2 font-display text-xs uppercase text-ink shadow-[2px_2px_0_#000]">Hybrid</span>
+            <span className="rounded-[10px] bg-blue px-4 py-2 font-display text-xs uppercase text-white clay-card">Campus</span>
+            <span className="rounded-[10px] bg-orange px-4 py-2 font-display text-xs uppercase text-ink clay-card">Online</span>
+            <span className="rounded-[10px] bg-green px-4 py-2 font-display text-xs uppercase text-ink clay-card">Hybrid</span>
           </div>
         </div>
       </motion.div>
@@ -463,12 +470,12 @@ function EventOverview() {
 function Marquee({ color, textColor, items }: { color: string; textColor: string; items: string[] }) {
   const repeated = [...items, ...items, ...items, ...items];
   return (
-    <section className={`my-gap overflow-hidden border-y-4 border-ink rounded-none ${color}`} aria-label={items.join(", ")}>
+    <section className={`my-gap overflow-hidden border-y border-ink/5 rounded-none ${color}`} aria-label={items.join(", ")}>
       <div className="flex w-max animate-marquee items-center gap-8 py-[18px]">
         {repeated.map((item, index) => (
-          <div key={`${item}-${index}`} className={`flex items-center gap-8 font-display text-[18px] uppercase font-bold leading-none ${textColor}`}>
+          <div key={`${item}-${index}`} className={`flex items-center gap-8 font-display text-[16px] uppercase font-black leading-none ${textColor}`}>
             <span className="whitespace-nowrap">{item}</span>
-            <span className="h-[12px] w-[12px] rotate-45 bg-current" />
+            <span className="h-[10px] w-[10px] rotate-45 bg-current opacity-70" />
           </div>
         ))}
       </div>
@@ -476,7 +483,7 @@ function Marquee({ color, textColor, items }: { color: string; textColor: string
   );
 }
 
-// Redesigned sliding card carousel using framer-motion drag gestures
+// Redesigned sliding card carousel using claymorphism cards
 function EventFlow() {
   const [active, setActive] = useState(0);
   const card = eventFlowCards[active];
@@ -484,15 +491,15 @@ function EventFlow() {
   return (
     <section id="schedule" className="my-gap overflow-hidden" data-reveal>
       <div className="flex min-h-[calc(100dvh-125px)] gap-gap max-lg:flex-col">
-        <div className="flex w-full flex-col rounded-brand bg-red-light border-4 border-ink p-box lg:w-[29.688vw] lg:flex-none shadow-[8px_8px_0_#000]">
+        <div className="flex w-full flex-col rounded-brand bg-red-light p-box lg:w-[29.688vw] lg:flex-none clay-card text-white">
           <div className="flex items-start justify-between">
-            <span className="label bg-paper border-2 border-ink font-bold text-xs uppercase">Quest Log</span>
+            <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase text-ink shadow-sm">Quest Log</span>
             <div className="construction-mark" aria-hidden="true" />
           </div>
           <div className="mt-auto max-lg:mt-10">
             <h2 className="font-display text-section uppercase text-white">Event flow layers</h2>
-            <p className="mt-[15px] text-lg font-bold text-yellow uppercase">Level {active + 1}: {card.title}</p>
-            <p className="mt-[10px] text-body-xl text-white">
+            <p className="mt-[15px] text-lg font-display uppercase font-black text-yellow">Level {active + 1}: {card.title}</p>
+            <p className="mt-[10px] text-body-xl text-white font-medium">
               Each campaign phase unlocks new milestones, side-quests, and tools to ensure your build qualifies for final grading.
             </p>
           </div>
@@ -504,13 +511,13 @@ function EventFlow() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                initial={{ opacity: 0, x: 50 }}
+                initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
+                exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
                 className="flex h-full gap-[15px] max-lg:flex-col"
               >
-                <div className="relative min-h-[260px] flex-1 overflow-hidden rounded-brand border-4 border-ink shadow-[4px_4px_0_#000]">
+                <div className="relative min-h-[260px] flex-1 overflow-hidden rounded-brand border-2 border-white/20 shadow-md">
                   <Image
                     src={card.image}
                     alt={card.title}
@@ -521,16 +528,16 @@ function EventFlow() {
                   <div className="crt-scanline" />
                 </div>
                 
-                <div className="rounded-brand bg-yellow border-4 border-ink p-box flex-1 flex flex-col justify-between shadow-[4px_4px_0_#000]">
+                <div className="rounded-brand bg-yellow p-box flex-1 flex flex-col justify-between clay-card text-ink">
                   <div>
-                    <span className="font-display text-xs text-ink/70 uppercase">Mission Objective</span>
-                    <h3 className="font-display text-[26px] leading-[1.1] uppercase text-ink mt-2">{card.title}</h3>
+                    <span className="font-display text-xs text-ink/75 uppercase font-bold">Mission Objective</span>
+                    <h3 className="font-display text-[26px] leading-[1.1] uppercase text-ink mt-2 font-black">{card.title}</h3>
                     <p className="mt-1 text-sm font-bold text-ink/80 uppercase">{card.subtitle}</p>
                   </div>
-                  <ul className="mt-5 list-none p-0 space-y-2 border-t-2 border-ink/20 pt-4">
+                  <ul className="mt-5 list-none p-0 space-y-2 border-t border-ink/10 pt-4">
                     {card.details.map((detail) => (
-                      <li key={detail} className="text-body-lg text-ink font-medium flex items-center gap-2">
-                        <span className="h-2.5 w-2.5 rounded-full bg-ink" />
+                      <li key={detail} className="text-body-lg text-ink font-semibold flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-ink" />
                         {detail}
                       </li>
                     ))}
@@ -543,19 +550,19 @@ function EventFlow() {
           <div className="mt-5 inline-flex gap-2 items-center">
             <button
               aria-label="Previous card"
-              className="grid h-12 w-12 place-content-center rounded-full border-2 border-ink bg-white hover:bg-yellow shadow-[2px_2px_0_#000] active:translate-y-0.5"
+              className="grid h-11 w-11 place-content-center rounded-full bg-white hover:bg-yellow clay-card"
               onClick={() => setActive((active - 1 + eventFlowCards.length) % eventFlowCards.length)}
             >
               ←
             </button>
             <button
               aria-label="Next card"
-              className="grid h-12 w-12 place-content-center rounded-full border-2 border-ink bg-white hover:bg-yellow shadow-[2px_2px_0_#000] active:translate-y-0.5"
+              className="grid h-11 w-11 place-content-center rounded-full bg-white hover:bg-yellow clay-card"
               onClick={() => setActive((active + 1) % eventFlowCards.length)}
             >
               →
             </button>
-            <span className="ml-4 font-display text-xs text-gray-700 uppercase tracking-widest">
+            <span className="ml-4 font-display text-xs text-gray-700 uppercase tracking-widest font-black">
               Stage {active + 1} / {eventFlowCards.length}
             </span>
           </div>
@@ -572,11 +579,11 @@ function TrackWall() {
       {[...trackCards, ...trackCards].map((track, index) => (
         <motion.article
           key={`${track.title}-${index}`}
-          whileHover={{ scale: 1.02, rotate: index % 2 === 0 ? 1 : -1 }}
-          className={`track-tile border-4 border-ink rounded-[20px] p-6 shadow-[6px_6px_0_#000] ${track.color}`}
+          whileHover={{ scale: 1.02, rotate: index % 2 === 0 ? 0.5 : -0.5 }}
+          className={`track-tile rounded-[24px] p-6 clay-card shadow-sm ${track.color}`}
         >
-          <span className="text-[10px] font-display uppercase tracking-wider text-ink/75">Quest Path {String((index % trackCards.length) + 1).padStart(2, "0")}</span>
-          <h3 className="mt-2 font-display text-[22px] leading-tight uppercase text-ink">{track.title}</h3>
+          <span className="text-[10px] font-display uppercase tracking-wider text-ink/75 font-bold">Quest Path {String((index % trackCards.length) + 1).padStart(2, "0")}</span>
+          <h3 className="mt-2 font-display text-[22px] leading-tight uppercase text-ink font-black">{track.title}</h3>
           <p className="mt-2 text-xs font-bold leading-normal text-ink/90">{track.prompt}</p>
         </motion.article>
       ))}
@@ -592,19 +599,19 @@ function Tracks({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="flex flex-col rounded-brand border-4 border-ink p-box bg-paper shadow-[8px_8px_0_#000]"
+        className="flex flex-col rounded-brand p-box bg-paper clay-card"
       >
-        <span className="label bg-yellow border-2 border-ink font-bold text-xs uppercase">Quest Matrix</span>
+        <span className="label bg-yellow border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Quest Matrix</span>
         <div className="mt-auto max-lg:mt-[30px]">
           <h2 className="font-display text-section uppercase tracking-tight text-ink">Choose your adventure</h2>
-          <p className="mt-5 text-body-xl font-medium text-ink/80">
+          <p className="mt-5 text-body-xl font-semibold text-ink/80 leading-snug">
             Build parameters are mapped per challenge. Team up to hack specific problem tracks loaded with GMs, APIs, and bounties.
           </p>
-          <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-3 border-t-2 border-ink/10 pt-6">
+          <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-ink/15 pt-6">
             {trackCards.slice(0, 8).map((track) => (
               <div key={track.title} className="flex items-center gap-[10px]">
-                <span className={`h-4 w-4 rounded-full border-2 border-ink ${track.color}`} />
-                <span className="text-sm font-bold uppercase tracking-tight text-ink">{track.title}</span>
+                <span className={`h-4.5 w-4.5 rounded-full border-2 border-white/40 shadow-sm ${track.color}`} />
+                <span className="text-sm font-display uppercase tracking-wider font-black text-ink">{track.title}</span>
               </div>
             ))}
           </div>
@@ -614,7 +621,7 @@ function Tracks({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
                 playRetroSound("laser", isMuted);
                 onBook();
               }}
-              className="arcade-panel rounded-pill bg-purple px-6 py-4 text-sm font-display uppercase text-white hover:bg-purple-light"
+              className="clay-card rounded-pill bg-purple px-6 py-4 text-sm font-display uppercase font-black text-white hover:bg-purple-light"
             >
               Explore Quests
             </button>
@@ -622,9 +629,9 @@ function Tracks({ onBook, isMuted }: { onBook: () => void; isMuted: boolean }) {
         </div>
       </motion.div>
       
-      <div className="relative min-h-[350px] overflow-hidden rounded-brand border-4 border-ink shadow-[8px_8px_0_#000] bg-paper-light">
+      <div className="relative min-h-[350px] overflow-hidden rounded-brand border-2 border-white/30 shadow-soft bg-paper">
         <TrackWall />
-        <div className="absolute left-1/2 top-1/2 z-10 grid h-24 w-24 -translate-x-1/2 -translate-y-1/2 place-content-center border-4 border-ink bg-yellow text-center font-display text-[16px] leading-none uppercase shadow-md rotate-3 hover:rotate-0 transition-transform">
+        <div className="absolute left-1/2 top-1/2 z-10 grid h-24 w-24 -translate-x-1/2 -translate-y-1/2 place-content-center bg-yellow text-center font-display text-[15px] leading-none uppercase shadow-md rotate-3 hover:rotate-0 transition-transform clay-card font-black">
           QUEST<br />BOARD
         </div>
       </div>
@@ -640,36 +647,36 @@ function ScheduleBoard({ isMuted }: { isMuted: boolean }) {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="rounded-brand bg-orange border-4 border-ink p-box shadow-[8px_8px_0_#000]"
+        className="rounded-brand bg-orange p-box clay-card"
       >
-        <span className="label bg-paper border-2 border-ink font-bold text-xs uppercase">Time Block</span>
+        <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Time Block</span>
         <h2 className="mt-[60px] font-display text-section uppercase text-ink">Run of Playbook</h2>
-        <p className="mt-4 max-w-[620px] text-body-xl text-ink font-medium">
+        <p className="mt-4 max-w-[620px] text-body-xl text-ink font-semibold leading-snug">
           Timing is everything. Sync your schedule clock to match checkpoints, code freeze slots, and arpeggio tests.
         </p>
-        <div className="mt-8 grid grid-cols-2 gap-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 border-t border-ink/10 pt-5">
           {["36h Build", "2 Save points", "5 Guild rooms", "1 Arena stage"].map((item) => (
-            <div key={item} className="rounded-[12px] border-2 border-ink bg-paper px-4 py-3 font-display text-xs uppercase text-ink font-bold shadow-[2px_2px_0_#000]">{item}</div>
+            <div key={item} className="rounded-[12px] bg-paper px-4 py-3 font-display text-xs uppercase text-ink font-black clay-card">{item}</div>
           ))}
         </div>
       </motion.div>
 
-      <div className="rounded-brand border-4 border-ink bg-paper p-4 shadow-[8px_8px_0_#000]">
+      <div className="rounded-brand bg-paper p-4 clay-card">
         <div className="grid gap-3">
           {scheduleItems.map((item) => (
             <article
               key={`${item.time}-${item.title}`}
               onMouseEnter={() => playRetroSound("bleep", isMuted)}
-              className="schedule-row grid gap-4 rounded-[16px] border-2 border-ink bg-white/60 p-4 md:grid-cols-[100px_1fr_130px]"
+              className="schedule-row grid gap-4 rounded-[18px] bg-white/60 p-4 shadow-sm hover:translate-x-1 transition-transform md:grid-cols-[100px_1fr_130px] border border-white/40"
             >
-              <div className={`grid min-h-[66px] place-content-center rounded-[10px] border-2 border-ink ${item.color} shadow-[2px_2px_0_#000]`}>
-                <span className="font-display text-[22px] leading-none uppercase">{item.time}</span>
+              <div className={`grid min-h-[66px] place-content-center rounded-[12px] ${item.color} clay-card`}>
+                <span className="font-display text-[22px] leading-none uppercase font-black">{item.time}</span>
               </div>
               <div className="self-center">
-                <h3 className="font-display text-[18px] uppercase leading-none text-ink">{item.title}</h3>
-                <p className="mt-1 text-xs text-gray-800 font-bold">{item.detail}</p>
+                <h3 className="font-display text-[18px] uppercase leading-none text-ink font-black">{item.title}</h3>
+                <p className="mt-1 text-xs text-gray-800 font-bold leading-normal">{item.detail}</p>
               </div>
-              <div className="self-center rounded-pill bg-ink border-2 border-ink text-yellow px-4 py-2 text-center text-[10px] font-display uppercase tracking-widest animate-pulse">
+              <div className="self-center rounded-pill bg-ink text-yellow px-4 py-2.5 text-center text-[10px] font-display uppercase tracking-widest animate-pulse font-black shadow-sm">
                 AUTO NOTIFY
               </div>
             </article>
@@ -680,40 +687,40 @@ function ScheduleBoard({ isMuted }: { isMuted: boolean }) {
   );
 }
 
-// Glowing Leaderboard style for Submissions
+// Glowing Leaderboard style for Submissions (CRT Terminal)
 function SubmissionBoard() {
   return (
     <section className="my-gap grid gap-gap lg:grid-cols-[1.05fr_.95fr]" data-reveal>
-      <div className="crt-screen crt-flicker rounded-brand border-4 border-ink p-box text-white bg-[#031305] shadow-[8px_8px_0_#000]">
+      <div className="crt-screen crt-flicker rounded-brand p-box text-white bg-[#031305] shadow-soft">
         {/* Scanline CRT */}
         <div className="crt-scanline" />
         
-        <span className="label border-glow-green bg-[#07240c] text-green-light font-display text-[11px] uppercase tracking-wider shadow-none">
+        <span className="label border-glow-green bg-[#07240c] text-green-light font-display text-[10px] uppercase tracking-wider shadow-none font-bold">
           Leaderboard
         </span>
         
-        <h2 className="mt-[40px] font-display text-section uppercase glow-green text-green-light tracking-tight">Active Room High Scores</h2>
-        <p className="mt-4 max-w-[680px] text-body-xl text-green-light/80">
+        <h2 className="mt-[40px] font-display text-section uppercase glow-green text-green-light tracking-tight font-black">Active Room High Scores</h2>
+        <p className="mt-4 max-w-[680px] text-body-xl text-green-light/80 font-medium">
           Check live submissions. Live build scores are graded dynamically by Game Masters based on core design metrics.
         </p>
         
-        <div className="mt-8 overflow-hidden rounded-[14px] border-2 border-green-light/40 bg-[#020b04]">
+        <div className="mt-8 overflow-hidden rounded-[18px] border-2 border-green-light/20 bg-[#020b04]">
           {projectSubmissions.map((project, idx) => (
             <div
               key={project.team}
-              className="grid grid-cols-[1fr_auto] gap-4 border-b border-green-light/20 bg-[#031305]/50 p-4 last:border-b-0 md:grid-cols-[40px_1fr_140px_120px_60px] text-green-light font-mono text-sm"
+              className="grid grid-cols-[1fr_auto] gap-4 border-b border-green-light/10 bg-[#031305]/50 p-4 last:border-b-0 md:grid-cols-[40px_1fr_140px_120px_60px] text-green-light font-mono text-sm"
             >
               <span className="opacity-65">#{idx + 1}</span>
               <strong className="uppercase glow-green">{project.team}</strong>
               <span className="opacity-75">{project.track}</span>
-              <span className="text-xs uppercase bg-[#092911] border border-green-light/30 px-2 py-0.5 rounded text-center self-center">{project.status}</span>
-              <span className="font-display text-[18px] text-right text-yellow-500 glow-pink self-center">{project.score}</span>
+              <span className="text-[10px] uppercase bg-[#092911] border border-green-light/20 px-2 py-0.5 rounded text-center self-center">{project.status}</span>
+              <span className="font-display text-[18px] text-right text-yellow-500 glow-pink self-center font-black">{project.score}</span>
             </div>
           ))}
         </div>
       </div>
       
-      <div className="relative min-h-[520px] overflow-hidden rounded-brand border-4 border-ink shadow-[8px_8px_0_#000]">
+      <div className="relative min-h-[520px] overflow-hidden rounded-brand border-2 border-white/20 shadow-soft">
         <Image
           src="/assets/images/nirmaan-demo-day.png"
           alt="Demo day project presentation"
@@ -721,9 +728,9 @@ function SubmissionBoard() {
           className="object-cover filter contrast-125 saturate-50"
           sizes="(min-width: 1024px) 40vw, 100vw"
         />
-        <div className="absolute inset-0 bg-ink/35" />
-        <div className="absolute bottom-6 left-6 right-6 rounded-[18px] border-4 border-ink bg-paper p-5 shadow-lg">
-          <p className="font-display text-[26px] leading-none uppercase text-ink flex items-center gap-2">
+        <div className="absolute inset-0 bg-ink/30" />
+        <div className="absolute bottom-6 left-6 right-6 rounded-[22px] bg-paper p-5 shadow-lg clay-card text-ink">
+          <p className="font-display text-[26px] leading-none uppercase text-ink flex items-center gap-2 font-black">
             <Trophy size={20} className="text-yellow" /> Finalist Showcase
           </p>
           <p className="mt-2 text-sm text-gray-800 font-bold">Public arpeggio showroom maps top projects for loot deployment post-hackathon.</p>
@@ -737,11 +744,11 @@ function SubmissionBoard() {
 function SponsorWall() {
   return (
     <section id="sponsors" className="my-gap" data-reveal>
-      <div className="rounded-brand bg-green border-4 border-ink p-box shadow-[8px_8px_0_#000]">
-        <div className="flex flex-wrap items-end justify-between gap-5 border-b-2 border-ink pb-6">
+      <div className="rounded-brand bg-green p-box clay-card">
+        <div className="flex flex-wrap items-end justify-between gap-5 border-b border-ink/10 pb-6">
           <div>
-            <span className="label bg-paper border-2 border-ink font-bold text-xs uppercase">Allies</span>
-            <h2 className="mt-4 font-display text-section uppercase text-ink">Guild Sponsors</h2>
+            <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Allies</span>
+            <h2 className="mt-4 font-display text-section uppercase text-ink font-black">Guild Sponsors</h2>
           </div>
           <p className="max-w-[560px] text-body-xl font-bold text-ink">
             Guild partners shape the sandbox: custom bounties, devkits, sandbox modules, and active recruiting seats.
@@ -749,14 +756,14 @@ function SponsorWall() {
         </div>
         <div className="mt-8 grid gap-gap lg:grid-cols-3">
           {sponsorTiers.map((tier) => (
-            <article key={tier.name} className="rounded-[20px] border-4 border-ink bg-paper p-6 shadow-[4px_4px_0_#000] hover:translate-y-[-4px] transition-transform">
-              <div className="flex items-center justify-between gap-4 border-b-2 border-ink/10 pb-4">
-                <h3 className="font-display text-[22px] uppercase leading-none text-ink">{tier.name}</h3>
-                <span className="rounded-pill bg-yellow border-2 border-ink px-3 py-1 text-xs font-bold uppercase">{tier.slots}</span>
+            <article key={tier.name} className="rounded-[24px] bg-paper p-6 clay-card">
+              <div className="flex items-center justify-between gap-4 border-b border-ink/10 pb-4">
+                <h3 className="font-display text-[22px] uppercase leading-none text-ink font-black">{tier.name}</h3>
+                <span className="rounded-pill bg-yellow border border-white/20 px-3 py-1 text-xs font-bold uppercase">{tier.slots}</span>
               </div>
               <ul className="mt-6 grid gap-2">
                 {tier.perks.map((perk) => (
-                  <li key={perk} className="rounded-[10px] border-2 border-ink bg-white/40 px-4 py-2 text-xs font-bold uppercase text-ink">{perk}</li>
+                  <li key={perk} className="rounded-[12px] border border-white/40 bg-white/40 px-4 py-2 text-xs font-bold uppercase text-ink">{perk}</li>
                 ))}
               </ul>
             </article>
@@ -771,27 +778,27 @@ function SponsorWall() {
 function Community({ onBook }: { onBook: () => void }) {
   return (
     <section className="my-gap grid gap-gap lg:grid-cols-[.78fr_1fr_.78fr]" data-reveal>
-      <div className="relative min-h-[430px] overflow-hidden rounded-brand border-4 border-ink shadow-[4px_4px_0_#000]">
+      <div className="relative min-h-[430px] overflow-hidden rounded-brand border-2 border-white/20 shadow-soft">
         <Image src="/assets/images/nirmaan-mentors.png" alt="Hackathon team discussing a prototype with mentors" fill className="object-cover filter contrast-125 grayscale" sizes="(min-width: 1024px) 25vw, 100vw" />
       </div>
-      <div className="flex min-h-[430px] flex-col rounded-brand bg-red border-4 border-ink p-box shadow-[8px_8px_0_#000]">
-        <span className="label bg-paper border-2 border-ink font-bold text-xs uppercase">Community</span>
+      <div className="flex min-h-[430px] flex-col rounded-brand bg-red p-box clay-card text-white">
+        <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase text-ink shadow-sm">Community</span>
         <div className="mt-auto">
-          <h2 className="font-display text-section uppercase text-white">Party Hub</h2>
-          <p className="mt-[20px] text-body-xl text-white font-medium">
+          <h2 className="font-display text-section uppercase text-white font-black">Party Hub</h2>
+          <p className="mt-[20px] text-body-xl text-white font-semibold leading-snug">
             Connect with builders, claim support items, test arpeggios, and check achievements in our co-op lobby feed.
           </p>
           <div className="mt-6">
             <button
               onClick={onBook}
-              className="arcade-panel rounded-pill bg-yellow px-6 py-3.5 text-sm font-display uppercase text-ink hover:bg-white"
+              className="clay-card rounded-pill bg-yellow px-6 py-3.5 text-sm font-display uppercase font-black text-ink"
             >
               Open Lobby
             </button>
           </div>
         </div>
       </div>
-      <div className="relative min-h-[430px] overflow-hidden rounded-brand border-4 border-ink shadow-[4px_4px_0_#000]">
+      <div className="relative min-h-[430px] overflow-hidden rounded-brand border-2 border-white/20 shadow-soft">
         <Image src="/assets/images/nirmaan-demo-day.png" alt="Hackathon team presenting a demo to judges" fill className="object-cover filter contrast-125 grayscale" sizes="(min-width: 1024px) 25vw, 100vw" />
       </div>
     </section>
@@ -801,23 +808,23 @@ function Community({ onBook }: { onBook: () => void }) {
 // Middle separator
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <section className="my-gap flex items-center justify-between border-y-4 border-ink bg-blue px-box py-[22px] text-yellow" data-reveal>
+    <section className="my-gap flex items-center justify-between border-y border-ink/5 bg-blue px-box py-[22px] text-yellow" data-reveal>
       <DownArrows />
-      <h2 className="text-center font-display text-[26px] uppercase tracking-tight text-ink">{children}</h2>
+      <h2 className="text-center font-display text-[26px] uppercase tracking-tight text-ink font-black">{children}</h2>
       <DownArrows />
     </section>
   );
 }
 
-// Core values / perks
+// Core values
 function Values() {
   return (
     <section className="flex gap-gap max-lg:flex-col" data-reveal>
       {values.map((item) => (
-        <article key={item.title} className="flex-1 rounded-brand bg-blue border-4 border-ink px-box py-[50px] text-center shadow-[6px_6px_0_#000]">
-          <div className="mx-auto grid h-20 w-20 place-content-center rounded-full border-4 border-ink bg-yellow font-display text-[28px] leading-none text-ink shadow-[2px_2px_0_#000]">{item.mark}</div>
-          <h3 className="mt-[25px] font-display text-card uppercase text-ink">{item.title}</h3>
-          <p className="mt-4 text-body-xl text-ink font-semibold">{item.copy}</p>
+        <article key={item.title} className="flex-1 rounded-brand bg-blue px-box py-[50px] text-center clay-card text-white">
+          <div className="mx-auto grid h-20 w-20 place-content-center rounded-full bg-yellow font-display text-[28px] leading-none text-ink clay-card font-black">{item.mark}</div>
+          <h3 className="mt-[25px] font-display text-card uppercase text-ink font-black">{item.title}</h3>
+          <p className="mt-4 text-body-xl text-ink font-bold leading-snug">{item.copy}</p>
         </article>
       ))}
     </section>
@@ -828,20 +835,20 @@ function Values() {
 function Footer() {
   return (
     <footer id="contact" className="mt-gap pb-5" data-reveal>
-      <div className="relative h-[320px] overflow-hidden rounded-brand border-4 border-ink bg-[#051c09]">
+      <div className="relative h-[320px] overflow-hidden rounded-brand bg-[#051c09] border-2 border-white/10 shadow-soft">
         {/* Grid patterns */}
-        <div className="footer-grid absolute inset-0 opacity-40" />
-        <Logo className="absolute bottom-[35px] left-[30px] scale-[2.2] origin-bottom-left max-lg:bottom-[15px] max-lg:left-[10px] max-lg:scale-[1.6] text-green-light glow-green" />
+        <div className="footer-grid absolute inset-0 opacity-20" />
+        <Logo className="absolute bottom-[35px] left-[30px] scale-[2.0] origin-bottom-left max-lg:bottom-[15px] max-lg:left-[10px] max-lg:scale-[1.5]" />
       </div>
       <div className="mt-[25px] flex justify-between gap-5 max-lg:flex-col items-center">
         <div>
-          <p className="font-display text-[18px] uppercase tracking-tight text-ink">© 2026 Nirmaan Cabinet</p>
+          <p className="font-display text-[18px] uppercase tracking-tight text-ink font-black">© 2026 Nirmaan Cabinet</p>
           <p className="mt-[5px] text-xs font-bold text-gray-700">A Gen-Z retro-arcade workspace built for developers, designers, and game creators.</p>
         </div>
         <ul className="flex list-none flex-wrap gap-[10px] p-0">
           {["Overview", "Quests", "Timeline"].map((item) => (
             <li key={item}>
-              <a className="block rounded-pill border-2 border-ink bg-paper hover:bg-ink hover:text-white px-3 py-2 text-xs font-bold uppercase transition-all" href="#top">
+              <a className="block rounded-pill bg-paper hover:bg-ink hover:text-white px-3 py-2 text-xs font-bold uppercase transition-all clay-card text-ink" href="#top">
                 {item}
               </a>
             </li>
@@ -852,7 +859,7 @@ function Footer() {
   );
 }
 
-// Redesigned "Insert Coin" modal (Onboarding register form)
+// Onboarding Modal (Claymorphic)
 function ParticipationModal({ open, onClose, isMuted }: { open: boolean; onClose: () => void; isMuted: boolean }) {
   const initialFocusRef = useRef<HTMLInputElement>(null);
 
@@ -880,9 +887,9 @@ function ParticipationModal({ open, onClose, isMuted }: { open: boolean; onClose
 
   return (
     <aside aria-hidden={!open} className={`modal-shell ${open ? "open" : ""}`}>
-      <button type="button" className="absolute inset-0 bg-ink/65 backdrop-blur-sm" aria-label="Close form" onClick={onClose} />
+      <button type="button" className="absolute inset-0 bg-ink/60 backdrop-blur-sm" aria-label="Close form" onClick={onClose} />
       
-      <div role="dialog" aria-modal="true" aria-labelledby="participation-title" className="modal-panel border-l-4 border-ink">
+      <div role="dialog" aria-modal="true" aria-labelledby="participation-title" className="modal-panel border-l border-white/20">
         <button
           type="button"
           onClick={() => {
@@ -890,58 +897,58 @@ function ParticipationModal({ open, onClose, isMuted }: { open: boolean; onClose
             onClose();
           }}
           aria-label="Close"
-          className="absolute right-6 top-6 z-20 grid h-12 w-12 place-content-center rounded-full border-2 border-ink bg-ink text-white hover:bg-red"
+          className="absolute right-6 top-6 z-20 grid h-12 w-12 place-content-center rounded-full bg-ink text-white hover:bg-red"
         >
           <CloseIcon />
         </button>
         
         {/* Header section as arcade panel */}
-        <div className="flex items-center justify-between bg-orange border-b-4 border-ink px-6 py-[22px] text-yellow">
+        <div className="flex items-center justify-between bg-orange border-b border-white/20 px-6 py-[22px] text-yellow">
           <DownArrows />
-          <h2 id="participation-title" className="font-display text-section uppercase tracking-tight text-ink">Insert Coin / Enter Lobby</h2>
+          <h2 id="participation-title" className="font-display text-section uppercase tracking-tight text-ink font-black">Insert Coin / Enter Lobby</h2>
           <DownArrows />
         </div>
         
         {/* Onboarding registration inputs */}
         <form onSubmit={handleSubmit} className="grid gap-4 p-box bg-paper">
           
-          <div className="flex items-center gap-4 bg-[#fcedde] border-2 border-ink rounded-[12px] p-4 mb-2">
+          <div className="flex items-center gap-4 bg-[#fcedde] border border-white/40 rounded-[14px] p-4 mb-2 shadow-sm">
             <Coins size={36} className="text-yellow animate-bounce" />
             <div>
-              <p className="font-display text-sm uppercase text-ink">INSERT 1 COIN TO INITIATE MATCHMAKING</p>
+              <p className="font-display text-sm uppercase text-ink font-black">INSERT 1 COIN TO INITIATE MATCHMAKING</p>
               <p className="text-xs text-gray-700 font-bold">Register as a builder, mentor, or sponsor for Nirmaan 2026.</p>
             </div>
           </div>
 
           <label className="field">
             <span className="text-xs tracking-wide">Player Name</span>
-            <input ref={initialFocusRef} name="name" placeholder="eg. Player_One" required className="border-2 border-ink" />
+            <input ref={initialFocusRef} name="name" placeholder="eg. Player_One" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
           </label>
           
           <label className="field">
             <span className="text-xs tracking-wide">Guild / College / Organisation</span>
-            <input name="organization" placeholder="eg. Zero_Junction" required className="border-2 border-ink" />
+            <input name="organization" placeholder="eg. Zero_Junction" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
           </label>
           
           <label className="field">
             <span className="text-xs tracking-wide">Comms Email</span>
-            <input name="email" type="email" placeholder="eg. player@lobby.gg" required className="border-2 border-ink" />
+            <input name="email" type="email" placeholder="eg. player@lobby.gg" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
           </label>
           
           <div className="grid gap-4 md:grid-cols-2">
             <label className="field">
               <span className="text-xs tracking-wide">Expected Party Size</span>
-              <input name="participants" type="number" min="1" defaultValue="1" required className="border-2 border-ink" />
+              <input name="participants" type="number" min="1" defaultValue="1" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
             </label>
             <label className="field">
               <span className="text-xs tracking-wide">Spawn Date</span>
-              <input name="targetMonth" type="month" required className="border-2 border-ink" />
+              <input name="targetMonth" type="month" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
             </label>
           </div>
           
           <label className="field">
             <span className="text-xs tracking-wide">Choose Lobby Role</span>
-            <select name="role" defaultValue="Builder" className="border-2 border-ink bg-transparent p-4 rounded-[18px]">
+            <select name="role" defaultValue="Builder" className="border-2 border-white/40 bg-white/45 p-4 rounded-[18px]">
               <option>Builder</option>
               <option>Mentor / Game Master</option>
               <option>Sponsor Guild</option>
@@ -951,11 +958,11 @@ function ParticipationModal({ open, onClose, isMuted }: { open: boolean; onClose
           
           <label className="field">
             <span className="text-xs tracking-wide">Player Objectives & Notes</span>
-            <textarea name="notes" rows={3} placeholder="Describe your tracks, tech gear, or how you want to support Nirmaan." className="border-2 border-ink" />
+            <textarea name="notes" rows={3} placeholder="Describe your tracks, tech gear, or how you want to support Nirmaan." className="border-2 border-white/40 bg-white/45 focus:bg-white" />
           </label>
           
           <button
-            className="mt-2 arcade-panel rounded-pill bg-green px-8 py-4 font-display text-lg uppercase text-ink hover:bg-white active:translate-y-1"
+            className="mt-2 rounded-pill bg-green px-8 py-4 font-display text-lg uppercase text-ink hover:bg-white active:translate-y-1 clay-card font-black"
             type="submit"
           >
             START QUEST
