@@ -51,22 +51,19 @@ function buildMatrix(stage: number): number[][] {
     // Stage 0: Single pixel block at dead center (2x2 center)
     fillBox(10, 11, 10, 11);
   } else if (stage === 1) {
-    // Stage 1: Small 4x4 square at center
-    fillBox(9, 12, 9, 12);
-  } else if (stage === 2) {
-    // Stage 2: Plus / Cross shape
+    // Stage 1: Plus / Cross shape
     fillBox(9, 12, 9, 12);
     fillBox(4, 17, 10, 11);
     fillBox(10, 11, 4, 17);
-  } else if (stage === 3) {
-    // Stage 3: Stepped solid square / Octagon (14x14)
+  } else if (stage === 2) {
+    // Stage 2: Stepped solid square / Octagon (14x14)
     fillBox(4, 17, 4, 17);
     fillBox(4, 5, 4, 5, 0);
     fillBox(4, 5, 16, 17, 0);
     fillBox(16, 17, 4, 5, 0);
     fillBox(16, 17, 16, 17, 0);
-  } else if (stage >= 4) {
-    // Stage 4: Full Pixel Circle Silhouette (22x22)
+  } else if (stage === 3 || stage === 4) {
+    // Stage 3 & 4: Full Pixel Circle Silhouette (22x22)
     const circleProfile = [
       { r: 0, c1: 8, c2: 13 },
       { r: 1, c1: 6, c2: 15 },
@@ -96,8 +93,8 @@ function buildMatrix(stage: number): number[][] {
       fillBox(r, r, c1, c2, 1);
     });
 
-    if (stage === 5) {
-      // Stage 5: Punch out Eyes and Smile Cutouts
+    if (stage === 4) {
+      // Stage 4: Punch out Eyes and Smile Cutouts (Face)
       // Left eye cutout (2 wide x 4 tall)
       fillBox(6, 9, 6, 7, 0);
 
@@ -113,15 +110,146 @@ function buildMatrix(stage: number): number[][] {
       fillBox(15, 15, 14, 14, 0);
       fillBox(16, 16, 8, 13, 0);
     }
+  } else if (stage === 5) {
+    // Stage 5: Clean Flat Front-Facing Laptop Silhouette (22x22)
+    // Screen Outer Frame (Rows 4..13, Cols 4..17)
+    fillBox(4, 13, 4, 17, 1);
+
+    // Inner Display Screen Cutout (Rows 6..12, Cols 6..15)
+    fillBox(6, 12, 6, 15, 0);
+
+    // Laptop Base Lip (Row 14, Cols 2..19)
+    fillBox(14, 14, 2, 19, 1);
+
+    // Laptop Base Body (Rows 15..16, Cols 1..20)
+    fillBox(15, 16, 1, 20, 1);
+
+    // Laptop Base Bottom Edge (Row 17, Cols 2..19)
+    fillBox(17, 17, 2, 19, 1);
+
+    // Central Trackpad Cutout (Row 16, Cols 9..12)
+    fillBox(16, 16, 9, 12, 0);
   }
 
   return m;
 }
 
-/** Pixel Art Display (Directly on preloader background, no card wrapper, zero pixel gaps) */
-function PixelGridDisplay({ stage }: { stage: number }) {
-  const matrix = useMemo(() => buildMatrix(stage), [stage]);
+/**
+ * Utility to interpolate between two binary 2D pixel matrices (matrixA -> matrixB).
+ * Returns `steps` intermediate matrices showing a progressive, stepped morph.
+ * Pixels turning ON (0->1) bloom outwards from center.
+ * Pixels turning OFF (1->0) contract inwards from edges.
+ */
+function interpolateMatrices(
+  matrixA: number[][],
+  matrixB: number[][],
+  steps: number
+): number[][][] {
+  if (steps <= 1) return [matrixB];
 
+  const centerR = (GRID_SIZE - 1) / 2; // 10.5
+  const centerC = (GRID_SIZE - 1) / 2; // 10.5
+
+  const toTurnOn: { r: number; c: number; dist: number }[] = [];
+  const toTurnOff: { r: number; c: number; dist: number }[] = [];
+
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      const valA = matrixA[r][c];
+      const valB = matrixB[r][c];
+      if (valA === 0 && valB === 1) {
+        const dist = Math.hypot(r - centerR, c - centerC);
+        toTurnOn.push({ r, c, dist });
+      } else if (valA === 1 && valB === 0) {
+        const dist = Math.hypot(r - centerR, c - centerC);
+        toTurnOff.push({ r, c, dist });
+      }
+    }
+  }
+
+  // Sort toTurnOn: inner pixels turn on first (center -> outward)
+  toTurnOn.sort((a, b) => a.dist - b.dist);
+
+  // Sort toTurnOff: outer pixels turn off first (outward -> center)
+  toTurnOff.sort((a, b) => b.dist - a.dist);
+
+  const result: number[][][] = [];
+
+  for (let s = 1; s <= steps; s++) {
+    const fraction = s / steps;
+    const current = matrixA.map((row) => [...row]);
+
+    const numOn = Math.round(toTurnOn.length * fraction);
+    for (let i = 0; i < numOn; i++) {
+      const { r, c } = toTurnOn[i];
+      current[r][c] = 1;
+    }
+
+    const numOff = Math.round(toTurnOff.length * fraction);
+    for (let i = 0; i < numOff; i++) {
+      const { r, c } = toTurnOff[i];
+      current[r][c] = 0;
+    }
+
+    result.push(current);
+  }
+
+  return result;
+}
+
+/** Pre-computes the complete sequence of interpolated 2D matrices for the entire 5s animation. */
+function generateFullAnimationSequence(): number[][][] {
+  const m0 = buildMatrix(0); // Single pixel
+  const m1 = buildMatrix(1); // Cross
+  const m2 = buildMatrix(2); // Square
+  const m3 = buildMatrix(3); // Circle
+  const m4 = buildMatrix(4); // Face
+  const m5 = buildMatrix(5); // Laptop
+
+  const frames: number[][][] = [m0];
+
+  // 1. Pixel -> Cross (7 steps)
+  frames.push(...interpolateMatrices(m0, m1, 7));
+
+  // 2. Cross -> Square (7 steps)
+  frames.push(...interpolateMatrices(m1, m2, 7));
+
+  // 3. Square -> Circle (7 steps)
+  frames.push(...interpolateMatrices(m2, m3, 7));
+
+  // 4. Circle -> Face (8 steps)
+  frames.push(...interpolateMatrices(m3, m4, 8));
+
+  // 5. Hold Face (12 identical frames)
+  for (let i = 0; i < 12; i++) {
+    frames.push(m4);
+  }
+
+  // 6. Face -> Laptop (10 steps)
+  frames.push(...interpolateMatrices(m4, m5, 10));
+
+  // 7. Hold Laptop (16 identical frames)
+  for (let i = 0; i < 16; i++) {
+    frames.push(m5);
+  }
+
+  // 8. Laptop -> Circle (skipping Face on reverse) (9 steps)
+  frames.push(...interpolateMatrices(m5, m3, 9));
+
+  // 9. Circle -> Square (7 steps)
+  frames.push(...interpolateMatrices(m3, m2, 7));
+
+  // 10. Square -> Cross (7 steps)
+  frames.push(...interpolateMatrices(m2, m1, 7));
+
+  // 11. Cross -> Pixel (7 steps)
+  frames.push(...interpolateMatrices(m1, m0, 7));
+
+  return frames;
+}
+
+/** Pixel Art Display (Directly on preloader background, no card wrapper, zero pixel gaps) */
+function PixelGridDisplay({ matrix }: { matrix: number[][] }) {
   return (
     <div
       className="relative w-[min(460px,78vw)] aspect-square flex items-center justify-center pointer-events-none"
@@ -179,9 +307,11 @@ function ConsoleBlock({ lineIndex }: { lineIndex: number }) {
 
 export function Preloader({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
-  const [stage, setStage] = useState(0);
   const [lineIdx, setLineIdx] = useState(0);
   const completedRef = useRef(false);
+
+  const allFrames = useMemo(() => generateFullAnimationSequence(), []);
+  const [currentFrame, setCurrentFrame] = useState<number[][]>(allFrames[0]);
 
   const handleComplete = useCallback(() => {
     if (completedRef.current) return;
@@ -199,39 +329,23 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
       const pct = Math.min(100, Math.floor((elapsed / duration) * 100));
       setProgress(pct);
 
-      // Determine pixel animation stage based on elapsed time (grow -> face -> hold -> shrink)
-      if (elapsed < 400) {
-        setStage(0); // Single pixel center
-      } else if (elapsed < 800) {
-        setStage(1); // Small square
-      } else if (elapsed < 1200) {
-        setStage(2); // Cross
-      } else if (elapsed < 1600) {
-        setStage(3); // Octagon square
-      } else if (elapsed < 2000) {
-        setStage(4); // Full pixel circle
-      } else if (elapsed < 3400) {
-        setStage(5); // Smiley face with eyes + smile (HOLD for 1.4s)
-      } else if (elapsed < 3700) {
-        setStage(4); // Shrink to circle
-      } else if (elapsed < 4000) {
-        setStage(3); // Shrink to octagon square
-      } else if (elapsed < 4300) {
-        setStage(2); // Shrink to cross
-      } else if (elapsed < 4600) {
-        setStage(1); // Shrink to small square
-      } else {
-        setStage(0); // Shrink to center pixel
+      const totalFrames = allFrames.length;
+      const frameIdx = Math.min(
+        totalFrames - 1,
+        Math.floor((elapsed / duration) * totalFrames)
+      );
+      if (allFrames[frameIdx]) {
+        setCurrentFrame(allFrames[frameIdx]);
       }
 
       if (elapsed >= 5000) {
         clearInterval(interval);
         handleComplete();
       }
-    }, 40);
+    }, 30);
 
     return () => clearInterval(interval);
-  }, [handleComplete]);
+  }, [allFrames, handleComplete]);
 
   // Sync console line index with progress percentage
   useEffect(() => {
@@ -337,7 +451,7 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
 
       {/* ── Center: Dominant Pixel Art Animation (No Box Wrapper, Zero Gaps) ── */}
       <div className="relative z-10 flex items-center justify-center my-auto">
-        <PixelGridDisplay stage={stage} />
+        <PixelGridDisplay matrix={currentFrame} />
       </div>
 
       {/* ── Bottom Section: Progress Bar & Console ── */}
@@ -383,3 +497,4 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
     </motion.div>
   );
 }
+
