@@ -5,7 +5,7 @@ import Image from "next/image";
 export function TeamSection() {
   return (
     <section id="team" className="my-gap" data-reveal>
-      <div className="grid gap-gap md:grid-cols-3">
+      <div className="grid gap-gap md:grid-cols-2">
         
         {/* Coding Club BMSIT */}
         <div className="clay-card bg-blue rounded-brand p-box text-white flex flex-col justify-between">
@@ -65,26 +65,6 @@ export function TeamSection() {
             </p>
           </div>
           <span className="text-[10px] font-display uppercase tracking-widest font-black text-purple mt-8">Alterino Club BMSIT // Co-Organizer</span>
-        </div>
-
-        {/* Confirmed Judge */}
-        <div className="clay-card bg-purple rounded-brand p-box text-white flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <div className="h-14 w-14 rounded-full bg-white/20 border-2 border-white/25 flex items-center justify-center text-yellow font-display text-[24px] font-black shadow-md">
-                評
-              </div>
-            </div>
-            <h3 className="font-display text-card uppercase text-white font-black leading-tight">Confirmed Judge</h3>
-            <div className="mt-3">
-              <h4 className="text-lg font-black text-yellow uppercase leading-tight font-display">D Santhosh Kumar (Sandy)</h4>
-              <p className="text-[10px] uppercase font-bold text-white/70 mb-2">Data Engineer at Walmart</p>
-              <p className="text-xs font-semibold leading-snug text-white/90">
-                13x Hackathon Champion, 13+ Conference Speaker, Microsoft Certified Trainer, Azure Certified x6 (Python, Spark, Hive, SQL).
-              </p>
-            </div>
-          </div>
-          <span className="text-[10px] font-display uppercase tracking-widest font-black text-yellow mt-8">Evaluation Panel // Grand Finale</span>
         </div>
       </div>
     </section>
