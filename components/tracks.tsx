@@ -1,0 +1,59 @@
+"use client";
+
+import { useMemo } from "react";
+import { trackCards } from "@/lib/data";
+
+export function Tracks({ onBook }: { onBook: () => void }) {
+  const softwareTracks = useMemo(() => trackCards.filter((t) => t.type === "software"), []);
+  const hardwareTracks = useMemo(() => trackCards.filter((t) => t.type === "hardware"), []);
+
+  return (
+    <section id="tracks" className="my-gap grid gap-gap" data-reveal>
+      <div className="flex flex-col rounded-brand p-box bg-paper clay-card">
+        <span className="label bg-yellow border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Quest Matrix</span>
+        <h2 className="mt-4 font-display text-section uppercase tracking-tight text-ink font-black">Problem Statements & Tracks</h2>
+        <p className="mt-4 max-w-[800px] text-body-xl font-semibold text-ink/80 leading-snug">
+          Select your challenge track. Problem prompts are divided into Software (S/W) and Hardware (H/W) fields loaded with GMs, devkits, and dedicated bounties.
+        </p>
+
+        {/* Separated Columns */}
+        <div className="mt-8 grid gap-gap md:grid-cols-2">
+          {/* Software Column */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-display text-card uppercase text-blue font-black border-b border-ink/10 pb-2">Software (S/W) Tracks</h3>
+            <div className="grid gap-3">
+              {softwareTracks.map((track, idx) => (
+                <div key={idx} className={`rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40`}>
+                  <h4 className="font-display text-lg uppercase font-black text-ink">{track.title}</h4>
+                  <p className="mt-1 text-xs text-gray-700 font-bold">{track.prompt}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Hardware Column */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-display text-card uppercase text-green font-black border-b border-ink/10 pb-2">Hardware (H/W) Tracks</h3>
+            <div className="grid gap-3">
+              {hardwareTracks.map((track, idx) => (
+                <div key={idx} className={`rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40`}>
+                  <h4 className="font-display text-lg uppercase font-black text-ink">{track.title}</h4>
+                  <p className="mt-1 text-xs text-gray-700 font-bold">{track.prompt}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8">
+          <button
+            onClick={onBook}
+            className="clay-card rounded-pill bg-purple px-6 py-4 text-sm font-display uppercase font-black text-white hover:bg-purple-light"
+          >
+            Register for a Track
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
