@@ -182,26 +182,6 @@ function Hero({ onBook }: { onBook: () => void }) {
             <Radio size={14} className="animate-pulse text-red" />
             Nirmaan 2026 // Registration Open
           </motion.div>
-
-          {/* Interactive 3D Live score panel */}
-          <InteractiveTiltCard className="w-full max-w-[390px]">
-            <div className="clay-card p-5 text-ink bg-white/70 backdrop-blur-md rounded-brand">
-              <div className="flex items-center justify-between">
-                <span className="rounded-pill bg-green-light border border-white/20 px-3 py-1 text-ink font-display text-[10px] uppercase font-black flex items-center gap-1.5 shadow-sm">
-                  Live Status
-                </span>
-                <span className="pulse-dot" aria-hidden="true" />
-              </div>
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                {liveMetrics.map(([label, value]) => (
-                  <div key={label} className="rounded-[12px] bg-paper px-4 py-3 text-ink shadow-sm border border-white/40">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-ink/60">{label}</p>
-                    <p className="mt-1 font-display text-[18px] leading-none uppercase font-black text-ink">{value}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </InteractiveTiltCard>
         </div>
 
         {/* Big visual statement (Units.gr large typography) */}
