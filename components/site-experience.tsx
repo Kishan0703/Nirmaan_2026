@@ -879,7 +879,7 @@ function LocationMap() {
       <div className="grid gap-gap lg:grid-cols-[1.1fr_.9fr]">
         <div className="rounded-brand overflow-hidden h-[400px] border-2 border-white/30 shadow-soft clay-card relative">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.183788775465!2d77.56475737571343!3d13.138479511105979!2m3!1f0!2f0!3f0!3m2!1i1024|2i768!4f13.1!3m3!1m2!1s0x3bae18d8e6e5cc95%3A0xe5a3c94cf9833cb9!2sBMS%20Institute%20of%20Technology%20and%20Management!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.2058032731876!2d77.56720402518607!3d13.134187587215457!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae18a5c54ece35%3A0x49c4c47a68a60b9c!2sBMS%20Institute%20of%20Technology%20and%20Management!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
             width="100%"
             height="100%"
             style={{ border: 0 }}
@@ -900,6 +900,15 @@ function LocationMap() {
           <div className="mt-6 border-t border-ink/10 pt-5 text-ink/80 text-sm font-bold flex flex-col gap-2">
             <p>📍 Doddaballapur Main Road, Yelahanka, Bengaluru - 560064</p>
             <p>🗓 November 6-7, 2026</p>
+            <a
+              href="https://www.google.com/maps/place/BMS+Institute+of+Technology+and+Management/@13.133363,77.5648019,830m/data=!3m1!1e3!4m6!3m5!1s0x3bae18a5c54ece35:0x49c4c47a68a60b9c!8m2!3d13.1341876!4d77.5693927!16s%2Fm%2F03c38ys?entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-pill bg-paper px-4 py-2.5 text-xs font-display uppercase font-black text-ink clay-card w-max border-2 border-white/30"
+            >
+              <span>Open in Google Maps</span>
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
           </div>
         </div>
       </div>
