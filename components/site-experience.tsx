@@ -8,6 +8,7 @@ import { Sparkles } from "lucide-react";
 
 // Section imports
 import { Hero } from "./hero";
+import { ReverseCountdownClock } from "./reverse-countdown-clock";
 import { EventOverview } from "./overview";
 import { Announcements } from "./announcements";
 import { EventFlow } from "./flow";
@@ -242,6 +243,7 @@ export function SiteExperience() {
       <main className="relative ml-0 overflow-hidden px-0 pt-[75px] lg:ml-[calc(theme(spacing.rail)+25px)] lg:px-0 lg:pr-5 lg:pt-[30px]">
         <article className="home">
           <Hero onBook={() => setModalOpen(true)} />
+          <ReverseCountdownClock />
           <EventOverview />
           <Marquee color="bg-red" textColor="text-yellow" items={marqueeOne} />
           

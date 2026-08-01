@@ -5,7 +5,6 @@ import { CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { Radio } from "lucide-react";
 import { ArrowUpRight } from "@/components/icons";
-import { CountdownTimer } from "./countdown-timer";
 import { InteractiveTiltCard } from "./helpers";
 import { liveMetrics } from "@/lib/data";
 
@@ -26,11 +25,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
       <div className="relative z-10 grid min-h-[calc(100dvh-50px)] content-between gap-8 px-6 py-8 text-white lg:px-10 lg:py-10">
         
         {/* Top bar details */}
-        <div className="flex flex-wrap items-start justify-between gap-5">
-          <div className="flex flex-col gap-3 items-start">
-            <CountdownTimer />
-          </div>
-
+        <div className="flex flex-wrap items-start justify-end gap-5">
           {/* Interactive 3D Live score panel (Claymorphic) */}
           <InteractiveTiltCard className="w-full max-w-[390px]">
             <div className="clay-card p-5 text-ink bg-paper/90 backdrop-blur-md rounded-[24px] border-2 border-white/60">
