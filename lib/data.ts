@@ -1,6 +1,6 @@
 export const menuItems = [
   { index: "01", label: "Overview", href: "#overview", color: "bg-blue" },
-  { index: "02", label: "Tracks", href: "#tracks", color: "bg-yellow" },
+  { index: "02", label: "Problem Statements", href: "#tracks", color: "bg-yellow" },
   { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange" },
   { index: "04", label: "Bug Game", href: "#game", color: "bg-red text-white" },
   { index: "05", label: "Location", href: "#location", color: "bg-green text-white" },
