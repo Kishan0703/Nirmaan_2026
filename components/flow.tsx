@@ -17,7 +17,7 @@ export function EventFlow() {
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-62%"]);
 
   return (
-    <div ref={targetRef} className="relative h-[220vh]">
+    <div ref={targetRef} className="relative h-[140vh]">
       {/* Sticky container that locks in viewport while translation completes */}
       <div className="sticky top-[80px] h-[calc(100vh-120px)] flex flex-col justify-center overflow-hidden">
         <div className="flex gap-gap items-stretch h-full py-4 max-lg:flex-col">
