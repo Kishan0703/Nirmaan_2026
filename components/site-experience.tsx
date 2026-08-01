@@ -28,7 +28,7 @@ import { Marquee, SectionTitle } from "./helpers";
 // Side Rail Navigation (Claymorphic & Compact to prevent vertical overflow)
 function Rail({ onBook }: { onBook: () => void }) {
   return (
-    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[calc(theme(spacing.rail)+25px)] flex-col px-[22px] py-[25px] lg:flex justify-between border-r border-ink/5 bg-paper/20 backdrop-blur-md">
+    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[calc(theme(spacing.rail)+25px)] flex-col px-[22px] py-[25px] lg:flex justify-between bg-paper/20 backdrop-blur-md">
       
       {/* Top Header Section */}
       <div className="flex flex-col gap-4">
