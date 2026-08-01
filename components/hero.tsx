@@ -104,21 +104,6 @@ export function Hero({ onBook }: { onBook: () => void }) {
             </a>
           </div>
         </div>
-
-        {/* bottom info board */}
-        <div className="grid gap-3 lg:grid-cols-4">
-          {[
-            { value: "36 hrs", label: "Build sprint", bg: "bg-blue text-white hover:border-yellow", text: "text-yellow group-hover:text-green-light" },
-            { value: "420", label: "Builders capacity", bg: "bg-yellow text-ink hover:border-blue", text: "text-purple group-hover:text-blue" },
-            { value: "18", label: "Mentors on call", bg: "bg-orange text-white hover:border-yellow", text: "text-yellow group-hover:text-green-light" },
-            { value: "₹8L", label: "Prize pool", bg: "bg-green text-ink hover:border-purple", text: "text-white group-hover:text-yellow" }
-          ].map((stat, idx) => (
-            <div key={stat.label} className={`clay-card rounded-[18px] ${stat.bg} px-5 py-4 border-2 border-white/20 transition-colors group`}>
-              <p className={`font-display text-[clamp(28px,2vw,36px)] leading-none ${stat.text} uppercase font-black`}>{stat.value}</p>
-              <p className="mt-2 text-xs font-bold uppercase tracking-wider opacity-85">{stat.label}</p>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
