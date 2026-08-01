@@ -1,29 +1,61 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { eventFlowCards } from "@/lib/data";
 
 export function EventFlow() {
   const targetRef = useRef<HTMLDivElement>(null);
-  
-  // Hook into vertical scroll of the target wrapper section
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [scrollRange, setScrollRange] = useState(0);
+
+  // Dynamically measure horizontal track scroll range for precise end-to-end alignment
+  useEffect(() => {
+    const container = containerRef.current;
+    const track = trackRef.current;
+    if (!container || !track) return;
+
+    const calculateRange = () => {
+      const trackWidth = track.scrollWidth;
+      const containerWidth = container.clientWidth;
+      const paddingRight = 32;
+      const maxScroll = Math.max(0, trackWidth - containerWidth + paddingRight);
+      setScrollRange(maxScroll);
+    };
+
+    calculateRange();
+
+    const resizeObserver = new ResizeObserver(() => {
+      calculateRange();
+    });
+
+    resizeObserver.observe(container);
+    resizeObserver.observe(track);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  // Hook into vertical scroll progress of targetRef runway:
+  // "start start" -> Top of target section reaches top of viewport (pin begins, progress = 0)
+  // "end end"     -> Bottom of target section reaches bottom of viewport (pin ends, progress = 1)
   const { scrollYProgress } = useScroll({
     target: targetRef,
+    offset: ["start start", "end end"]
   });
 
-  // Map vertical scroll progress [0, 1] to horizontal translation percent [-62%]
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-62%"]);
+  // Map scroll progress [0, 1] 1:1 to horizontal displacement [0, -scrollRange]
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   return (
-    <div ref={targetRef} className="relative h-[140vh]">
-      {/* Sticky container that locks in viewport while translation completes */}
-      <div className="sticky top-[80px] h-[calc(100vh-120px)] flex flex-col justify-center overflow-hidden">
-        <div className="flex gap-gap items-stretch h-full py-4 max-lg:flex-col">
+    <section ref={targetRef} className="relative h-[250vh] w-full">
+      {/* Inner Sticky Container pinned at top: 0, height: 100vh */}
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden py-6 lg:py-10">
+        <div className="flex gap-6 items-stretch h-[82vh] max-h-[680px] w-full px-4 lg:px-8 max-lg:flex-col">
           
           {/* Left Side: Fixed Description Card */}
-          <div className="flex w-full flex-col justify-between rounded-brand bg-red-light p-box lg:w-[28vw] lg:flex-none clay-card text-white z-10">
+          <div className="flex w-full flex-col justify-between rounded-brand bg-red-light p-box lg:w-[320px] xl:w-[360px] lg:shrink-0 clay-card text-white z-10">
             <div className="flex items-start justify-between">
               <div className="construction-mark" aria-hidden="true" />
             </div>
@@ -35,16 +67,17 @@ export function EventFlow() {
             </div>
           </div>
           
-          {/* Right Side: Horizontal Parallax Scroll Track */}
-          <div className="min-w-0 flex-1 relative flex items-center overflow-hidden">
+          {/* Right Side: Horizontal Scroll Track Container */}
+          <div ref={containerRef} className="min-w-0 flex-1 relative flex items-center overflow-hidden">
             <motion.div 
+              ref={trackRef}
               style={{ x }}
-              className="flex gap-6 pr-[20vw]"
+              className="flex gap-6 items-stretch py-2"
             >
               {eventFlowCards.map((card, idx) => (
                 <div 
                   key={idx} 
-                  className="shrink-0 w-[290px] md:w-[360px] flex flex-col gap-4"
+                  className="shrink-0 w-[280px] sm:w-[320px] md:w-[360px] flex flex-col gap-4"
                 >
                   {/* Stage Image */}
                   <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border-2 border-white/20 shadow-md">
@@ -79,8 +112,10 @@ export function EventFlow() {
               ))}
             </motion.div>
           </div>
+
         </div>
       </div>
-    </div>
+    </section>
   );
 }
+

@@ -63,6 +63,14 @@ button {
 }
 
 @layer components {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   .label {
     @apply inline-block w-max rounded-pill border border-ink px-5 py-2 text-[16px] leading-[1.2];
   }

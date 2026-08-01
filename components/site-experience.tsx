@@ -28,48 +28,63 @@ import { Marquee, SectionTitle } from "./helpers";
 import { AnimatePresence } from "framer-motion";
 import { Preloader } from "./preloader";
 
-// Side Rail Navigation (Claymorphic & Compact to prevent vertical overflow)
+// Side Rail Navigation (Matching reference style)
 function Rail({ onBook }: { onBook: () => void }) {
   return (
-    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[calc(theme(spacing.rail)+25px)] flex-col px-[22px] py-[25px] lg:flex justify-between bg-paper/20 backdrop-blur-md">
+    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[200px] flex-col px-[10px] py-[14px] lg:flex justify-between bg-paper/20 backdrop-blur-md overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       
-      {/* Top Header Section */}
-      <div className="flex flex-col gap-4">
-        <Logo className="w-full" />
+      {/* Top Header Section with Logo Block */}
+      <div className="flex flex-col items-start gap-1 pb-1 px-1">
+        <Logo />
       </div>
 
-      {/* Main compact Navigation stack */}
-      <nav aria-label="Main navigation" className="flex flex-col gap-[8px] my-auto">
+      {/* Main Navigation Stack */}
+      <nav aria-label="Main navigation" className="flex flex-col gap-[8px] my-auto w-full">
         {menuItems.map((item) => (
           <a
             key={item.index}
             href={item.href}
-            className={`${item.color} group clay-card flex h-[52px] items-center justify-between rounded-[12px] px-[16px] py-[8px] text-ink`}
+            className={`${item.color} group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] p-[14px] transition-all hover:scale-[1.02] focus:outline-none`}
           >
-            <div className="flex items-center gap-3">
-              <span className="font-display text-xs opacity-60">{item.index}</span>
-              <span className="font-display text-[13px] uppercase font-black tracking-wider">{item.label}</span>
+            <div className="flex items-center justify-between w-full">
+              <span className="font-aeonik text-[13px] font-normal opacity-70 leading-none">
+                {item.index}
+              </span>
+              {item.external && (
+                <ArrowUpRight className="h-[14px] w-[14px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              )}
             </div>
-            <ArrowUpRight className="h-[14px] w-[14px] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <span className="font-aeonik text-[15px] font-bold leading-[1.18] text-left">
+              {item.label}
+            </span>
           </a>
         ))}
-      </nav>
-      
-      {/* Bottom controls */}
-      <div className="flex flex-col gap-[8px]">
+
+        {/* Join Nirmaan Action Box */}
         <button
           type="button"
           onClick={onBook}
-          className="h-[52px] clay-card rounded-[12px] bg-purple px-4 text-center font-display text-[14px] uppercase font-black text-white hover:bg-purple-light hover:text-ink focus:outline-none"
+          className="group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] bg-purple p-[14px] text-white transition-all hover:scale-[1.02] focus:outline-none text-left"
         >
-          Join Nirmaan
+          <div className="flex items-center justify-between w-full">
+            <span className="font-aeonik text-[13px] font-normal opacity-70 leading-none">
+              07
+            </span>
+            <ArrowUpRight className="h-[14px] w-[14px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </div>
+          <span className="font-aeonik text-[15px] font-bold leading-[1.18]">
+            Join Nirmaan
+          </span>
         </button>
-
+      </nav>
+      
+      {/* Bottom tag/info */}
+      <div className="pt-1">
         <a
           href="#top"
-          className="flex h-[44px] items-center justify-center rounded-[12px] clay-card bg-paper text-ink px-[18px]"
+          className="flex h-[36px] w-full items-center justify-center rounded-[12px] clay-card bg-paper text-ink px-3 transition-transform hover:scale-[1.01]"
         >
-          <span className="font-aeonik text-[10px] uppercase tracking-wider font-bold text-gray-700">Nirmaan 2026</span>
+          <span className="font-aeonik text-[11px] uppercase tracking-wider font-bold text-gray-700">Nirmaan 2026</span>
         </a>
       </div>
     </header>
@@ -240,7 +255,7 @@ export function SiteExperience() {
       <Rail onBook={() => setModalOpen(true)} />
       <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => setModalOpen(true)} />
       
-      <main className="relative ml-0 overflow-hidden px-0 pt-[75px] lg:ml-[calc(theme(spacing.rail)+25px)] lg:px-0 lg:pr-5 lg:pt-[30px]">
+      <main className="relative ml-0 overflow-x-clip px-0 pt-[75px] lg:ml-[200px] lg:px-0 lg:pr-5 lg:pt-[30px]">
         <article className="home">
           <Hero onBook={() => setModalOpen(true)} />
           <ReverseCountdownClock />

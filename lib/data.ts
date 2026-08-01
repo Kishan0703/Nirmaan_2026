@@ -1,10 +1,10 @@
 export const menuItems = [
-  { index: "01", label: "Overview", href: "#overview", color: "bg-blue" },
-  { index: "02", label: "Problem Statements", href: "#tracks", color: "bg-yellow" },
-  { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange" },
-  { index: "04", label: "Bug Game", href: "#game", color: "bg-red text-white" },
-  { index: "05", label: "Location", href: "#location", color: "bg-green text-white" },
-  { index: "06", label: "FAQ & Team", href: "#faq", color: "bg-purple text-white" }
+  { index: "01", label: "Overview", href: "#overview", color: "bg-blue text-white" },
+  { index: "02", label: "Problem Statements", href: "#tracks", color: "bg-yellow text-ink" },
+  { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange text-white" },
+  { index: "04", label: "Bug Game", href: "#game", color: "bg-red text-white", external: true },
+  { index: "05", label: "Location", href: "#location", color: "bg-green text-ink" },
+  { index: "06", label: "FAQ & Team", href: "#faq", color: "bg-purple text-white", external: true }
 ];
 
 export const eventFlowCards = [
