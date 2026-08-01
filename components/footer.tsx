@@ -59,6 +59,23 @@ export function Footer() {
           >
             Cookies Policy
           </Link>
+          <span className="w-[1px] h-6 bg-ink/20 self-center hidden md:inline-block" />
+          <a
+            href="https://www.instagram.com/codingclub_bmsit/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-ink/40 px-5 py-2 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors"
+          >
+            @codingclub_bmsit
+          </a>
+          <a
+            href="https://www.instagram.com/alterino_bmsit/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-ink/40 px-5 py-2 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors"
+          >
+            @alterino_bmsit
+          </a>
         </div>
       </div>
     </footer>
