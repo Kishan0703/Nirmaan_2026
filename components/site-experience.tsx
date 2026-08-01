@@ -180,14 +180,34 @@ function Hero({ onBook }: { onBook: () => void }) {
             className="rounded-pill border border-white/20 bg-ink/75 px-5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-yellow shadow-md"
           >
             <Radio size={14} className="animate-pulse text-red" />
-            Nirmaan 2026 // Registration Open
+            Nirmaan 2026 // Builder sprint
           </motion.div>
+
+          {/* Interactive 3D Live score panel (Claymorphic) */}
+          <InteractiveTiltCard className="w-full max-w-[390px]">
+            <div className="clay-card p-5 text-ink bg-paper/90 backdrop-blur-md rounded-[24px] border-2 border-white/60">
+              <div className="flex items-center justify-between">
+                <span className="rounded-pill bg-green-light border border-white/30 px-3 py-1.5 text-ink font-display text-[10px] uppercase font-black flex items-center gap-1.5 shadow-sm">
+                  Live event
+                </span>
+                <span className="pulse-dot" aria-hidden="true" />
+              </div>
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                {liveMetrics.map(([label, value]) => (
+                  <div key={label} className="rounded-[14px] bg-white/60 px-4 py-3 text-ink shadow-sm border border-white/40">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-ink/60">{label}</p>
+                    <p className="mt-1 font-display text-[18px] leading-none uppercase font-black text-ink">{value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </InteractiveTiltCard>
         </div>
 
         {/* Big visual statement (Units.gr large typography) */}
         <div className="max-w-[1180px]">
-          <h1 className="hero-title justify-start text-left font-display text-hero text-yellow tracking-tighter uppercase">
-            {"Design. Code. Deploy."
+          <h1 className="hero-title justify-start text-left font-display text-hero text-white tracking-tighter uppercase">
+            {"Nirmaan builds hackathons that build back."
               .split(" ")
               .map((word, index) => (
                 <span
@@ -200,20 +220,21 @@ function Hero({ onBook }: { onBook: () => void }) {
               ))}
           </h1>
           <p className="mt-5 max-w-[900px] font-aeonik text-[clamp(20px,1.5vw,28px)] font-bold leading-[1.15] text-white">
-            A 36-hour design-led hackathon. Team up, build prototypes, get mentor guidance, and showcase your project for the final prize pool.
+            Run a 36-hour design-led hackathon with tracks, teams, mentor rooms, live submissions, judging, sponsor booths, and demo day in one clean hosting flow.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <button
               onClick={onBook}
-              className="clay-card rounded-pill bg-purple px-[30px] py-[15px] text-white font-display text-lg uppercase font-black"
+              className="clay-card rounded-pill bg-ink px-[30px] py-[15px] text-white font-display text-lg uppercase font-black flex items-center gap-2 border-2 border-white/10"
             >
-              Join Nirmaan
+              <span>Start Hosting</span>
+              <ArrowUpRight className="h-[18px] w-[18px]" />
             </button>
             <a
               href="#schedule"
-              className="clay-card rounded-pill bg-paper text-ink px-[30px] py-[15px] text-body-xl font-bold transition-transform hover:-translate-y-0.5 text-center"
+              className="clay-card rounded-pill bg-paper text-ink px-[30px] py-[15px] text-body-xl font-bold transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30"
             >
-              View Schedule
+              View Playbook
             </a>
           </div>
         </div>
@@ -221,8 +242,8 @@ function Hero({ onBook }: { onBook: () => void }) {
         {/* bottom info board */}
         <div className="grid gap-3 lg:grid-cols-4">
           {eventStats.map((stat) => (
-            <div key={stat.label} className="clay-card rounded-[18px] bg-ink/65 backdrop-blur px-5 py-4 hover:border-yellow transition-colors group">
-              <p className="font-display text-[clamp(28px,2vw,36px)] leading-none text-yellow group-hover:text-green-light transition-colors uppercase">{stat.value}</p>
+            <div key={stat.label} className="clay-card rounded-[18px] bg-ink/75 backdrop-blur-md px-5 py-4 border-2 border-white/10 hover:border-yellow transition-colors group">
+              <p className="font-display text-[clamp(28px,2vw,36px)] leading-none text-yellow group-hover:text-green-light transition-colors uppercase font-black">{stat.value}</p>
               <p className="mt-2 text-xs font-bold uppercase tracking-wider text-gray-300">{stat.label}</p>
             </div>
           ))}
