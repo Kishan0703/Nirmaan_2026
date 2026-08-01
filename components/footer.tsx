@@ -1,4 +1,4 @@
-"use client";
+import Link from "next/link";
 
 export function Footer() {
   return (
@@ -47,18 +47,18 @@ export function Footer() {
           >
             FAQs
           </a>
-          <a
-            href="#overview"
+          <Link
+            href="/privacy"
             className="rounded-full border border-ink/40 px-5 py-2 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors"
           >
             Privacy Policy
-          </a>
-          <a
-            href="#schedule"
+          </Link>
+          <Link
+            href="/cookies"
             className="rounded-full border border-ink/40 px-5 py-2 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors"
           >
             Cookies Policy
-          </a>
+          </Link>
         </div>
       </div>
     </footer>
