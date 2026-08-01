@@ -49,7 +49,7 @@ function EventCommandBoard() {
 
 export function EventOverview() {
   return (
-    <section id="overview" className="grid gap-gap lg:grid-cols-[.7fr_1fr]" data-reveal>
+    <section id="overview" className="my-gap grid gap-gap lg:grid-cols-[.7fr_1fr]" data-reveal>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
