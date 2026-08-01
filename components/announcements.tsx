@@ -31,24 +31,16 @@ export function Announcements() {
           
           {/* Right Side: Announcement Video Player (2 columns wide on large screen) */}
           <div className="lg:col-span-2 flex justify-center">
-            <div className="w-full max-w-[320px] clay-card bg-white/50 p-3 rounded-[24px] border border-white/50 flex flex-col justify-between overflow-hidden">
-              <div className="relative aspect-[9/16] w-full rounded-[16px] overflow-hidden border border-ink/5 shadow-inner bg-black">
-                <video
-                  src="/aanoucement.mp4"
-                  controls
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="mt-3 px-1 flex items-center justify-between">
-                <span className="text-[10px] font-display uppercase tracking-widest font-black text-gray-800">
-                  Nirmaan Promo Broadcast
-                </span>
-                <span className="h-2 w-2 rounded-full bg-red animate-pulse" title="Live Video Node" />
-              </div>
+            <div className="w-full max-w-[320px] aspect-[9/16] rounded-[20px] overflow-hidden border-2 border-white/40 shadow-md bg-black">
+              <video
+                src="/aanoucement.mp4"
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>
