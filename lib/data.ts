@@ -46,7 +46,7 @@ export const eventFlowCards = [
 ];
 
 export const eventStats = [
-  { value: "36 hrs", label: "Build sprint" },
+  { value: "36 hrs", label: "Build" },
   { value: "420", label: "Builders capacity" },
   { value: "18", label: "Mentors on call" },
   { value: "₹8L", label: "Prize pool" }
@@ -66,7 +66,7 @@ export const scheduleItems = [
   { time: "18:00", title: "Mentor circuit", detail: "Design, AI, pitch, hardware, and business rooms", color: "bg-orange" },
   { time: "23:30", title: "Checkpoint 01", detail: "Problem, prototype plan, risk notes, next actions", color: "bg-red text-white" },
   { time: "09:30", title: "Submission freeze", detail: "Repos, decks, demo links, and project gallery", color: "bg-purple" },
-  { time: "12:00", title: "Judging sprint", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
+  { time: "12:00", title: "Judging round", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
   { time: "16:00", title: "Demo day", detail: "Final pitches, winners, certificates, archive", color: "bg-green text-white" }
 ];
 

@@ -14,8 +14,7 @@ export function FAQSection() {
   return (
     <section className="my-gap" data-reveal>
       <div className="clay-card bg-paper p-box rounded-brand border-2 border-white/40">
-        <span className="label bg-yellow border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Help</span>
-        <h2 className="mt-4 font-display text-section uppercase tracking-tight text-ink font-black">Frequently Asked Questions</h2>
+        <h2 className="font-display text-section uppercase tracking-tight text-ink font-black">Frequently Asked Questions</h2>
         <div className="mt-6 grid gap-3">
           {faqs.map((faq, idx) => (
             <div key={idx} className="clay-card rounded-[18px] bg-white/60 border border-white/40 overflow-hidden">

@@ -14,7 +14,6 @@ export function EventFlow() {
       <div className="flex min-h-[calc(100dvh-125px)] gap-gap max-lg:flex-col">
         <div className="flex w-full flex-col rounded-brand bg-red-light p-box lg:w-[29.688vw] lg:flex-none clay-card text-white">
           <div className="flex items-start justify-between">
-            <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase text-ink shadow-sm">Event Flow</span>
             <div className="construction-mark" aria-hidden="true" />
           </div>
           <div className="mt-auto max-lg:mt-10">

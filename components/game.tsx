@@ -73,8 +73,7 @@ export function BugSquasherGame() {
       <div className="rounded-brand bg-red-light p-box clay-card text-white flex flex-col gap-5">
         <div className="flex flex-wrap items-center justify-between gap-5 border-b border-white/20 pb-4">
           <div>
-            <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase text-ink shadow-sm">Mini-Game</span>
-            <h2 className="mt-4 font-display text-section uppercase text-white font-black">Bug Squasher</h2>
+            <h2 className="font-display text-section uppercase text-white font-black">Bug Squasher</h2>
           </div>
           <div className="flex gap-4">
             <div className="clay-card rounded-[12px] bg-paper px-4 py-2 text-ink text-center">

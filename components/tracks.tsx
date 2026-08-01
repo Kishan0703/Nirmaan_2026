@@ -10,8 +10,7 @@ export function Tracks({ onBook }: { onBook: () => void }) {
   return (
     <section id="tracks" className="my-gap grid gap-gap" data-reveal>
       <div className="flex flex-col rounded-brand p-box bg-paper clay-card">
-        <span className="label bg-yellow border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Quest Matrix</span>
-        <h2 className="mt-4 font-display text-section uppercase tracking-tight text-ink font-black">Problem Statements & Tracks</h2>
+        <h2 className="font-display text-section uppercase tracking-tight text-ink font-black">Problem Statements & Tracks</h2>
         <p className="mt-4 max-w-[800px] text-body-xl font-semibold text-ink/80 leading-snug">
           Select your challenge track. Problem prompts are divided into Software (S/W) and Hardware (H/W) fields loaded with GMs, devkits, and dedicated bounties.
         </p>

@@ -8,8 +8,7 @@ export function SponsorWall() {
       <div className="rounded-brand bg-green p-box clay-card">
         <div className="flex flex-wrap items-end justify-between gap-5 border-b border-ink/10 pb-6">
           <div>
-            <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Sponsors</span>
-            <h2 className="mt-4 font-display text-section uppercase text-ink font-black">Guild Sponsors</h2>
+            <h2 className="font-display text-section uppercase text-ink font-black">Guild Sponsors</h2>
           </div>
           <p className="max-w-[560px] text-body-xl font-bold text-ink">
             Sponsors shape the build floor. Challenge prompts, API briefs, and developer recruitment slots.

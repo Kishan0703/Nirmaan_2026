@@ -56,7 +56,6 @@ export function EventOverview() {
         viewport={{ once: true }}
         className="flex min-h-[520px] flex-col rounded-brand bg-yellow p-box clay-card"
       >
-        <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Overview</span>
         <div className="mt-auto">
           <h2 className="font-display text-section uppercase tracking-tight text-ink">From idea to demo day</h2>
           <p className="mt-[20px] max-w-[620px] text-body-xl text-ink font-semibold leading-snug">

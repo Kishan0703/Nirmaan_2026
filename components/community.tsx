@@ -9,7 +9,6 @@ export function Community({ onBook }: { onBook: () => void }) {
         <Image src="/assets/images/nirmaan-mentors.png" alt="Hackathon team discussing a prototype with mentors" fill className="object-cover filter contrast-125 grayscale" sizes="(min-width: 1024px) 25vw, 100vw" />
       </div>
       <div className="flex min-h-[430px] flex-col rounded-brand bg-red p-box clay-card text-white">
-        <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase text-ink shadow-sm">Community</span>
         <div className="mt-auto">
           <h2 className="font-display text-section uppercase text-white font-black">Community Lobby</h2>
           <p className="mt-[20px] text-body-xl text-white font-semibold leading-snug">

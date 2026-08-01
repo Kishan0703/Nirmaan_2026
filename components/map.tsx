@@ -21,8 +21,7 @@ export function LocationMap() {
         </div>
         
         <div className="flex flex-col justify-center rounded-brand bg-green p-box clay-card">
-          <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Venue</span>
-          <h2 className="mt-6 font-display text-section uppercase tracking-tight text-ink font-black">BMSIT Campus</h2>
+          <h2 className="font-display text-section uppercase tracking-tight text-ink font-black">BMSIT Campus</h2>
           <p className="mt-4 text-body-xl text-ink font-semibold leading-snug">
             Nirmaan 2026 is hosted offline at BMS Institute of Technology and Management, Yelahanka, Bengaluru.
           </p>

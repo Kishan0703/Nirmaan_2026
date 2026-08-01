@@ -28,14 +28,6 @@ export function Hero({ onBook }: { onBook: () => void }) {
         {/* Top bar details */}
         <div className="flex flex-wrap items-start justify-between gap-5">
           <div className="flex flex-col gap-3 items-start">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="rounded-pill border border-white/20 bg-ink/75 px-5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-yellow shadow-md"
-            >
-              <Radio size={14} className="animate-pulse text-red" />
-              Nirmaan 2026 // Builder sprint
-            </motion.div>
             <CountdownTimer />
           </div>
 

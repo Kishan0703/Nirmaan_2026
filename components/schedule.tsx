@@ -10,15 +10,16 @@ export function ScheduleBoard() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="rounded-brand bg-orange p-box clay-card"
+        className="rounded-brand bg-orange p-box clay-card flex flex-col justify-between min-h-[420px]"
       >
-        <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Schedule</span>
-        <h2 className="mt-[60px] font-display text-section uppercase text-ink">A run-of-show for builders</h2>
-        <p className="mt-4 max-w-[620px] text-body-xl text-ink font-semibold leading-snug">
-          The Nirmaan schedule keeps the hackathon moving: check-in, launch brief, team lock, mentor checkpoints, submission freeze, judging, and demo day.
-        </p>
+        <div>
+          <h2 className="font-display text-section uppercase text-ink">A run-of-show for builders</h2>
+          <p className="mt-4 max-w-[620px] text-body-xl text-ink font-semibold leading-snug">
+            The Nirmaan schedule keeps the hackathon moving: check-in, launch brief, team lock, mentor checkpoints, submission freeze, judging, and demo day.
+          </p>
+        </div>
         <div className="mt-8 grid grid-cols-2 gap-3 border-t border-ink/10 pt-5">
-          {["36h sprint", "2 checkpoints", "5 mentor rooms", "1 demo stage"].map((item) => (
+          {["36h build", "2 checkpoints", "5 mentor rooms", "1 demo stage"].map((item) => (
             <div key={item} className="rounded-[12px] bg-paper px-4 py-3 font-display text-xs uppercase text-ink font-black clay-card">{item}</div>
           ))}
         </div>

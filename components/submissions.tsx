@@ -8,11 +8,7 @@ export function SubmissionBoard() {
   return (
     <section className="my-gap grid gap-gap lg:grid-cols-[1.05fr_.95fr]" data-reveal>
       <div className="rounded-brand p-box bg-white/80 backdrop-blur-md clay-card text-ink">
-        <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">
-          Submissions
-        </span>
-        
-        <h2 className="mt-[30px] font-display text-section uppercase tracking-tight text-ink font-black">Active Room Leaderboard</h2>
+        <h2 className="font-display text-section uppercase tracking-tight text-ink font-black">Active Room Leaderboard</h2>
         <p className="mt-4 max-w-[680px] text-body-xl text-ink/80 font-medium">
           Check live submissions. Live build scores are graded dynamically by mentors based on core design metrics.
         </p>
