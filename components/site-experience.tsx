@@ -24,6 +24,8 @@ import { Values } from "./values";
 import { TeamSection } from "./team-section";
 import { Footer } from "./footer";
 import { Marquee, SectionTitle } from "./helpers";
+import { AnimatePresence } from "framer-motion";
+import { Preloader } from "./preloader";
 
 // Side Rail Navigation (Claymorphic & Compact to prevent vertical overflow)
 function Rail({ onBook }: { onBook: () => void }) {
@@ -221,6 +223,7 @@ function ParticipationModal({ open, onClose }: { open: boolean; onClose: () => v
 }
 
 export function SiteExperience() {
+  const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -229,6 +232,10 @@ export function SiteExperience() {
 
   return (
     <>
+      <AnimatePresence>
+        {loading && <Preloader onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
+
       <Rail onBook={() => setModalOpen(true)} />
       <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => setModalOpen(true)} />
       
