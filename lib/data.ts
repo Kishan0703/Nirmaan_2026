@@ -1,8 +1,10 @@
 export const menuItems = [
   { index: "01", label: "Overview", href: "#overview", color: "bg-blue" },
   { index: "02", label: "Tracks", href: "#tracks", color: "bg-yellow" },
-  { index: "03", label: "Schedule", href: "#schedule", color: "bg-orange" },
-  { index: "04", label: "Sponsors", href: "#sponsors", color: "bg-green" }
+  { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange" },
+  { index: "04", label: "Bug Game", href: "#game", color: "bg-red text-white" },
+  { index: "05", label: "Location", href: "#location", color: "bg-green text-white" },
+  { index: "06", label: "FAQ & Team", href: "#faq", color: "bg-purple text-white" }
 ];
 
 export const eventFlowCards = [
@@ -83,14 +85,17 @@ export const projectSubmissions = [
 ];
 
 export const trackCards = [
-  { title: "AI + Automation", prompt: "Agents, workflows, and operational leverage", color: "bg-blue" },
-  { title: "Climate + Cities", prompt: "Resilient campuses, mobility, and public systems", color: "bg-green" },
-  { title: "FinTech", prompt: "Payments, trust, credit, and accessible finance", color: "bg-yellow" },
-  { title: "Health", prompt: "Care access, triage, wellness, and diagnostics", color: "bg-red" },
-  { title: "Open Innovation", prompt: "Wildcard builds with clear outcome metrics", color: "bg-purple" },
-  { title: "Design Systems", prompt: "Reusable interfaces, tokens, and product craft", color: "bg-orange" },
-  { title: "Hardware", prompt: "Connected devices, sensors, and physical prototypes", color: "bg-green-light" },
-  { title: "Social Impact", prompt: "Community tools with measurable local value", color: "bg-paper" }
+  // Software (S/W) Tracks
+  { title: "AI + Automation", prompt: "Agents, workflows, and operational leverage", color: "bg-blue", type: "software" },
+  { title: "FinTech", prompt: "Payments, trust, credit, and accessible finance", color: "bg-yellow", type: "software" },
+  { title: "Open Innovation", prompt: "Wildcard builds with clear outcome metrics", color: "bg-purple", type: "software" },
+  { title: "Social Impact", prompt: "Community tools with measurable local value", color: "bg-paper", type: "software" },
+  
+  // Hardware (H/W) Tracks
+  { title: "Climate + Cities", prompt: "Resilient campuses, mobility, and public systems", color: "bg-green", type: "hardware" },
+  { title: "Health & Triage", prompt: "Care access, diagnostics, and smart bio-wearables", color: "bg-red", type: "hardware" },
+  { title: "Design Systems", prompt: "Reusable physical form factors, enclosures, and casings", color: "bg-orange", type: "hardware" },
+  { title: "Hardware Rigs", prompt: "Connected devices, custom controllers, and IoT nodes", color: "bg-green-light", type: "hardware" }
 ];
 
 export const values = [
@@ -108,5 +113,41 @@ export const values = [
     title: "Built for Outcomes",
     mark: "03",
     copy: "Judging, demos, winner archives, and follow-up community loops turn one event into durable momentum."
+  }
+];
+
+export const announcements = [
+  { id: 1, date: "Nov 01, 2026", tag: "INFO", content: "Registrations are officially open! Select your quest path." },
+  { id: 2, date: "Nov 03, 2026", tag: "BOUNTY", content: "Prize pool increased to ₹8L with community tracks added." },
+  { id: 3, date: "Nov 05, 2026", tag: "RULES", content: "Submission rules and GitHub workflow briefs published." }
+];
+
+export const galleryImages = [
+  { src: "/assets/images/nirmaan-hero.png", alt: "Active building floor", caption: "Team brainstorming session" },
+  { src: "/assets/images/nirmaan-mentors.png", alt: "Mentor review sessions", caption: "Live engineering checkpoints" },
+  { src: "/assets/images/nirmaan-demo-day.png", alt: "Final pitching stage", caption: "Shortlist project demos" },
+  { src: "/assets/images/nirmaan-hero.png", alt: "Showcase winner ceremony", caption: "Loot award distribution" }
+];
+
+export const faqs = [
+  {
+    question: "Who can participate in Nirmaan?",
+    answer: "Any student currently enrolled in an undergraduate or postgraduate program. Both designers and developers are welcome!"
+  },
+  {
+    question: "What is the team size limit?",
+    answer: "Teams can consist of 1 to 4 members. Matchmaking rooms will be available for solo builders."
+  },
+  {
+    question: "Are there registration fees?",
+    answer: "No, registration for Nirmaan Hackathon is completely free, including food and workshop slots."
+  },
+  {
+    question: "Will the event be online or offline?",
+    answer: "It is an in-person, offline hackathon hosted at the BMSIT campus in Bangalore, India."
+  },
+  {
+    question: "What do I need to bring?",
+    answer: "Your laptop, chargers, extension boxes, and hardware dev kits if you are in the Hardware track."
   }
 ];

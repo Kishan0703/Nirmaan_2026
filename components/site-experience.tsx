@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { CSSProperties, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
-import { Gamepad2, Coins, Trophy, Terminal, Users, Flame, Swords, Heart, Sparkles, Radio } from "lucide-react";
+import { Gamepad2, Coins, Trophy, Terminal, Users, Flame, Swords, Heart, Sparkles, Radio, ShieldAlert } from "lucide-react";
 import {
   eventStats,
   eventFlowCards,
@@ -13,7 +13,10 @@ import {
   scheduleItems,
   sponsorTiers,
   trackCards,
-  values
+  values,
+  announcements,
+  galleryImages,
+  faqs
 } from "@/lib/data";
 import { ArrowUpRight, CloseIcon, DownArrows, GlobeIcon } from "@/components/icons";
 import { Logo } from "@/components/logo";
@@ -58,6 +61,56 @@ function InteractiveTiltCard({ children, className = "" }: { children: React.Rea
         {children}
       </div>
     </motion.div>
+  );
+}
+
+// Countdown timer to Nov 6, 2026
+function CountdownTimer() {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, active: true });
+
+  useEffect(() => {
+    const targetDate = new Date("2026-11-06T09:00:00+05:30").getTime();
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      if (difference <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, active: false });
+        clearInterval(interval);
+      } else {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        setTimeLeft({ days, hours, minutes, seconds, active: true });
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!timeLeft.active) {
+    return (
+      <div className="clay-card px-5 py-3 rounded-[12px] bg-green text-white text-center font-display text-sm uppercase font-black">
+        Event is Active!
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-4 gap-2 text-center text-ink max-w-[340px]">
+      {[
+        { value: timeLeft.days, label: "Days" },
+        { value: timeLeft.hours, label: "Hrs" },
+        { value: timeLeft.minutes, label: "Mins" },
+        { value: timeLeft.seconds, label: "Secs" }
+      ].map((item, idx) => (
+        <div key={idx} className="clay-card bg-white/70 backdrop-blur-md rounded-[12px] p-2 flex flex-col justify-center border border-white/40">
+          <span className="font-display text-[20px] leading-none font-black text-ink">{String(item.value).padStart(2, "0")}</span>
+          <span className="text-[8px] uppercase font-bold text-gray-700 mt-1">{item.label}</span>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -174,14 +227,17 @@ function Hero({ onBook }: { onBook: () => void }) {
         
         {/* Top bar details */}
         <div className="flex flex-wrap items-start justify-between gap-5">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="rounded-pill border border-white/20 bg-ink/75 px-5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-yellow shadow-md"
-          >
-            <Radio size={14} className="animate-pulse text-red" />
-            Nirmaan 2026 // Builder sprint
-          </motion.div>
+          <div className="flex flex-col gap-3 items-start">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="rounded-pill border border-white/20 bg-ink/75 px-5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-yellow shadow-md"
+            >
+              <Radio size={14} className="animate-pulse text-red" />
+              Nirmaan 2026 // Builder sprint
+            </motion.div>
+            <CountdownTimer />
+          </div>
 
           {/* Interactive 3D Live score panel (Claymorphic) */}
           <InteractiveTiltCard className="w-full max-w-[390px]">
@@ -235,6 +291,13 @@ function Hero({ onBook }: { onBook: () => void }) {
               className="clay-card rounded-pill bg-paper text-ink px-[30px] py-[15px] text-body-xl font-bold transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30"
             >
               View Playbook
+            </a>
+            <a
+              href="/nirmaan_brochure.pdf"
+              download="nirmaan_brochure.pdf"
+              className="clay-card rounded-pill bg-paper text-ink px-[30px] py-[15px] text-body-xl font-bold transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30"
+            >
+              Brochure (PDF)
             </a>
           </div>
         </div>
@@ -324,6 +387,29 @@ function EventOverview() {
         </div>
       </motion.div>
       <EventCommandBoard />
+    </section>
+  );
+}
+
+// Announcements Board
+function Announcements() {
+  return (
+    <section className="my-gap" data-reveal>
+      <div className="clay-card bg-paper p-box rounded-brand border-2 border-white/40">
+        <span className="label bg-orange border-2 border-white/20 font-bold text-xs uppercase text-ink shadow-sm">Bulletin</span>
+        <h2 className="mt-4 font-display text-section uppercase tracking-tight text-ink font-black">Live Announcements</h2>
+        <div className="mt-6 grid gap-4">
+          {announcements.map((item) => (
+            <div key={item.id} className="clay-card rounded-[16px] bg-white/60 p-4 border border-white/40 flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-display uppercase bg-blue text-white px-2 py-0.5 rounded-[6px] font-black">{item.tag}</span>
+                <span className="text-xs text-gray-500 font-bold">{item.date}</span>
+              </div>
+              <p className="text-sm font-bold text-ink leading-relaxed flex-1 md:px-4">{item.content}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
@@ -452,45 +538,186 @@ function TrackWall() {
   );
 }
 
-// Tracks/Quests screen
+// Separated Problem statements section
 function Tracks({ onBook }: { onBook: () => void }) {
+  const softwareTracks = useMemo(() => trackCards.filter((t) => t.type === "software"), []);
+  const hardwareTracks = useMemo(() => trackCards.filter((t) => t.type === "hardware"), []);
+
   return (
-    <section id="tracks" className="my-gap grid min-h-[830px] gap-gap lg:grid-cols-[35.938vw_1fr]" data-reveal>
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        className="flex flex-col rounded-brand p-box bg-paper clay-card"
-      >
-        <span className="label bg-yellow border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Tracks</span>
-        <div className="mt-auto max-lg:mt-[30px]">
-          <h2 className="font-display text-section uppercase tracking-tight text-ink">Challenges with structure</h2>
-          <p className="mt-5 text-body-xl font-semibold text-ink/80 leading-snug">
-            Nirmaan teams choose from challenge tracks with prompts, datasets or APIs, sponsor briefs, scoring criteria, and deliverables that keep every build aligned.
-          </p>
-          <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-ink/15 pt-6">
-            {trackCards.slice(0, 8).map((track) => (
-              <div key={track.title} className="flex items-center gap-[10px]">
-                <span className={`h-4.5 w-4.5 rounded-full border-2 border-white/40 shadow-sm ${track.color}`} />
-                <span className="text-sm font-display uppercase tracking-wider font-black text-ink">{track.title}</span>
-              </div>
-            ))}
+    <section id="tracks" className="my-gap grid gap-gap" data-reveal>
+      <div className="flex flex-col rounded-brand p-box bg-paper clay-card">
+        <span className="label bg-yellow border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Quest Matrix</span>
+        <h2 className="mt-4 font-display text-section uppercase tracking-tight text-ink font-black">Problem Statements & Tracks</h2>
+        <p className="mt-4 max-w-[800px] text-body-xl font-semibold text-ink/80 leading-snug">
+          Select your challenge track. Problem prompts are divided into Software (S/W) and Hardware (H/W) fields loaded with GMs, devkits, and dedicated bounties.
+        </p>
+
+        {/* Separated Columns */}
+        <div className="mt-8 grid gap-gap md:grid-cols-2">
+          {/* Software Column */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-display text-card uppercase text-blue font-black border-b border-ink/10 pb-2">Software (S/W) Tracks</h3>
+            <div className="grid gap-3">
+              {softwareTracks.map((track, idx) => (
+                <div key={idx} className={`rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40`}>
+                  <h4 className="font-display text-lg uppercase font-black text-ink">{track.title}</h4>
+                  <p className="mt-1 text-xs text-gray-700 font-bold">{track.prompt}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="mt-[35px]">
-            <button
-              onClick={onBook}
-              className="clay-card rounded-pill bg-purple px-6 py-4 text-sm font-display uppercase font-black text-white hover:bg-purple-light"
-            >
-              Explore Tracks
-            </button>
+
+          {/* Hardware Column */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-display text-card uppercase text-green font-black border-b border-ink/10 pb-2">Hardware (H/W) Tracks</h3>
+            <div className="grid gap-3">
+              {hardwareTracks.map((track, idx) => (
+                <div key={idx} className={`rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40`}>
+                  <h4 className="font-display text-lg uppercase font-black text-ink">{track.title}</h4>
+                  <p className="mt-1 text-xs text-gray-700 font-bold">{track.prompt}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </motion.div>
-      
-      <div className="relative min-h-[350px] overflow-hidden rounded-brand border-2 border-white/30 shadow-soft bg-paper">
-        <TrackWall />
-        <div className="absolute left-1/2 top-1/2 z-10 grid h-24 w-24 -translate-x-1/2 -translate-y-1/2 place-content-center bg-yellow text-center font-display text-[15px] leading-none uppercase shadow-md rotate-3 hover:rotate-0 transition-transform clay-card font-black">
-          TRACKS<br />BOARD
+
+        <div className="mt-8">
+          <button
+            onClick={onBook}
+            className="clay-card rounded-pill bg-purple px-6 py-4 text-sm font-display uppercase font-black text-white hover:bg-purple-light"
+          >
+            Register for a Track
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Student Mini-Game: Bug Squasher
+function BugSquasherGame() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [bugs, setBugs] = useState<{ id: number; x: number; y: number }[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("nirmaan_high_score");
+    if (saved) setHighScore(parseInt(saved, 10));
+  }, []);
+
+  const startGame = () => {
+    setIsPlaying(true);
+    setScore(0);
+    setTimeLeft(30);
+    setBugs([]);
+  };
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    if (timeLeft <= 0) {
+      setIsPlaying(false);
+      if (score > highScore) {
+        setHighScore(score);
+        localStorage.setItem("nirmaan_high_score", score.toString());
+      }
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setTimeLeft((t) => t - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [isPlaying, timeLeft, score, highScore]);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    
+    const spawnInterval = setInterval(() => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = Math.random() * (rect.width - 40);
+      const y = Math.random() * (rect.height - 40);
+      const id = Date.now() + Math.random();
+
+      setBugs((b) => [...b, { id, x, y }]);
+
+      setTimeout(() => {
+        setBugs((currentBugs) => currentBugs.filter((bug) => bug.id !== id));
+      }, 2000);
+
+    }, 700);
+
+    return () => clearInterval(spawnInterval);
+  }, [isPlaying]);
+
+  const squashBug = (id: number) => {
+    setScore((s) => s + 10);
+    setBugs((b) => b.filter((bug) => bug.id !== id));
+  };
+
+  return (
+    <section id="game" className="my-gap" data-reveal>
+      <div className="rounded-brand bg-red-light p-box clay-card text-white flex flex-col gap-5">
+        <div className="flex flex-wrap items-center justify-between gap-5 border-b border-white/20 pb-4">
+          <div>
+            <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase text-ink shadow-sm">Mini-Game</span>
+            <h2 className="mt-4 font-display text-section uppercase text-white font-black">Bug Squasher</h2>
+          </div>
+          <div className="flex gap-4">
+            <div className="clay-card rounded-[12px] bg-paper px-4 py-2 text-ink text-center">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-700">Time Left</p>
+              <p className="font-display text-lg font-black">{timeLeft}s</p>
+            </div>
+            <div className="clay-card rounded-[12px] bg-paper px-4 py-2 text-ink text-center">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-700">Score</p>
+              <p className="font-display text-lg font-black">{score}</p>
+            </div>
+            <div className="clay-card rounded-[12px] bg-paper px-4 py-2 text-ink text-center">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-700">High Score</p>
+              <p className="font-display text-lg font-black">{highScore}</p>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-body-xl text-white/90 font-medium">
+          Quickly click or tap the red bugs as they spawn on the board below to resolve compilation issues! 30 seconds speedrun.
+        </p>
+
+        {/* Game play area */}
+        <div
+          ref={containerRef}
+          className="relative h-[300px] w-full bg-ink/40 border border-white/10 rounded-[18px] overflow-hidden flex items-center justify-center cursor-crosshair shadow-inner"
+        >
+          {!isPlaying && (
+            <div className="text-center z-10 flex flex-col items-center gap-3">
+              <Trophy size={40} className="text-yellow animate-bounce" />
+              <h3 className="font-display text-xl uppercase font-black">Ready to Debug?</h3>
+              <button
+                onClick={startGame}
+                className="clay-card rounded-pill bg-yellow px-8 py-3.5 text-sm font-display uppercase font-black text-ink"
+              >
+                Start Lobby Game
+              </button>
+            </div>
+          )}
+
+          {isPlaying && bugs.map((bug) => (
+            <motion.button
+              key={bug.id}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              onClick={() => squashBug(bug.id)}
+              style={{ left: bug.x, top: bug.y }}
+              className="absolute h-9 w-9 bg-red border-2 border-white rounded-full flex items-center justify-center text-white shadow-md active:scale-95"
+            >
+              🐞
+            </motion.button>
+          ))}
         </div>
       </div>
     </section>
@@ -500,7 +727,7 @@ function Tracks({ onBook }: { onBook: () => void }) {
 // Schedule timeline
 function ScheduleBoard() {
   return (
-    <section className="my-gap grid gap-gap lg:grid-cols-[.9fr_1.1fr]" data-reveal>
+    <section id="schedule" className="my-gap grid gap-gap lg:grid-cols-[.9fr_1.1fr]" data-reveal>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -544,7 +771,7 @@ function ScheduleBoard() {
   );
 }
 
-// Glowing Leaderboard style for Submissions (CRT Terminal)
+// Glowing Leaderboard style for Submissions
 function SubmissionBoard() {
   return (
     <section className="my-gap grid gap-gap lg:grid-cols-[1.05fr_.95fr]" data-reveal>
@@ -588,6 +815,107 @@ function SubmissionBoard() {
             <Trophy size={20} className="text-yellow" /> Finalist Showcase
           </p>
           <p className="mt-2 text-sm text-gray-800 font-bold">Public arpeggio showroom maps top projects for loot deployment post-hackathon.</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Event Gallery
+function GallerySection() {
+  return (
+    <section id="gallery" className="my-gap" data-reveal>
+      <div className="clay-card bg-purple p-box rounded-brand border-2 border-white/20 text-white">
+        <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase text-ink shadow-sm">Archive</span>
+        <h2 className="mt-4 font-display text-section uppercase text-white font-black">Event Gallery</h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {galleryImages.map((img, idx) => (
+            <div key={idx} className="clay-card bg-paper p-3 rounded-[20px] text-ink border-2 border-white/40 shadow-sm flex flex-col gap-2">
+              <div className="relative aspect-video w-full overflow-hidden rounded-[14px] border border-white/30">
+                <Image src={img.src} alt={img.alt} fill className="object-cover filter contrast-125 saturate-50" sizes="20vw" />
+              </div>
+              <p className="font-display text-xs uppercase font-black text-center mt-1">{img.caption}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Location Map
+function LocationMap() {
+  return (
+    <section id="location" className="my-gap" data-reveal>
+      <div className="grid gap-gap lg:grid-cols-[1.1fr_.9fr]">
+        <div className="rounded-brand overflow-hidden h-[400px] border-2 border-white/30 shadow-soft clay-card relative">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.183788775465!2d77.56475737571343!3d13.138479511105979!2m3!1f0!2f0!3f0!3m2!1i1024|2i768!4f13.1!3m3!1m2!1s0x3bae18d8e6e5cc95%3A0xe5a3c94cf9833cb9!2sBMS%20Institute%20of%20Technology%20and%20Management!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="rounded-brand"
+            title="BMSIT Campus Map"
+          />
+        </div>
+        
+        <div className="flex flex-col justify-center rounded-brand bg-green p-box clay-card">
+          <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Venue</span>
+          <h2 className="mt-6 font-display text-section uppercase tracking-tight text-ink font-black">BMSIT Campus</h2>
+          <p className="mt-4 text-body-xl text-ink font-semibold leading-snug">
+            Nirmaan 2026 is hosted offline at BMS Institute of Technology and Management, Yelahanka, Bengaluru.
+          </p>
+          <div className="mt-6 border-t border-ink/10 pt-5 text-ink/80 text-sm font-bold flex flex-col gap-2">
+            <p>📍 Doddaballapur Main Road, Yelahanka, Bengaluru - 560064</p>
+            <p>🗓 November 6-7, 2026</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// FAQ Section
+function FAQSection() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const toggleFAQ = (idx: number) => {
+    setActiveIndex(activeIndex === idx ? null : idx);
+  };
+
+  return (
+    <section className="my-gap" data-reveal>
+      <div className="clay-card bg-paper p-box rounded-brand border-2 border-white/40">
+        <span className="label bg-yellow border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Help</span>
+        <h2 className="mt-4 font-display text-section uppercase tracking-tight text-ink font-black">Frequently Asked Questions</h2>
+        <div className="mt-6 grid gap-3">
+          {faqs.map((faq, idx) => (
+            <div key={idx} className="clay-card rounded-[18px] bg-white/60 border border-white/40 overflow-hidden">
+              <button
+                onClick={() => toggleFAQ(idx)}
+                className="w-full flex items-center justify-between p-5 text-left font-display text-[16px] uppercase font-black text-ink focus:outline-none"
+              >
+                <span>{faq.question}</span>
+                <span className="font-bold text-lg">{activeIndex === idx ? "−" : "+"}</span>
+              </button>
+              <AnimatePresence>
+                {activeIndex === idx && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="px-5 pb-5 text-xs text-gray-800 font-bold leading-relaxed border-t border-ink/5 pt-3 bg-white/20"
+                  >
+                    {faq.answer}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -681,6 +1009,39 @@ function Values() {
           <p className="mt-4 text-body-xl text-ink font-bold leading-snug">{item.copy}</p>
         </article>
       ))}
+    </section>
+  );
+}
+
+// About the Team
+function TeamSection() {
+  return (
+    <section id="team" className="my-gap" data-reveal>
+      <div className="grid gap-gap md:grid-cols-2">
+        {/* Coding Club */}
+        <div className="clay-card bg-blue rounded-brand p-box text-white flex flex-col justify-between">
+          <div>
+            <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase text-ink shadow-sm">Organizers</span>
+            <h3 className="mt-6 font-display text-card uppercase text-white font-black">BMSIT Coding Club</h3>
+            <p className="mt-4 text-body-xl text-white font-semibold leading-snug">
+              BMSIT Coding Club is a premier student-run tech community driving software craftsmanship, hardware engineering, and innovation hubs across Bangalore campus platforms.
+            </p>
+          </div>
+          <span className="text-[10px] font-display uppercase tracking-widest font-black text-yellow mt-8">BMSIT CC // Platform Operations</span>
+        </div>
+
+        {/* Alterino */}
+        <div className="clay-card bg-yellow rounded-brand p-box text-ink flex flex-col justify-between">
+          <div>
+            <span className="label bg-paper border-2 border-white/20 font-bold text-xs uppercase shadow-sm">Partners</span>
+            <h3 className="mt-6 font-display text-card uppercase text-ink font-black">Alterino Ecosystem</h3>
+            <p className="mt-4 text-body-xl text-ink/90 font-semibold leading-snug">
+              Alterino is our strategic technology partner powering developer pipelines, logistics grids, and event infrastructures to ensure every build sprint runs with zero friction.
+            </p>
+          </div>
+          <span className="text-[10px] font-display uppercase tracking-widest font-black text-purple mt-8">Alterino // Logistics Grid Partner</span>
+        </div>
+      </div>
     </section>
   );
 }
@@ -840,15 +1201,30 @@ export function SiteExperience() {
           <Hero onBook={() => setModalOpen(true)} />
           <EventOverview />
           <Marquee color="bg-red" textColor="text-yellow" items={marqueeOne} />
+          
+          <Announcements />
+          
           <EventFlow />
           <ScheduleBoard />
           <Marquee color="bg-blue" textColor="text-green-light" items={marqueeTwo} />
+          
           <Tracks onBook={() => setModalOpen(true)} />
+          <BugSquasherGame />
+          
           <SubmissionBoard />
+          <GallerySection />
+          
+          <LocationMap />
+          <FAQSection />
+          
           <SponsorWall />
           <Community onBook={() => setModalOpen(true)} />
+          
           <SectionTitle>Engine Mechanics</SectionTitle>
           <Values />
+          
+          <TeamSection />
+          
           <Footer />
         </article>
       </main>
