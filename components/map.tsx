@@ -8,7 +8,7 @@ export function LocationMap() {
       <div className="grid gap-gap lg:grid-cols-[1.1fr_.9fr]">
         <div className="rounded-brand overflow-hidden h-[400px] border-2 border-white/30 shadow-soft clay-card relative">
           <iframe
-            src="https://maps.google.com/maps?q=BMS%20Institute%20of%20Technology%20and%20Management&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            src="https://maps.google.com/maps?q=13.1341876,77.5693927&t=&z=15&ie=UTF8&iwloc=near&output=embed"
             width="100%"
             height="100%"
             style={{ border: 0 }}
