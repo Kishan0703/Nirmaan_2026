@@ -879,7 +879,7 @@ function LocationMap() {
       <div className="grid gap-gap lg:grid-cols-[1.1fr_.9fr]">
         <div className="rounded-brand overflow-hidden h-[400px] border-2 border-white/30 shadow-soft clay-card relative">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.2058032731876!2d77.56720402518607!3d13.134187587215457!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae18a5c54ece35%3A0x49c4c47a68a60b9c!2sBMS%20Institute%20of%20Technology%20and%20Management!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
+            src="https://maps.google.com/maps?q=BMS%20Institute%20of%20Technology%20and%20Management&t=&z=15&ie=UTF8&iwloc=&output=embed"
             width="100%"
             height="100%"
             style={{ border: 0 }}
