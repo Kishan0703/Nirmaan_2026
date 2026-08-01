@@ -11,13 +11,12 @@ export function TeamSection() {
         <div className="clay-card bg-blue rounded-brand p-box text-white flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-6">
-              <div className="relative h-14 w-14 rounded-full overflow-hidden border-2 border-white/20 bg-black flex items-center justify-center p-1 shadow-md">
+              <div className="relative h-20 w-20 rounded-[16px] overflow-hidden border-2 border-white/20 bg-black flex items-center justify-center p-1 shadow-md">
                 <Image 
                   src="/assets/images/codingclub-logo.png" 
                   alt="Coding Club BMSIT Logo" 
-                  width={56}
-                  height={56}
-                  className="object-contain"
+                  fill
+                  className="object-cover"
                 />
               </div>
               <a 
@@ -41,13 +40,12 @@ export function TeamSection() {
         <div className="clay-card bg-yellow rounded-brand p-box text-ink flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-6">
-              <div className="relative h-14 w-14 rounded-full overflow-hidden border-2 border-ink/10 bg-[#0f1b29] flex items-center justify-center p-1 shadow-md">
+              <div className="relative h-20 w-20 rounded-[16px] overflow-hidden border-2 border-ink/10 bg-[#0f1b29] flex items-center justify-center p-1 shadow-md">
                 <Image 
                   src="/assets/images/alterino-logo.png" 
                   alt="Alterino Club BMSIT Logo" 
-                  width={56}
-                  height={56}
-                  className="object-contain"
+                  fill
+                  className="object-cover"
                 />
               </div>
               <a 
