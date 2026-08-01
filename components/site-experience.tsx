@@ -128,7 +128,7 @@ function InteractiveTiltCard({ children, className = "" }: { children: React.Rea
 function Rail({ onBook, isMuted, toggleMute }: { onBook: () => void; isMuted: boolean; toggleMute: () => void }) {
   return (
     <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[calc(theme(spacing.rail)+25px)] flex-col px-[22px] py-[30px] lg:flex">
-      <Logo className="mb-[20px]" />
+      <Logo className="mb-[20px]" sizeClass="text-[clamp(26px,1.8vw,34px)]" />
       
       {/* Sound toggle button */}
       <button
