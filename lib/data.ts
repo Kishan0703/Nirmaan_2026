@@ -1,8 +1,10 @@
 export const menuItems = [
   { index: "01", label: "Overview", href: "#overview", color: "bg-blue" },
-  { index: "02", label: "Tracks", href: "#tracks", color: "bg-yellow" },
-  { index: "03", label: "Schedule", href: "#schedule", color: "bg-orange" },
-  { index: "04", label: "Sponsors", href: "#sponsors", color: "bg-green" }
+  { index: "02", label: "Problem Statements", href: "#tracks", color: "bg-yellow" },
+  { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange" },
+  { index: "04", label: "Bug Game", href: "#game", color: "bg-red text-white" },
+  { index: "05", label: "Location", href: "#location", color: "bg-green text-white" },
+  { index: "06", label: "FAQ & Team", href: "#faq", color: "bg-purple text-white" }
 ];
 
 export const eventFlowCards = [
@@ -44,9 +46,9 @@ export const eventFlowCards = [
 ];
 
 export const eventStats = [
-  { value: "36 hrs", label: "Build sprint" },
+  { value: "24 hrs", label: "Build" },
   { value: "420", label: "Builders capacity" },
-  { value: "18", label: "Mentors on call" },
+  { value: "18+", label: "Mentors on call" },
   { value: "₹8L", label: "Prize pool" }
 ];
 
@@ -64,7 +66,7 @@ export const scheduleItems = [
   { time: "18:00", title: "Mentor circuit", detail: "Design, AI, pitch, hardware, and business rooms", color: "bg-orange" },
   { time: "23:30", title: "Checkpoint 01", detail: "Problem, prototype plan, risk notes, next actions", color: "bg-red text-white" },
   { time: "09:30", title: "Submission freeze", detail: "Repos, decks, demo links, and project gallery", color: "bg-purple" },
-  { time: "12:00", title: "Judging sprint", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
+  { time: "12:00", title: "Judging round", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
   { time: "16:00", title: "Demo day", detail: "Final pitches, winners, certificates, archive", color: "bg-green text-white" }
 ];
 
@@ -75,38 +77,84 @@ export const sponsorTiers = [
 ];
 
 export const projectSubmissions = [
-  { team: "Team Cantilever", track: "Climate + Cities", status: "Prototype live", score: "86" },
-  { team: "Null Junction", track: "AI + Automation", status: "Judge review", score: "91" },
-  { team: "Ledger Lane", track: "FinTech", status: "Demo ready", score: "78" },
-  { team: "CareGrid", track: "Health", status: "Needs mentor", score: "72" },
-  { team: "Signal Forge", track: "Hardware", status: "Prototype live", score: "84" }
+  { team: "Team Cantilever", track: "Embedded Systems", status: "Prototype live", score: "86" },
+  { team: "Null Junction", track: "IoT & Automation", status: "Judge review", score: "91" },
+  { team: "Ledger Lane", track: "Embedded Systems", status: "Demo ready", score: "78" },
+  { team: "CareGrid", track: "Hardware Prototyping", status: "Needs mentor", score: "72" },
+  { team: "Signal Forge", track: "Hardware Innovation", status: "Prototype live", score: "84" }
 ];
 
 export const trackCards = [
-  { title: "AI + Automation", prompt: "Agents, workflows, and operational leverage", color: "bg-blue" },
-  { title: "Climate + Cities", prompt: "Resilient campuses, mobility, and public systems", color: "bg-green" },
-  { title: "FinTech", prompt: "Payments, trust, credit, and accessible finance", color: "bg-yellow" },
-  { title: "Health", prompt: "Care access, triage, wellness, and diagnostics", color: "bg-red" },
-  { title: "Open Innovation", prompt: "Wildcard builds with clear outcome metrics", color: "bg-purple" },
-  { title: "Design Systems", prompt: "Reusable interfaces, tokens, and product craft", color: "bg-orange" },
-  { title: "Hardware", prompt: "Connected devices, sensors, and physical prototypes", color: "bg-green-light" },
-  { title: "Social Impact", prompt: "Community tools with measurable local value", color: "bg-paper" }
+  // Software (Embedded Systems / IoT) Tracks
+  { title: "Embedded Systems", prompt: "Blend of embedded computing, connectivity, and software", color: "bg-blue", type: "software" },
+  { title: "IoT Multidisciplinary", prompt: "Connected devices, custom casing, and systems-level logic", color: "bg-yellow", type: "software" },
+  { title: "Connectivity Networks", prompt: "Secure communications, edge nodes, and network protocols", color: "bg-purple", type: "software" },
+  
+  // Hardware Tracks
+  { title: "Robotics & Devices", prompt: "Robotics, physical form factors, and device-based solutions", color: "bg-green", type: "hardware" },
+  { title: "Hardware Prototyping", prompt: "Physical casings, sensing units, casters, and casing system", color: "bg-red", type: "hardware" },
+  { title: "Automation Rigs", prompt: "Connected systems, physical actuators, and automation circuits", color: "bg-orange", type: "hardware" }
 ];
 
 export const values = [
   {
-    title: "Built for Teams",
+    title: "Innovation & Creativity",
     mark: "01",
-    copy: "Clear tracks, rules, mentor checkpoints, and submission expectations help teams build with focus from day one."
+    copy: "How unique and original is the approach? Does it solve a real problem in an inventive way?"
   },
   {
-    title: "Built for Builders",
+    title: "Feasibility & Impact",
     mark: "02",
-    copy: "Participants get clear rules, team formation, track context, and submissions that feel simple under pressure."
+    copy: "Is the solution practical and scalable? Can it make a real-world impact beyond the hackathon stage?"
   },
   {
-    title: "Built for Outcomes",
+    title: "Technical Implementation",
     mark: "03",
-    copy: "Judging, demos, winner archives, and follow-up community loops turn one event into durable momentum."
+    copy: "Is the working prototype technically sound? Quality of coding, hardware components, and overall integration."
+  },
+  {
+    title: "Presentation & Demo",
+    mark: "04",
+    copy: "Clarity of the pitch, demonstration of the working prototype, and the team's ability to answer questions."
+  }
+];
+
+export const announcements = [
+  { id: 1, date: "Aug 05, 2026", tag: "LAUNCH", content: "Round 1 Online PPT registration and submission is officially open!" },
+  { id: 2, date: "Sept 07, 2026", tag: "SHORTS", content: "Round 1 evaluation results announced. Top selected teams proceed to Finale." },
+  { id: 3, date: "Sept 18, 2026", tag: "FINALE", content: "Grand Finale: 24-hour on-site build-off begins at BMSIT campus Bangalore." }
+];
+
+export const galleryImages = [
+  { src: "/assets/images/nirmaan-hero.png", alt: "Active building floor", caption: "Team brainstorming session" },
+  { src: "/assets/images/nirmaan-mentors.png", alt: "Mentor review sessions", caption: "Live engineering checkpoints" },
+  { src: "/assets/images/nirmaan-demo-day.png", alt: "Final pitching stage", caption: "Shortlist project demos" },
+  { src: "/assets/images/nirmaan-hero.png", alt: "Showcase winner ceremony", caption: "Loot award distribution" }
+];
+
+export const faqs = [
+  {
+    question: "Who can participate in Nirmaan?",
+    answer: "Nirmaan is open to student builders and teams from colleges across India. Designers, developers, and hardware engineers are all welcome!"
+  },
+  {
+    question: "What is the team size limit?",
+    answer: "Teams must consist of 2 to 4 members."
+  },
+  {
+    question: "What is the structure of the event?",
+    answer: "It is a two-round challenge: Round 1 is an online PPT submission (open nationwide). Shortlisted teams then proceed to the Grand Finale, an on-site 24-hour build-off in Bangalore."
+  },
+  {
+    question: "Where is the Grand Finale venue?",
+    answer: "It will be hosted at the BMS Institute of Technology and Management, Yelahanka, Bangalore, India."
+  },
+  {
+    question: "Are there registration fees?",
+    answer: "No, registration for Nirmaan is completely free."
+  },
+  {
+    question: "What hardware tracks are available?",
+    answer: "We support Hardware-Based Innovation (robotics, sensing, automation) and Embedded Systems/IoT Multidisciplinary builds."
   }
 ];

@@ -1,0 +1,70 @@
+"use client";
+
+import Image from "next/image";
+
+export function TeamSection() {
+  return (
+    <section id="team" className="my-gap" data-reveal>
+      <div className="grid gap-gap md:grid-cols-2">
+        
+        {/* Coding Club BMSIT */}
+        <div className="clay-card bg-blue rounded-brand p-box text-white flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <div className="relative h-20 w-20 rounded-[16px] overflow-hidden border-2 border-white/20 bg-black flex items-center justify-center p-1 shadow-md">
+                <Image 
+                  src="/assets/images/codingclub-logo.png" 
+                  alt="Coding Club BMSIT Logo" 
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <a 
+                href="https://www.instagram.com/codingclub_bmsit/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[10px] font-display uppercase tracking-wider bg-white/20 text-white hover:bg-white/35 px-4 py-2 rounded-full font-black border border-white/10 transition-transform active:translate-y-0.5"
+              >
+                Instagram ↗
+              </a>
+            </div>
+            <h3 className="font-display text-card uppercase text-white font-black leading-tight">BMSIT Coding Club</h3>
+            <p className="mt-3 text-body-xl text-white font-semibold leading-snug">
+              BMSIT Coding Club is a premier student-run tech community driving software craftsmanship, hardware engineering, and innovation hubs across Bangalore campus platforms.
+            </p>
+          </div>
+          <span className="text-[10px] font-display uppercase tracking-widest font-black text-yellow mt-8">Coding Club BMSIT // Co-Organizer</span>
+        </div>
+
+        {/* Alterino Club BMSIT */}
+        <div className="clay-card bg-yellow rounded-brand p-box text-ink flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <div className="relative h-20 w-20 rounded-[16px] overflow-hidden border-2 border-ink/10 bg-[#0f1b29] flex items-center justify-center p-1 shadow-md">
+                <Image 
+                  src="/assets/images/alterino-logo.png" 
+                  alt="Alterino Club BMSIT Logo" 
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <a 
+                href="https://www.instagram.com/alterino_bmsit/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[10px] font-display uppercase tracking-wider bg-ink/10 text-ink hover:bg-ink/20 px-4 py-2 rounded-full font-black border border-ink/5 transition-transform active:translate-y-0.5"
+              >
+                Instagram ↗
+              </a>
+            </div>
+            <h3 className="font-display text-card uppercase text-ink font-black leading-tight">BMSIT Alterino Club</h3>
+            <p className="mt-3 text-body-xl text-ink/90 font-semibold leading-snug">
+              BMSIT Alterino Club is a premier student-run technology group hosting workshops, hackathons, and bootcamps to build a community of modern engineering builders at BMSIT.
+            </p>
+          </div>
+          <span className="text-[10px] font-display uppercase tracking-widest font-black text-purple mt-8">Alterino Club BMSIT // Co-Organizer</span>
+        </div>
+      </div>
+    </section>
+  );
+}
