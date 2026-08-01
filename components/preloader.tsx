@@ -15,23 +15,43 @@ const loadingPhrases = [
 
 const letters = "nirmaan.".split("");
 
+// Retro Terminal Typing Effect sub-component
+function TypingText({ text }: { text: string }) {
+  const [displayedText, setDisplayedText] = useState("");
+  
+  useEffect(() => {
+    let index = 0;
+    setDisplayedText("");
+    const interval = setInterval(() => {
+      setDisplayedText((prev) => prev + text.charAt(index));
+      index++;
+      if (index >= text.length) {
+        clearInterval(interval);
+      }
+    }, 20); // Fast, snappy letter typing
+    return () => clearInterval(interval);
+  }, [text]);
+  
+  return <span className="inline-block">{displayedText}</span>;
+}
+
 export function Preloader({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
   const [phraseIdx, setPhraseIdx] = useState(0);
 
   useEffect(() => {
-    // Ticking progress counter from 0 to 100 with varying speeds for kinetic rhythm
+    // Ticking progress counter from 0 to 100 with smaller steps for a calmer flow
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(progressInterval);
           return 100;
         }
-        // Custom incremental steps for organic build feel
-        const diff = Math.floor(Math.random() * 8) + 4;
+        // Increments of +1 or +2 only
+        const diff = Math.floor(Math.random() * 2) + 1;
         return Math.min(prev + diff, 100);
       });
-    }, 85);
+    }, 110);
 
     return () => clearInterval(progressInterval);
   }, []);
@@ -63,18 +83,36 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
     >
       <div className="relative flex flex-col items-center max-w-sm w-full px-6">
         
-        {/* Orbiting Kinetic Shapes */}
+        {/* Orbiting Kinetic Shapes Cluster */}
         
-        {/* Floating shape 1 (Yellow pill rotating) */}
+        {/* Yellow pill: BUILD */}
         <motion.div
           animate={{ rotate: 360, y: [0, -15, 0] }}
-          transition={{ rotate: { repeat: Infinity, duration: 4, ease: "linear" }, y: { repeat: Infinity, duration: 2, ease: "easeInOut" } }}
+          transition={{ rotate: { repeat: Infinity, duration: 5, ease: "linear" }, y: { repeat: Infinity, duration: 2.2, ease: "easeInOut" } }}
           className="absolute -top-10 -left-12 h-10 w-16 bg-yellow rounded-full clay-card border-none opacity-90 shadow-md flex items-center justify-center font-display text-[9px] font-black text-ink"
         >
           BUILD
         </motion.div>
 
-        {/* Floating shape 2 (Orange cross spinning) */}
+        {/* Blue pill: CODE */}
+        <motion.div
+          animate={{ x: [0, -10, 0], rotate: [0, -10, 0] }}
+          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+          className="absolute top-[35%] -right-16 h-8 w-14 bg-blue rounded-full clay-card border-none opacity-90 shadow-md flex items-center justify-center font-display text-[8px] font-black text-white"
+        >
+          CODE
+        </motion.div>
+
+        {/* Green pill: LAUNCH */}
+        <motion.div
+          animate={{ x: [0, 10, 0], rotate: [0, 15, 0] }}
+          transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
+          className="absolute bottom-[25%] -left-16 h-8 w-16 bg-green rounded-full clay-card border-none opacity-90 shadow-md flex items-center justify-center font-display text-[8px] font-black text-white"
+        >
+          LAUNCH
+        </motion.div>
+
+        {/* Orange cross: + */}
         <motion.div
           animate={{ rotate: -360, scale: [0.95, 1.1, 0.95] }}
           transition={{ rotate: { repeat: Infinity, duration: 3, ease: "linear" }, scale: { repeat: Infinity, duration: 1.5, ease: "easeInOut" } }}
@@ -83,7 +121,7 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
           +
         </motion.div>
 
-        {/* Floating shape 3 (Purple star shape pulsing) */}
+        {/* Purple star: ✦ */}
         <motion.div
           animate={{ x: [0, 12, 0], y: [0, -10, 0] }}
           transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
@@ -91,6 +129,23 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
         >
           ✦
         </motion.div>
+
+        {/* Floating Gen Z text taglines */}
+        <motion.span
+          animate={{ y: [0, 4, 0], opacity: [0.4, 0.85, 0.4] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="absolute -top-16 left-[25%] text-[8px] font-display font-black text-orange uppercase tracking-widest"
+        >
+          NO CAP
+        </motion.span>
+
+        <motion.span
+          animate={{ y: [0, -4, 0], opacity: [0.4, 0.85, 0.4] }}
+          transition={{ repeat: Infinity, duration: 2.3 }}
+          className="absolute -bottom-16 right-[20%] text-[8px] font-display font-black text-purple uppercase tracking-widest"
+        >
+          WE COOKIN
+        </motion.span>
         
         {/* Main 3D Container Card */}
         <motion.div 
@@ -123,17 +178,17 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
             ))}
           </div>
 
-          {/* Large elastic percentage indicator */}
-          <div className="h-20 flex items-center justify-center mb-6">
+          {/* Large elastic percentage indicator (Slightly smaller, sleek) */}
+          <div className="h-16 flex items-center justify-center mb-6">
             <motion.div 
               key={progress}
-              initial={{ scale: 0.7, y: 15, rotate: -5, opacity: 0 }}
+              initial={{ scale: 0.8, y: 10, rotate: -3, opacity: 0 }}
               animate={{ scale: 1, y: 0, rotate: 0, opacity: 1 }}
               transition={{ type: "spring", stiffness: 350, damping: 12 }}
-              className="font-display text-[62px] leading-none font-black text-ink select-none flex items-baseline"
+              className="font-display text-[46px] leading-none font-black text-ink select-none flex items-baseline"
             >
               <span>{progress}</span>
-              <span className="text-xl font-bold ml-1 text-gray-500 font-aeonik">%</span>
+              <span className="text-lg font-bold ml-1 text-gray-500 font-aeonik">%</span>
             </motion.div>
           </div>
 
@@ -146,16 +201,16 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
             />
           </div>
 
-          {/* Dynamic slang status message */}
+          {/* Dynamic slang status message (With snappy typing effect) */}
           <div className="h-6 flex items-center justify-center">
             <motion.p
               key={phraseIdx}
-              initial={{ opacity: 0, y: 8, filter: "blur(2px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ type: "spring", stiffness: 180, damping: 12 }}
+              initial={{ opacity: 0, filter: "blur(2px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.2 }}
               className="text-[10px] font-display uppercase tracking-widest font-black text-gray-800 text-center"
             >
-              {loadingPhrases[phraseIdx]}
+              <TypingText text={loadingPhrases[phraseIdx]} />
             </motion.p>
           </div>
         </motion.div>
