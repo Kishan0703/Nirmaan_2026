@@ -1,225 +1,335 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const loadingPhrases = [
-  "spawning main lobby... very demure 💅",
-  "summoning based mentors... coding check 💻",
-  "squashing nasty bugs... absolute cinema 🎬",
-  "injecting claymorphic colors... no cap 🎨",
-  "allocating build resources... we cookin 🍳",
-  "compiling codebases... let them cook 🧑‍🍳",
-  "nirmaan active... let's gooo! 🚀"
+/* ─── Data ─────────────────────────────────────────────── */
+
+const consoleLines = [
+  "$ initializing nirmaan kernel...",
+  "$ loading challenge tracks [██████████] done",
+  "$ spawning mentor graph nodes...",
+  "$ compiling submission engine...",
+  "$ connecting to builder lobby...",
+  "$ syncing judging rubrics...",
+  "$ deploying demo stage...",
+  "$ hackathon environment ready ✓",
 ];
 
-const letters = "nirmaan.".split("");
+const letters = "nirmaan".split("");
 
-// Retro Terminal Typing Effect sub-component
-function TypingText({ text }: { text: string }) {
+const particles = Array.from({ length: 18 }, (_, i) => ({
+  id: i,
+  x: Math.random() * 100,
+  y: Math.random() * 100,
+  size: Math.random() * 6 + 3,
+  duration: Math.random() * 4 + 3,
+  delay: Math.random() * 2,
+  color: ["#ef333a", "#f6c62e", "#2563eb", "#22c55e", "#f97316", "#a855f7"][i % 6],
+}));
+
+/* ─── Sub-components ───────────────────────────────────── */
+
+/** SVG circular progress ring */
+function ProgressRing({ progress }: { progress: number }) {
+  const radius = 52;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (progress / 100) * circumference;
+
+  return (
+    <svg width="140" height="140" viewBox="0 0 120 120" className="absolute -z-0">
+      {/* Track */}
+      <circle
+        cx="60" cy="60" r={radius}
+        fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="4"
+      />
+      {/* Progress arc */}
+      <motion.circle
+        cx="60" cy="60" r={radius}
+        fill="none"
+        stroke="url(#progressGrad)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeDasharray={circumference}
+        strokeDashoffset={offset}
+        transform="rotate(-90 60 60)"
+        style={{ transition: "stroke-dashoffset 0.15s ease-out" }}
+      />
+      {/* Glow dot at progress tip */}
+      <defs>
+        <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ef333a" />
+          <stop offset="50%" stopColor="#f97316" />
+          <stop offset="100%" stopColor="#f6c62e" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+/** Retro console typing block */
+function ConsoleBlock({ lineIndex }: { lineIndex: number }) {
   const [displayedText, setDisplayedText] = useState("");
-  
+  const text = consoleLines[lineIndex] || "";
+
   useEffect(() => {
-    let index = 0;
+    let i = 0;
     setDisplayedText("");
     const interval = setInterval(() => {
-      setDisplayedText((prev) => prev + text.charAt(index));
-      index++;
-      if (index >= text.length) {
-        clearInterval(interval);
-      }
-    }, 20); // Fast, snappy letter typing
+      setDisplayedText((prev) => prev + text.charAt(i));
+      i++;
+      if (i >= text.length) clearInterval(interval);
+    }, 18);
     return () => clearInterval(interval);
   }, [text]);
-  
-  return <span className="inline-block">{displayedText}</span>;
+
+  return (
+    <span className="block">
+      {displayedText}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ repeat: Infinity, duration: 0.6 }}
+        className="inline-block w-[6px] h-[11px] bg-green ml-0.5 align-middle rounded-[1px]"
+      />
+    </span>
+  );
 }
+
+/* ─── Main Preloader ───────────────────────────────────── */
 
 export function Preloader({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
-  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [lineIdx, setLineIdx] = useState(0);
+  const completedRef = useRef(false);
 
+  const handleComplete = useCallback(() => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onComplete();
+  }, [onComplete]);
+
+  // Progress ticker — calm, organic increments
   useEffect(() => {
-    // Ticking progress counter from 0 to 100 with smaller steps for a calmer flow
-    const progressInterval = setInterval(() => {
+    const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(progressInterval);
+          clearInterval(interval);
           return 100;
         }
-        // Increments of +1 or +2 only
-        const diff = Math.floor(Math.random() * 2) + 1;
-        return Math.min(prev + diff, 100);
+        const step = Math.random() < 0.3 ? 1 : 2;
+        return Math.min(prev + step, 100);
       });
-    }, 110);
-
-    return () => clearInterval(progressInterval);
+    }, 95);
+    return () => clearInterval(interval);
   }, []);
 
+  // Console line sync + completion trigger
   useEffect(() => {
-    // Sync phrase index with percentage step intervals
-    const step = Math.ceil(100 / loadingPhrases.length);
-    const targetIdx = Math.min(Math.floor(progress / step), loadingPhrases.length - 1);
-    setPhraseIdx(targetIdx);
+    const step = Math.ceil(100 / consoleLines.length);
+    setLineIdx(Math.min(Math.floor(progress / step), consoleLines.length - 1));
 
     if (progress === 100) {
-      const timeout = setTimeout(() => {
-        onComplete();
-      }, 700);
-      return () => clearTimeout(timeout);
+      const t = setTimeout(handleComplete, 800);
+      return () => clearTimeout(t);
     }
-  }, [progress, onComplete]);
+  }, [progress, handleComplete]);
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
-      exit={{ 
-        opacity: 0, 
-        scale: 0.95,
-        filter: "blur(10px)",
-        transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } 
+      exit={{
+        opacity: 0,
+        scale: 0.92,
+        filter: "blur(16px)",
+        transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] },
       }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#f4e9e1] clay-grid"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
+      style={{ background: "#f4e9e1" }}
     >
-      <div className="relative flex flex-col items-center max-w-sm w-full px-6">
-        
-        {/* Orbiting Kinetic Shapes Cluster */}
-        
-        {/* Yellow pill: BUILD */}
+      {/* ── Ambient floating particles ── */}
+      {particles.map((p) => (
         <motion.div
-          animate={{ rotate: 360, y: [0, -15, 0] }}
-          transition={{ rotate: { repeat: Infinity, duration: 5, ease: "linear" }, y: { repeat: Infinity, duration: 2.2, ease: "easeInOut" } }}
-          className="absolute -top-10 -left-12 h-10 w-16 bg-yellow rounded-full clay-card border-none opacity-90 shadow-md flex items-center justify-center font-display text-[9px] font-black text-ink"
+          key={p.id}
+          initial={{ x: `${p.x}vw`, y: `${p.y}vh`, opacity: 0, scale: 0 }}
+          animate={{
+            y: [`${p.y}vh`, `${p.y - 20}vh`, `${p.y}vh`],
+            x: [`${p.x}vw`, `${p.x + (Math.random() > 0.5 ? 8 : -8)}vw`, `${p.x}vw`],
+            opacity: [0, 0.5, 0],
+            scale: [0, 1, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: p.duration,
+            delay: p.delay,
+            ease: "easeInOut",
+          }}
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: p.size,
+            height: p.size,
+            background: p.color,
+            filter: "blur(1px)",
+          }}
+        />
+      ))}
+
+      {/* ── Subtle grid overlay ── */}
+      <div className="absolute inset-0 clay-grid opacity-30 pointer-events-none" />
+
+      {/* ── Ambient gradient wash ── */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 50% at 30% 40%, rgba(239,51,58,0.06) 0%, transparent 70%), radial-gradient(ellipse 50% 60% at 70% 60%, rgba(37,99,235,0.05) 0%, transparent 70%)",
+        }}
+      />
+
+      {/* ── Central composition ── */}
+      <div className="relative flex flex-col items-center z-10">
+
+        {/* ── Staggered letter cascade: "nirmaan" ── */}
+        <div className="flex gap-[2px] mb-8" aria-label="Nirmaan">
+          {letters.map((char, i) => (
+            <motion.span
+              key={i}
+              initial={{ y: 60, rotateX: -90, opacity: 0, filter: "blur(8px)" }}
+              animate={{ y: 0, rotateX: 0, opacity: 1, filter: "blur(0px)" }}
+              transition={{
+                delay: 0.3 + i * 0.08,
+                duration: 0.6,
+                type: "spring",
+                stiffness: 180,
+                damping: 14,
+              }}
+              className="font-display text-[clamp(36px,6vw,52px)] leading-none text-ink tracking-tight font-black lowercase inline-block"
+              style={{ willChange: "transform, opacity, filter" }}
+            >
+              {char}
+            </motion.span>
+          ))}
+          {/* Period with bounce */}
+          <motion.span
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 1, type: "spring", stiffness: 400, damping: 10 }}
+            className="font-display text-[clamp(36px,6vw,52px)] leading-none text-red font-black inline-block"
+          >
+            .
+          </motion.span>
+        </div>
+
+        {/* ── Counter + Ring composite ── */}
+        <motion.div
+          initial={{ scale: 0.6, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.5, type: "spring", stiffness: 120, damping: 16 }}
+          className="relative flex items-center justify-center mb-8"
+          style={{ width: 140, height: 140 }}
+        >
+          <ProgressRing progress={progress} />
+
+          {/* Kinetic counter */}
+          <div className="relative z-10 flex items-baseline select-none">
+            <AnimatePresence mode="popLayout">
+              <motion.span
+                key={progress}
+                initial={{ y: 18, opacity: 0, scale: 0.85 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: -14, opacity: 0, scale: 0.85 }}
+                transition={{ type: "spring", stiffness: 400, damping: 18 }}
+                className="font-display text-[48px] leading-none font-black text-ink tabular-nums"
+                style={{ willChange: "transform, opacity" }}
+              >
+                {progress}
+              </motion.span>
+            </AnimatePresence>
+            <span className="text-[16px] font-bold text-ink/40 ml-1 font-aeonik">%</span>
+          </div>
+        </motion.div>
+
+        {/* ── Horizontal progress bar ── */}
+        <motion.div
+          initial={{ width: 0, opacity: 0 }}
+          animate={{ width: 220, opacity: 1 }}
+          transition={{ delay: 0.7, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="h-[3px] bg-ink/8 rounded-full overflow-hidden mb-8 relative"
+        >
+          <motion.div
+            className="h-full rounded-full"
+            style={{
+              width: `${progress}%`,
+              background: "linear-gradient(90deg, #ef333a, #f97316, #f6c62e)",
+              transition: "width 0.12s ease-out",
+            }}
+          />
+        </motion.div>
+
+        {/* ── Console output block ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+          className="w-[min(340px,85vw)] bg-ink/[0.04] backdrop-blur-sm border border-ink/[0.08] rounded-[14px] p-4 font-mono text-[10px] leading-[1.6] text-ink/60 overflow-hidden"
+          style={{ minHeight: 80 }}
+        >
+          {/* Rendered console history (last 3 lines) */}
+          {consoleLines.slice(Math.max(0, lineIdx - 2), lineIdx).map((line, i) => (
+            <span key={`history-${lineIdx}-${i}`} className="block text-ink/30">
+              {line}
+            </span>
+          ))}
+          {/* Active typing line */}
+          <ConsoleBlock lineIndex={lineIdx} />
+        </motion.div>
+
+        {/* ── Floating accent pills ── */}
+        <motion.div
+          animate={{ y: [0, -8, 0], rotate: [0, 3, 0] }}
+          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+          className="absolute -top-4 -right-16 md:-right-24 bg-yellow text-ink text-[8px] font-display font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm"
         >
           BUILD
         </motion.div>
-
-        {/* Blue pill: CODE */}
         <motion.div
-          animate={{ x: [0, -10, 0], rotate: [0, -10, 0] }}
-          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-          className="absolute top-[35%] -right-16 h-8 w-14 bg-blue rounded-full clay-card border-none opacity-90 shadow-md flex items-center justify-center font-display text-[8px] font-black text-white"
+          animate={{ y: [0, 6, 0], rotate: [0, -4, 0] }}
+          transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
+          className="absolute top-[30%] -left-14 md:-left-20 bg-blue text-white text-[8px] font-display font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm"
         >
           CODE
         </motion.div>
-
-        {/* Green pill: LAUNCH */}
         <motion.div
-          animate={{ x: [0, 10, 0], rotate: [0, 15, 0] }}
-          transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
-          className="absolute bottom-[25%] -left-16 h-8 w-16 bg-green rounded-full clay-card border-none opacity-90 shadow-md flex items-center justify-center font-display text-[8px] font-black text-white"
+          animate={{ y: [0, -6, 0], x: [0, 4, 0] }}
+          transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[20%] -right-12 md:-right-20 bg-green text-white text-[8px] font-display font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm"
         >
-          LAUNCH
+          HACK
         </motion.div>
-
-        {/* Orange cross: + */}
         <motion.div
-          animate={{ rotate: -360, scale: [0.95, 1.1, 0.95] }}
-          transition={{ rotate: { repeat: Infinity, duration: 3, ease: "linear" }, scale: { repeat: Infinity, duration: 1.5, ease: "easeInOut" } }}
-          className="absolute -bottom-8 -right-10 h-11 w-11 bg-orange rounded-[12px] clay-card border-none opacity-95 shadow-md flex items-center justify-center text-white text-md font-black"
+          animate={{ rotate: [0, 180, 360] }}
+          transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
+          className="absolute -bottom-2 -left-10 md:-left-16 w-7 h-7 bg-orange rounded-[8px] shadow-sm flex items-center justify-center text-white text-xs font-black"
         >
           +
         </motion.div>
-
-        {/* Purple star: ✦ */}
         <motion.div
-          animate={{ x: [0, 12, 0], y: [0, -10, 0] }}
-          transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-          className="absolute -top-8 -right-12 h-9 w-9 bg-purple rounded-full clay-card border-none opacity-90 shadow-md flex items-center justify-center text-yellow text-sm font-bold"
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+          className="absolute -top-6 -left-8 md:-left-14 w-6 h-6 bg-purple rounded-full shadow-sm flex items-center justify-center text-yellow text-[10px]"
         >
           ✦
         </motion.div>
-
-        {/* Floating Gen Z text taglines */}
-        <motion.span
-          animate={{ y: [0, 4, 0], opacity: [0.4, 0.85, 0.4] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute -top-16 left-[25%] text-[8px] font-display font-black text-orange uppercase tracking-widest"
-        >
-          NO CAP
-        </motion.span>
-
-        <motion.span
-          animate={{ y: [0, -4, 0], opacity: [0.4, 0.85, 0.4] }}
-          transition={{ repeat: Infinity, duration: 2.3 }}
-          className="absolute -bottom-16 right-[20%] text-[8px] font-display font-black text-purple uppercase tracking-widest"
-        >
-          WE COOKIN
-        </motion.span>
-        
-        {/* Main 3D Container Card */}
-        <motion.div 
-          initial={{ scale: 0.85, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, ease: [0.175, 0.885, 0.32, 1.275] }} // Elastic spring reveal
-          className="w-full clay-card bg-paper p-8 rounded-[36px] flex flex-col items-center text-ink border-2 border-white/50 relative overflow-hidden"
-        >
-          {/* Subtle background ambient mesh */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-yellow/5 via-transparent to-purple/5 pointer-events-none" />
-
-          {/* Letter-Staggered Kinetic Header */}
-          <div className="flex gap-0.5 mb-6">
-            {letters.map((char, index) => (
-              <motion.span
-                key={index}
-                initial={{ y: 25, rotate: -25, opacity: 0 }}
-                animate={{ y: 0, rotate: 0, opacity: 1 }}
-                transition={{ 
-                  delay: index * 0.05,
-                  duration: 0.5,
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 12
-                }}
-                className="font-display text-[38px] leading-none text-ink tracking-tight font-black lowercase inline-block"
-              >
-                {char}
-              </motion.span>
-            ))}
-          </div>
-
-          {/* Large elastic percentage indicator (Slightly smaller, sleek) */}
-          <div className="h-16 flex items-center justify-center mb-6">
-            <motion.div 
-              key={progress}
-              initial={{ scale: 0.8, y: 10, rotate: -3, opacity: 0 }}
-              animate={{ scale: 1, y: 0, rotate: 0, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 350, damping: 12 }}
-              className="font-display text-[46px] leading-none font-black text-ink select-none flex items-baseline"
-            >
-              <span>{progress}</span>
-              <span className="text-lg font-bold ml-1 text-gray-500 font-aeonik">%</span>
-            </motion.div>
-          </div>
-
-          {/* Interactive progress track bar */}
-          <div className="w-full h-3 bg-white/60 border border-white/40 rounded-full overflow-hidden mb-6 shadow-inner relative">
-            <motion.div 
-              className="h-full bg-gradient-to-r from-orange to-yellow rounded-full"
-              style={{ width: `${progress}%` }}
-              transition={{ ease: "easeOut", duration: 0.1 }}
-            />
-          </div>
-
-          {/* Dynamic slang status message (With snappy typing effect) */}
-          <div className="h-6 flex items-center justify-center">
-            <motion.p
-              key={phraseIdx}
-              initial={{ opacity: 0, filter: "blur(2px)" }}
-              animate={{ opacity: 1, filter: "blur(0px)" }}
-              transition={{ duration: 0.2 }}
-              className="text-[10px] font-display uppercase tracking-widest font-black text-gray-800 text-center"
-            >
-              <TypingText text={loadingPhrases[phraseIdx]} />
-            </motion.p>
-          </div>
-        </motion.div>
-
-        {/* Small copyright footer */}
-        <p className="absolute -bottom-16 text-[9px] font-display uppercase tracking-widest font-black text-ink/40 text-center">
-          © 2026 NIRMAAN // STAGE ZERO
-        </p>
       </div>
+
+      {/* ── Bottom branding ── */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.35 }}
+        transition={{ delay: 1.2 }}
+        className="absolute bottom-6 text-[9px] font-display uppercase tracking-[0.25em] font-black text-ink text-center"
+      >
+        © 2026 Nirmaan // Stage Zero
+      </motion.p>
     </motion.div>
   );
 }
