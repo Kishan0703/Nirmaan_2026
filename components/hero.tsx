@@ -71,7 +71,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
               })}
           </h1>
           <p className="mt-5 max-w-[900px] font-aeonik text-[clamp(20px,1.5vw,28px)] font-bold leading-[1.15] text-white">
-            Run a 36-hour design-led hackathon with tracks, teams, mentor rooms, live submissions, judging, sponsor booths, and demo day in one clean hosting flow.
+            National-level 24-hour innovation challenge for student builders across India. Run an intense sprint from idea to working prototype with real-world impact.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <button

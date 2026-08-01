@@ -12,14 +12,14 @@ export function Tracks({ onBook }: { onBook: () => void }) {
       <div className="flex flex-col rounded-brand p-box bg-paper clay-card">
         <h2 className="font-display text-section uppercase tracking-tight text-ink font-black">Problem Statements & Tracks</h2>
         <p className="mt-4 max-w-[800px] text-body-xl font-semibold text-ink/80 leading-snug">
-          Select your challenge track. Problem prompts are divided into Software (S/W) and Hardware (H/W) fields loaded with GMs, devkits, and dedicated bounties.
+          Select your challenge track. Prompts are divided into Embedded Systems / IoT (Multidisciplinary) and Hardware-Based Innovation fields, loaded with custom devkits and industry mentors.
         </p>
 
         {/* Separated Columns */}
         <div className="mt-8 grid gap-gap md:grid-cols-2">
           {/* Software Column */}
           <div className="flex flex-col gap-4">
-            <h3 className="font-display text-card uppercase text-blue font-black border-b border-ink/10 pb-2">Software (S/W) Tracks</h3>
+            <h3 className="font-display text-card uppercase text-blue font-black border-b border-ink/10 pb-2">Embedded Systems & IoT</h3>
             <div className="grid gap-3">
               {softwareTracks.map((track, idx) => (
                 <div key={idx} className={`rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40`}>
@@ -32,7 +32,7 @@ export function Tracks({ onBook }: { onBook: () => void }) {
 
           {/* Hardware Column */}
           <div className="flex flex-col gap-4">
-            <h3 className="font-display text-card uppercase text-green font-black border-b border-ink/10 pb-2">Hardware (H/W) Tracks</h3>
+            <h3 className="font-display text-card uppercase text-green font-black border-b border-ink/10 pb-2">Hardware Innovation</h3>
             <div className="grid gap-3">
               {hardwareTracks.map((track, idx) => (
                 <div key={idx} className={`rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40`}>

@@ -27,7 +27,7 @@ export function LocationMap() {
           </p>
           <div className="mt-6 border-t border-ink/10 pt-5 text-ink/80 text-sm font-bold flex flex-col gap-2">
             <p>📍 Doddaballapur Main Road, Yelahanka, Bengaluru - 560064</p>
-            <p>🗓 November 6-7, 2026</p>
+            <p>🗓 September 18-19, 2026 (tentative)</p>
             <a
               href="https://www.google.com/maps/place/BMS+Institute+of+Technology+and+Management/@13.133363,77.5648019,830m/data=!3m1!1e3!4m6!3m5!1s0x3bae18a5c54ece35:0x49c4c47a68a60b9c!8m2!3d13.1341876!4d77.5693927!16s%2Fm%2F03c38ys?entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D"
               target="_blank"

@@ -46,9 +46,9 @@ export const eventFlowCards = [
 ];
 
 export const eventStats = [
-  { value: "36 hrs", label: "Build" },
+  { value: "24 hrs", label: "Build" },
   { value: "420", label: "Builders capacity" },
-  { value: "18", label: "Mentors on call" },
+  { value: "18+", label: "Mentors on call" },
   { value: "₹8L", label: "Prize pool" }
 ];
 
@@ -77,49 +77,52 @@ export const sponsorTiers = [
 ];
 
 export const projectSubmissions = [
-  { team: "Team Cantilever", track: "Climate + Cities", status: "Prototype live", score: "86" },
-  { team: "Null Junction", track: "AI + Automation", status: "Judge review", score: "91" },
-  { team: "Ledger Lane", track: "FinTech", status: "Demo ready", score: "78" },
-  { team: "CareGrid", track: "Health", status: "Needs mentor", score: "72" },
-  { team: "Signal Forge", track: "Hardware", status: "Prototype live", score: "84" }
+  { team: "Team Cantilever", track: "Embedded Systems", status: "Prototype live", score: "86" },
+  { team: "Null Junction", track: "IoT & Automation", status: "Judge review", score: "91" },
+  { team: "Ledger Lane", track: "Embedded Systems", status: "Demo ready", score: "78" },
+  { team: "CareGrid", track: "Hardware Prototyping", status: "Needs mentor", score: "72" },
+  { team: "Signal Forge", track: "Hardware Innovation", status: "Prototype live", score: "84" }
 ];
 
 export const trackCards = [
-  // Software (S/W) Tracks
-  { title: "AI + Automation", prompt: "Agents, workflows, and operational leverage", color: "bg-blue", type: "software" },
-  { title: "FinTech", prompt: "Payments, trust, credit, and accessible finance", color: "bg-yellow", type: "software" },
-  { title: "Open Innovation", prompt: "Wildcard builds with clear outcome metrics", color: "bg-purple", type: "software" },
-  { title: "Social Impact", prompt: "Community tools with measurable local value", color: "bg-paper", type: "software" },
+  // Software (Embedded Systems / IoT) Tracks
+  { title: "Embedded Systems", prompt: "Blend of embedded computing, connectivity, and software", color: "bg-blue", type: "software" },
+  { title: "IoT Multidisciplinary", prompt: "Connected devices, custom casing, and systems-level logic", color: "bg-yellow", type: "software" },
+  { title: "Connectivity Networks", prompt: "Secure communications, edge nodes, and network protocols", color: "bg-purple", type: "software" },
   
-  // Hardware (H/W) Tracks
-  { title: "Climate + Cities", prompt: "Resilient campuses, mobility, and public systems", color: "bg-green", type: "hardware" },
-  { title: "Health & Triage", prompt: "Care access, diagnostics, and smart bio-wearables", color: "bg-red", type: "hardware" },
-  { title: "Design Systems", prompt: "Reusable physical form factors, enclosures, and casings", color: "bg-orange", type: "hardware" },
-  { title: "Hardware Rigs", prompt: "Connected devices, custom controllers, and IoT nodes", color: "bg-green-light", type: "hardware" }
+  // Hardware Tracks
+  { title: "Robotics & Devices", prompt: "Robotics, physical form factors, and device-based solutions", color: "bg-green", type: "hardware" },
+  { title: "Hardware Prototyping", prompt: "Physical casings, sensing units, casters, and casing system", color: "bg-red", type: "hardware" },
+  { title: "Automation Rigs", prompt: "Connected systems, physical actuators, and automation circuits", color: "bg-orange", type: "hardware" }
 ];
 
 export const values = [
   {
-    title: "Built for Teams",
+    title: "Innovation & Creativity",
     mark: "01",
-    copy: "Clear tracks, rules, mentor checkpoints, and submission expectations help teams build with focus from day one."
+    copy: "How unique and original is the approach? Does it solve a real problem in an inventive way?"
   },
   {
-    title: "Built for Builders",
+    title: "Feasibility & Impact",
     mark: "02",
-    copy: "Participants get clear rules, team formation, track context, and submissions that feel simple under pressure."
+    copy: "Is the solution practical and scalable? Can it make a real-world impact beyond the hackathon stage?"
   },
   {
-    title: "Built for Outcomes",
+    title: "Technical Implementation",
     mark: "03",
-    copy: "Judging, demos, winner archives, and follow-up community loops turn one event into durable momentum."
+    copy: "Is the working prototype technically sound? Quality of coding, hardware components, and overall integration."
+  },
+  {
+    title: "Presentation & Demo",
+    mark: "04",
+    copy: "Clarity of the pitch, demonstration of the working prototype, and the team's ability to answer questions."
   }
 ];
 
 export const announcements = [
-  { id: 1, date: "Nov 01, 2026", tag: "INFO", content: "Registrations are officially open! Select your quest path." },
-  { id: 2, date: "Nov 03, 2026", tag: "BOUNTY", content: "Prize pool increased to ₹8L with community tracks added." },
-  { id: 3, date: "Nov 05, 2026", tag: "RULES", content: "Submission rules and GitHub workflow briefs published." }
+  { id: 1, date: "Aug 05, 2026", tag: "LAUNCH", content: "Round 1 Online PPT registration and submission is officially open!" },
+  { id: 2, date: "Sept 07, 2026", tag: "SHORTS", content: "Round 1 evaluation results announced. Top selected teams proceed to Finale." },
+  { id: 3, date: "Sept 18, 2026", tag: "FINALE", content: "Grand Finale: 24-hour on-site build-off begins at BMSIT campus Bangalore." }
 ];
 
 export const galleryImages = [
@@ -132,22 +135,26 @@ export const galleryImages = [
 export const faqs = [
   {
     question: "Who can participate in Nirmaan?",
-    answer: "Any student currently enrolled in an undergraduate or postgraduate program. Both designers and developers are welcome!"
+    answer: "Nirmaan is open to student builders and teams from colleges across India. Designers, developers, and hardware engineers are all welcome!"
   },
   {
     question: "What is the team size limit?",
-    answer: "Teams can consist of 1 to 4 members. Matchmaking rooms will be available for solo builders."
+    answer: "Teams must consist of 2 to 4 members."
+  },
+  {
+    question: "What is the structure of the event?",
+    answer: "It is a two-round challenge: Round 1 is an online PPT submission (open nationwide). Shortlisted teams then proceed to the Grand Finale, an on-site 24-hour build-off in Bangalore."
+  },
+  {
+    question: "Where is the Grand Finale venue?",
+    answer: "It will be hosted at the BMS Institute of Technology and Management, Yelahanka, Bangalore, India."
   },
   {
     question: "Are there registration fees?",
-    answer: "No, registration for Nirmaan Hackathon is completely free, including food and workshop slots."
+    answer: "No, registration for Nirmaan is completely free."
   },
   {
-    question: "Will the event be online or offline?",
-    answer: "It is an in-person, offline hackathon hosted at the BMSIT campus in Bangalore, India."
-  },
-  {
-    question: "What do I need to bring?",
-    answer: "Your laptop, chargers, extension boxes, and hardware dev kits if you are in the Hardware track."
+    question: "What hardware tracks are available?",
+    answer: "We support Hardware-Based Innovation (robotics, sensing, automation) and Embedded Systems/IoT Multidisciplinary builds."
   }
 ];

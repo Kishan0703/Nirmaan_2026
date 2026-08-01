@@ -270,7 +270,7 @@ export function SiteExperience() {
           <SponsorWall />
           <Community onBook={() => setModalOpen(true)} />
           
-          <SectionTitle>Engine Mechanics</SectionTitle>
+          <SectionTitle>Judging Criteria</SectionTitle>
           <Values />
           
           <TeamSection />

@@ -19,7 +19,7 @@ export function ScheduleBoard() {
           </p>
         </div>
         <div className="mt-8 grid grid-cols-2 gap-3 border-t border-ink/10 pt-5">
-          {["36h build", "2 checkpoints", "5 mentor rooms", "1 demo stage"].map((item) => (
+          {["24h build", "2 checkpoints", "5 mentor rooms", "1 demo stage"].map((item) => (
             <div key={item} className="rounded-[12px] bg-paper px-4 py-3 font-display text-xs uppercase text-ink font-black clay-card">{item}</div>
           ))}
         </div>
