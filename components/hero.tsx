@@ -82,6 +82,12 @@ export function Hero({ onBook }: { onBook: () => void }) {
               <ArrowUpRight className="h-[18px] w-[18px]" />
             </button>
             <a
+              href="#tracks"
+              className="clay-card rounded-pill bg-yellow text-ink px-[30px] py-[15px] text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30"
+            >
+              Problem Statements
+            </a>
+            <a
               href="#schedule"
               className="clay-card rounded-pill bg-paper text-ink px-[30px] py-[15px] text-body-xl font-bold transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30"
             >

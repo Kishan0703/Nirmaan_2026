@@ -56,6 +56,13 @@ function Rail({ onBook }: { onBook: () => void }) {
       
       {/* Bottom controls */}
       <div className="flex flex-col gap-[8px]">
+        <a
+          href="#tracks"
+          className="h-[52px] clay-card rounded-[12px] bg-yellow px-4 flex items-center justify-center text-center font-display text-[13px] uppercase font-black text-ink hover:bg-yellow-light focus:outline-none"
+        >
+          Problem Statements
+        </a>
+
         <button
           type="button"
           onClick={onBook}
