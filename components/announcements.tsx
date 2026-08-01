@@ -30,9 +30,9 @@ export function Announcements() {
           </div>
           
           {/* Right Side: Announcement Video Player (2 columns wide on large screen) */}
-          <div className="lg:col-span-2 flex">
-            <div className="w-full clay-card bg-white/50 p-3 rounded-[24px] border border-white/50 flex flex-col justify-between overflow-hidden">
-              <div className="relative aspect-video w-full rounded-[16px] overflow-hidden border border-ink/5 shadow-inner">
+          <div className="lg:col-span-2 flex justify-center">
+            <div className="w-full max-w-[320px] clay-card bg-white/50 p-3 rounded-[24px] border border-white/50 flex flex-col justify-between overflow-hidden">
+              <div className="relative aspect-[9/16] w-full rounded-[16px] overflow-hidden border border-ink/5 shadow-inner bg-black">
                 <video
                   src="/announcement.mp4"
                   controls
