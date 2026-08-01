@@ -34,7 +34,7 @@ export function Announcements() {
             <div className="w-full max-w-[320px] clay-card bg-white/50 p-3 rounded-[24px] border border-white/50 flex flex-col justify-between overflow-hidden">
               <div className="relative aspect-[9/16] w-full rounded-[16px] overflow-hidden border border-ink/5 shadow-inner bg-black">
                 <video
-                  src="/announcement.mp4"
+                  src="/aanoucement.mp4"
                   controls
                   autoPlay
                   muted
