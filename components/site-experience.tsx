@@ -246,7 +246,7 @@ function Hero({ onBook }: { onBook: () => void }) {
         alt="Hackathon teams building prototypes in a design studio"
         fill
         priority
-        className="object-cover opacity-60 filter grayscale contrast-125"
+        className="object-cover opacity-70 filter saturate-100 contrast-110"
         sizes="(min-width: 1024px) 88vw, 100vw"
       />
       <div className="clay-grid absolute inset-0 mix-blend-multiply opacity-40" />
@@ -294,15 +294,18 @@ function Hero({ onBook }: { onBook: () => void }) {
           <h1 className="hero-title justify-start text-left font-display text-hero text-white tracking-tighter uppercase">
             {"Nirmaan builds hackathons that build back."
               .split(" ")
-              .map((word, index) => (
-                <span
-                  key={`${word}-${index}`}
-                  className="drop-shadow-sm"
-                  style={{ "--word-index": index } as CSSProperties}
-                >
-                  {word}
-                </span>
-              ))}
+              .map((word, index) => {
+                const colors = ["text-white", "text-yellow font-black", "text-white", "text-white", "text-green-light font-black", "text-green-light font-black"];
+                return (
+                  <span
+                    key={`${word}-${index}`}
+                    className={`drop-shadow-sm ${colors[index] || "text-white"}`}
+                    style={{ "--word-index": index } as CSSProperties}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
           </h1>
           <p className="mt-5 max-w-[900px] font-aeonik text-[clamp(20px,1.5vw,28px)] font-bold leading-[1.15] text-white">
             Run a 36-hour design-led hackathon with tracks, teams, mentor rooms, live submissions, judging, sponsor booths, and demo day in one clean hosting flow.
@@ -333,12 +336,26 @@ function Hero({ onBook }: { onBook: () => void }) {
 
         {/* bottom info board */}
         <div className="grid gap-3 lg:grid-cols-4">
-          {eventStats.map((stat) => (
-            <div key={stat.label} className="clay-card rounded-[18px] bg-ink/75 backdrop-blur-md px-5 py-4 border-2 border-white/10 hover:border-yellow transition-colors group">
-              <p className="font-display text-[clamp(28px,2vw,36px)] leading-none text-yellow group-hover:text-green-light transition-colors uppercase font-black">{stat.value}</p>
-              <p className="mt-2 text-xs font-bold uppercase tracking-wider text-gray-300">{stat.label}</p>
-            </div>
-          ))}
+          {eventStats.map((stat, idx) => {
+            const statColors = [
+              "bg-blue text-white hover:border-yellow",
+              "bg-yellow text-ink hover:border-blue",
+              "bg-orange text-white hover:border-yellow",
+              "bg-green text-ink hover:border-purple"
+            ];
+            const textColors = [
+              "text-yellow group-hover:text-green-light",
+              "text-purple group-hover:text-blue",
+              "text-yellow group-hover:text-green-light",
+              "text-white group-hover:text-yellow"
+            ];
+            return (
+              <div key={stat.label} className={`clay-card rounded-[18px] ${statColors[idx]} px-5 py-4 border-2 border-white/20 transition-colors group`}>
+                <p className={`font-display text-[clamp(28px,2vw,36px)] leading-none ${textColors[idx]} uppercase font-black`}>{stat.value}</p>
+                <p className="mt-2 text-xs font-bold uppercase tracking-wider opacity-85">{stat.label}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
