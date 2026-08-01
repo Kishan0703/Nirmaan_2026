@@ -376,7 +376,7 @@ button {
   }
 }
 
-/* --- ARCADE & CRT CUSTOM UTILITIES --- */
+/* --- CLAYMORPHISM & LAYOUT UTILITIES --- */
 
 .perspective-1000 {
   perspective: 1000px;
@@ -390,8 +390,8 @@ button {
   backface-visibility: hidden;
 }
 
-.arcade-grid {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1.5px, transparent 1.5px);
+.clay-grid {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1.5px, transparent 1.5px);
   background-size: 16px 16px;
   background-color: #f4e9e1;
 }
@@ -431,7 +431,6 @@ button {
     8px 12px 24px rgba(0, 0, 0, 0.05);
 }
 
-/* Map the arcade-panel to claymorphism style */
 .arcade-panel {
   border: 2px solid rgba(255, 255, 255, 0.45);
   box-shadow: 
@@ -449,96 +448,4 @@ button {
     3px 4px 8px rgba(0, 0, 0, 0.06);
 }
 
-.glow-green {
-  text-shadow: 0 0 8px rgba(27, 227, 73, 0.6), 0 0 16px rgba(27, 227, 73, 0.2);
-}
-
-.glow-pink {
-  text-shadow: 0 0 8px rgba(239, 51, 58, 0.6), 0 0 16px rgba(239, 51, 58, 0.2);
-}
-
-.glow-purple {
-  text-shadow: 0 0 8px rgba(171, 84, 247, 0.6), 0 0 16px rgba(171, 84, 247, 0.2);
-}
-
-.border-glow-green {
-  box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.15), inset -2px -2px 4px rgba(0, 0, 0, 0.4), 0 0 8px rgba(27, 227, 73, 0.2);
-  border: 2px solid rgba(27, 227, 73, 0.4);
-}
-
-.border-glow-pink {
-  box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.15), inset -2px -2px 4px rgba(0, 0, 0, 0.4), 0 0 8px rgba(239, 51, 58, 0.2);
-  border: 2px solid rgba(239, 51, 58, 0.4);
-}
-
-.crt-screen {
-  border: 6px solid #2e2825;
-  border-radius: 28px;
-  background: #030f06;
-  box-shadow: 
-    inset 0 0 40px rgba(0,0,0,0.85),
-    inset 4px 4px 8px rgba(255,255,255,0.1),
-    inset -4px -4px 8px rgba(0,0,0,0.5),
-    8px 12px 28px rgba(0,0,0,0.15);
-}
-
-.crt-screen::before {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
-  z-index: 20;
-  background-size: 100% 4px, 6px 100%;
-  pointer-events: none;
-}
-
-.crt-screen::after {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-  background: radial-gradient(circle, transparent 65%, rgba(0, 0, 0, 0.45) 100%);
-  z-index: 21;
-  pointer-events: none;
-}
-
-.crt-flicker {
-  animation: crt-flicker-anim 0.15s infinite;
-}
-
-.crt-scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: rgba(27, 227, 73, 0.08);
-  opacity: 0.8;
-  z-index: 22;
-  pointer-events: none;
-  animation: crt-scanline-anim 6s linear infinite;
-}
-
-@keyframes crt-flicker-anim {
-  0% { opacity: 0.985; }
-  50% { opacity: 0.999; }
-  100% { opacity: 0.98; }
-}
-
-@keyframes crt-scanline-anim {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(2000%); }
-}
-
-/* Custom retro joystick anims */
-@keyframes tilt-joystick {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(15deg); }
-  75% { transform: rotate(-15deg); }
-}
-
-.joystick-head {
-  animation: tilt-joystick 4s ease-in-out infinite;
-}
 

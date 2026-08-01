@@ -1,112 +1,112 @@
 export const menuItems = [
   { index: "01", label: "Overview", href: "#overview", color: "bg-blue" },
-  { index: "02", label: "Quests", href: "#tracks", color: "bg-yellow" },
-  { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange" },
-  { index: "04", label: "Guilds", href: "#sponsors", color: "bg-green" }
+  { index: "02", label: "Tracks", href: "#tracks", color: "bg-yellow" },
+  { index: "03", label: "Schedule", href: "#schedule", color: "bg-orange" },
+  { index: "04", label: "Sponsors", href: "#sponsors", color: "bg-green" }
 ];
 
 export const eventFlowCards = [
   {
-    title: "Spawn",
-    subtitle: "Define the Quest Brief",
+    title: "Plan",
+    subtitle: "Shape the build brief",
     image: "/assets/images/nirmaan-hero.png",
     speed: "fast",
-    details: ["Select challenge paths & boss rules", "Inspect the loot pool & timelines", "Challenge parameters unlocked"]
+    details: ["Tracks, rules, and rubrics", "Timeline and prize structure", "Challenge briefs published"]
   },
   {
-    title: "Lobby",
-    subtitle: "Assemble Your Party",
+    title: "Launch",
+    subtitle: "Open the event cleanly",
     image: "/assets/images/nirmaan-mentors.png",
     speed: "slow",
-    details: ["Join matchmaking & build profiles", "Guild creation & registration lock", "Onboarding tutorial complete"]
+    details: ["Registration opens", "Team creation and announcements", "Participant onboarding flow"]
   },
   {
-    title: "Speedrun",
-    subtitle: "36-Hour Continuous Build",
+    title: "Run",
+    subtitle: "Keep the floor moving",
     image: "/assets/images/nirmaan-demo-day.png",
     speed: "fast",
-    details: ["Check-in gates & power-up buffers", "Live developer support & mentor slots", "Milestone checkpoints with zero lag"]
+    details: ["Check-ins and mentor slots", "Live support and checkpoints", "Submission windows that stay clear"]
   },
   {
-    title: "Boss Fight",
-    subtitle: "Scoreboards and Judging",
+    title: "Judge",
+    subtitle: "Score without chaos",
     image: "/assets/images/nirmaan-mentors.png",
     speed: "slow",
-    details: ["Game Master allocations", "Rubric-led scoring algorithms", "Shortlists & final scoreboards synced"]
+    details: ["Reviewer assignment", "Rubric-led scoring", "Finalist selection and scoreboards"]
   },
   {
-    title: "Hall of Fame",
-    subtitle: "Climb the High Score Board",
+    title: "Showcase",
+    subtitle: "Turn projects into proof",
     image: "/assets/images/nirmaan-demo-day.png",
     speed: "fast",
-    details: ["Live demo arena & public stream", "Claim tokens, badges & certificate loot", "Ongoing community guild matchmaking"]
+    details: ["Project gallery and demo links", "Winner archive", "Certificates and community follow-up"]
   }
 ];
 
 export const eventStats = [
-  { value: "36 HR", label: "Speedrun" },
-  { value: "420", label: "Lobby Slots" },
-  { value: "18", label: "Game Masters" },
-  { value: "₹8L", label: "Loot Pool" }
+  { value: "36 hrs", label: "Build sprint" },
+  { value: "420", label: "Builders capacity" },
+  { value: "18", label: "Mentors on call" },
+  { value: "₹8L", label: "Prize pool" }
 ];
 
 export const liveMetrics = [
-  ["Lobby Capacity", "312 / 420"],
-  ["Guilds Joined", "64 Parties"],
-  ["Draft Builds", "118 Submissions"],
-  ["Game Masters", "24 Active"]
+  ["Registrations", "312 / 420"],
+  ["Teams formed", "64"],
+  ["Submissions", "118 drafts"],
+  ["Judges assigned", "24"]
 ];
 
 export const scheduleItems = [
-  { time: "09:00", title: "Matchmaking Open", detail: "QR check-in, grab badges, setup rigs in zone", color: "bg-yellow" },
-  { time: "10:30", title: "Quest Briefing", detail: "Opening tutorial, challenge paths, rules of play", color: "bg-blue text-white" },
-  { time: "13:00", title: "Party Formation Lock", detail: "Assemble final teams, solo matchmaking ends", color: "bg-green-light" },
-  { time: "18:00", title: "Mentor Power-ups", detail: "Design, AI, pitch, and hardware rooms active", color: "bg-orange" },
-  { time: "23:30", title: "Save Point 01", detail: "Prototype logs, tech stack verification check", color: "bg-red text-white" },
-  { time: "09:30", title: "Submit Build", detail: "Repos frozen, slide decks uploaded, demo loops active", color: "bg-purple" },
-  { time: "12:00", title: "Boss Trial", detail: "Scoring algorithms, Game Master reviews", color: "bg-yellow" },
-  { time: "16:00", title: "Hall of Fame Ceremony", detail: "Final presentations, loot distribution", color: "bg-green text-white" }
+  { time: "09:00", title: "Check-in opens", detail: "QR desk, badge pickup, team zones unlock", color: "bg-yellow" },
+  { time: "10:30", title: "Opening brief", detail: "Rules, tracks, sponsor prompts, judging rubric", color: "bg-blue text-white" },
+  { time: "13:00", title: "Team formation lock", detail: "Solo builders matched, team pages generated", color: "bg-green-light" },
+  { time: "18:00", title: "Mentor circuit", detail: "Design, AI, pitch, hardware, and business rooms", color: "bg-orange" },
+  { time: "23:30", title: "Checkpoint 01", detail: "Problem, prototype plan, risk notes, next actions", color: "bg-red text-white" },
+  { time: "09:30", title: "Submission freeze", detail: "Repos, decks, demo links, and project gallery", color: "bg-purple" },
+  { time: "12:00", title: "Judging sprint", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
+  { time: "16:00", title: "Demo day", detail: "Final pitches, winners, certificates, archive", color: "bg-green text-white" }
 ];
 
 export const sponsorTiers = [
-  { name: "Blueprint Guild", slots: "2 slots", perks: ["Named challenge track", "Final judge seat", "Developer recruitment portal"] },
-  { name: "Build Floor Sponsor", slots: "4 slots", perks: ["Custom power-up room", "Sandbox booth", "API/Dataset brief"] },
-  { name: "Loot Contributor", slots: "8 slots", perks: ["Prize support", "Technical workshop slot", "Community archive badge"] }
+  { name: "Blueprint Partner", slots: "2 slots", perks: ["Named challenge track", "Final judging seat", "Talent shortlist"] },
+  { name: "Build Floor Sponsor", slots: "4 slots", perks: ["Mentor room", "Booth module", "Dataset/API brief"] },
+  { name: "Community Backer", slots: "8 slots", perks: ["Prize support", "Workshop slot", "Project archive badge"] }
 ];
 
 export const projectSubmissions = [
-  { team: "Cyber Cantilever", track: "Cyberpunk + Cities", status: "Demo active", score: "86" },
-  { team: "Null Junction", track: "AI + Autopilot", status: "GM review", score: "91" },
-  { team: "Ledger Lane", track: "DeFi Guild", status: "Ready to play", score: "78" },
-  { team: "CareGrid", track: "Bio-Hacks", status: "Need potion", score: "72" },
-  { team: "Signal Forge", track: "Hardware Rig", status: "Demo active", score: "84" }
+  { team: "Team Cantilever", track: "Climate + Cities", status: "Prototype live", score: "86" },
+  { team: "Null Junction", track: "AI + Automation", status: "Judge review", score: "91" },
+  { team: "Ledger Lane", track: "FinTech", status: "Demo ready", score: "78" },
+  { team: "CareGrid", track: "Health", status: "Needs mentor", score: "72" },
+  { team: "Signal Forge", track: "Hardware", status: "Prototype live", score: "84" }
 ];
 
 export const trackCards = [
-  { title: "AI + Autopilot", prompt: "Autonomous agents, deep learning, operational bots", color: "bg-blue" },
-  { title: "Cyberpunk + Cities", prompt: "Smart campus nodes, public systems, mesh networks", color: "bg-green" },
-  { title: "DeFi Guilds", prompt: "Crypto billing, micropayments, digital loot assets", color: "bg-yellow" },
-  { title: "Bio-Hacks", prompt: "Diagnostics, focus trackers, biosensors, wellness", color: "bg-red" },
-  { title: "Open Sandbox", prompt: "Wildcard builds with clear score parameters", color: "bg-purple" },
-  { title: "Interface Craft", prompt: "Design tokens, game UI elements, high craft interfaces", color: "bg-orange" },
-  { title: "Hardware Rig", prompt: "Controllers, sensor rigs, IoT, physical gadgets", color: "bg-green-light" },
-  { title: "Social Lobby", prompt: "Community hubs, local impact, campus utilities", color: "bg-paper" }
+  { title: "AI + Automation", prompt: "Agents, workflows, and operational leverage", color: "bg-blue" },
+  { title: "Climate + Cities", prompt: "Resilient campuses, mobility, and public systems", color: "bg-green" },
+  { title: "FinTech", prompt: "Payments, trust, credit, and accessible finance", color: "bg-yellow" },
+  { title: "Health", prompt: "Care access, triage, wellness, and diagnostics", color: "bg-red" },
+  { title: "Open Innovation", prompt: "Wildcard builds with clear outcome metrics", color: "bg-purple" },
+  { title: "Design Systems", prompt: "Reusable interfaces, tokens, and product craft", color: "bg-orange" },
+  { title: "Hardware", prompt: "Connected devices, sensors, and physical prototypes", color: "bg-green-light" },
+  { title: "Social Impact", prompt: "Community tools with measurable local value", color: "bg-paper" }
 ];
 
 export const values = [
   {
-    title: "Co-Op Ready",
+    title: "Built for Teams",
     mark: "01",
-    copy: "Structured timelines, matchmaking guides, and active Game Masters keep your party aligned."
+    copy: "Clear tracks, rules, mentor checkpoints, and submission expectations help teams build with focus from day one."
   },
   {
-    title: "Infinite Sandbox",
+    title: "Built for Builders",
     mark: "02",
-    copy: "Clean specifications, sandbox rules, and challenge prompts let you build exactly what you want."
+    copy: "Participants get clear rules, team formation, track context, and submissions that feel simple under pressure."
   },
   {
-    title: "High Score Legacy",
+    title: "Built for Outcomes",
     mark: "03",
-    copy: "Judging transparency, public build showrooms, and continuous loot keep the momentum going."
+    copy: "Judging, demos, winner archives, and follow-up community loops turn one event into durable momentum."
   }
 ];
