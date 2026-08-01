@@ -182,17 +182,10 @@ function Rail({ onBook }: { onBook: () => void }) {
 
         <a
           href="#top"
-          className="flex h-[44px] items-center justify-between rounded-[12px] clay-card bg-paper text-ink px-[18px]"
+          className="flex h-[44px] items-center justify-center rounded-[12px] clay-card bg-paper text-ink px-[18px]"
         >
           <span className="font-aeonik text-[10px] uppercase tracking-wider font-bold text-gray-700">Nirmaan 2026</span>
-          <GlobeIcon />
         </a>
-        
-        <div className="flex h-[44px] items-center justify-around rounded-[12px] clay-card bg-paper text-ink" aria-label="Social links">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue transition-colors"><GithubIcon size={15} /></a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-yellow transition-colors"><XIcon size={15} /></a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-pink transition-colors"><InstagramIcon size={15} /></a>
-        </div>
       </div>
     </header>
   );
