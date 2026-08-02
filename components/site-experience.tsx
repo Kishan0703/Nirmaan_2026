@@ -47,7 +47,7 @@ function Rail({ onBook }: { onBook: () => void }) {
           <a
             key={item.index}
             href={item.href}
-            className={`${item.color} group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] p-[14px] transition-all hover:scale-[1.02] focus:outline-none`}
+            className={`${item.color} group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] p-[14px] transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper`}
           >
             <div className="flex items-center justify-between w-full">
               <span className="font-aeonik text-[13px] font-normal opacity-70 leading-none">
@@ -67,7 +67,7 @@ function Rail({ onBook }: { onBook: () => void }) {
         <button
           type="button"
           onClick={onBook}
-          className="group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] bg-purple p-[14px] text-white transition-all hover:scale-[1.02] focus:outline-none text-left"
+          className="group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] bg-purple p-[14px] text-white transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper text-left"
         >
           <div className="flex items-center justify-between w-full">
             <span className="font-aeonik text-[13px] font-normal opacity-70 leading-none">
@@ -112,7 +112,7 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
           aria-expanded={open}
           aria-label="Toggle menu"
           onClick={() => setOpen(!open)}
-          className="grid h-10 w-10 place-content-center rounded-full bg-ink text-white"
+          className="grid h-10 w-10 place-content-center rounded-full bg-ink text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
         >
           <span className="hamburger" />
         </button>

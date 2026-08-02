@@ -12,15 +12,15 @@ export function FAQSection() {
   };
 
   return (
-    <section className="my-gap" data-reveal>
+    <section id="faq" className="my-gap" data-reveal>
       <div className="clay-card bg-paper p-box rounded-brand border-2 border-white/40">
         <h2 className="font-display text-section uppercase tracking-tight text-ink font-black">Frequently Asked Questions</h2>
         <div className="mt-6 grid gap-3">
           {faqs.map((faq, idx) => (
-            <div key={idx} className="clay-card rounded-[18px] bg-white/60 border border-white/40 overflow-hidden">
+            <div key={faq.question} className="clay-card rounded-[18px] bg-white/60 border border-white/40 overflow-hidden">
               <button
                 onClick={() => toggleFAQ(idx)}
-                className="w-full flex items-center justify-between p-5 text-left font-display text-[16px] uppercase font-black text-ink focus:outline-none"
+                className="w-full flex items-center justify-between p-5 text-left font-display text-[16px] uppercase font-black text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
               >
                 <span>{faq.question}</span>
                 <span className="font-bold text-lg">{activeIndex === idx ? "−" : "+"}</span>
