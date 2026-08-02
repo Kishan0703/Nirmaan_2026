@@ -40,3 +40,13 @@
 - Confirm registration falls back to the modal without `NEXT_PUBLIC_REGISTRATION_URL`.
 - Confirm registration uses the external URL when `NEXT_PUBLIC_REGISTRATION_URL` is set.
 - Confirm the bug game starts, scores, ends, and cleans timers.
+
+## Follow-Up Quality Fixes
+
+- Add the missing FAQ section anchor so navigation and footer FAQ links resolve correctly.
+- Replace the hard-coded visible countdown with real event-date countdown logic.
+- Prevent closed mobile menu links from remaining keyboard-focusable.
+- Improve modal keyboard behavior with focus restoration and a basic focus trap.
+- Add visible focus states where interactive elements currently remove outlines.
+- Rename the announcement video from `aanoucement.mp4` to `announcement.mp4`.
+- Review oversized or unused media assets and optimize only where it does not change visual output.
