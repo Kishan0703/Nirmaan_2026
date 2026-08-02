@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
-import { trackCards } from "@/lib/data";
+import { trackCards, TrackType } from "@/lib/data";
+
+const getTracksByType = (type: TrackType) => trackCards.filter((track) => track.type === type);
+const softwareTracks = getTracksByType("software");
+const hardwareTracks = getTracksByType("hardware");
 
 export function Tracks({ onBook }: { onBook: () => void }) {
-  const softwareTracks = useMemo(() => trackCards.filter((t) => t.type === "software"), []);
-  const hardwareTracks = useMemo(() => trackCards.filter((t) => t.type === "hardware"), []);
-
   return (
     <section id="tracks" className="my-gap grid gap-gap" data-reveal>
       <div className="flex flex-col rounded-brand p-box bg-paper clay-card">
@@ -21,8 +21,8 @@ export function Tracks({ onBook }: { onBook: () => void }) {
           <div className="flex flex-col gap-4">
             <h3 className="font-display text-card uppercase text-blue font-black border-b border-ink/10 pb-2">Embedded Systems & IoT</h3>
             <div className="grid gap-3">
-              {softwareTracks.map((track, idx) => (
-                <div key={idx} className={`rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40`}>
+              {softwareTracks.map((track) => (
+                <div key={track.title} className="rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40">
                   <h4 className="font-display text-lg uppercase font-black text-ink">{track.title}</h4>
                   <p className="mt-1 text-xs text-gray-700 font-bold">{track.prompt}</p>
                 </div>
@@ -34,8 +34,8 @@ export function Tracks({ onBook }: { onBook: () => void }) {
           <div className="flex flex-col gap-4">
             <h3 className="font-display text-card uppercase text-green font-black border-b border-ink/10 pb-2">Hardware Innovation</h3>
             <div className="grid gap-3">
-              {hardwareTracks.map((track, idx) => (
-                <div key={idx} className={`rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40`}>
+              {hardwareTracks.map((track) => (
+                <div key={track.title} className="rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40">
                   <h4 className="font-display text-lg uppercase font-black text-ink">{track.title}</h4>
                   <p className="mt-1 text-xs text-gray-700 font-bold">{track.prompt}</p>
                 </div>

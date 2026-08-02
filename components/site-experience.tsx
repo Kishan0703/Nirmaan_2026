@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, FormEvent } from "react";
+import { useEffect, useRef, useState, FormEvent } from "react";
 import { ArrowUpRight, CloseIcon, DownArrows } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { menuItems } from "@/lib/data";
@@ -27,6 +27,9 @@ import { Footer } from "./footer";
 import { Marquee, SectionTitle } from "./helpers";
 import { AnimatePresence } from "framer-motion";
 import { Preloader } from "./preloader";
+
+const MARQUEE_ONE_ITEMS = ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"];
+const MARQUEE_TWO_ITEMS = ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"];
 
 // Side Rail Navigation (Matching reference style)
 function Rail({ onBook }: { onBook: () => void }) {
@@ -250,9 +253,6 @@ export function SiteExperience() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const marqueeOne = useMemo(() => ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"], []);
-  const marqueeTwo = useMemo(() => ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"], []);
-
   return (
     <>
       <AnimatePresence>
@@ -267,13 +267,13 @@ export function SiteExperience() {
           <Hero onBook={() => setModalOpen(true)} />
           <ReverseCountdownClock />
           <EventOverview />
-          <Marquee color="bg-red" textColor="text-yellow" items={marqueeOne} />
+          <Marquee color="bg-red" textColor="text-yellow" items={MARQUEE_ONE_ITEMS} />
           
           <Announcements />
           
           <EventFlow />
           <ScheduleBoard />
-          <Marquee color="bg-blue" textColor="text-green-light" items={marqueeTwo} />
+          <Marquee color="bg-blue" textColor="text-green-light" items={MARQUEE_TWO_ITEMS} />
           
           <Tracks onBook={() => setModalOpen(true)} />
           <BugSquasherGame />

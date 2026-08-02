@@ -2,8 +2,6 @@
 
 import Image from "next/image";
 import { CSSProperties } from "react";
-import { motion } from "framer-motion";
-import { Radio } from "lucide-react";
 import { ArrowUpRight } from "@/components/icons";
 import { InteractiveTiltCard } from "./helpers";
 import { REGISTRATION_URL } from "@/lib/config";
