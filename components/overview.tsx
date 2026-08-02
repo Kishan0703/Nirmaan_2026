@@ -6,11 +6,11 @@ import { Terminal } from "lucide-react";
 
 function EventCommandBoard() {
   const nodes = [
-    { label: "Plan", className: "left-[10%] top-[30%] bg-yellow border-white/20 shadow-md" },
-    { label: "Launch", className: "left-[32%] top-[15%] bg-blue text-white border-white/20 shadow-md" },
-    { label: "Run", className: "left-[50%] top-[60%] bg-red text-white border-white/20 shadow-md" },
-    { label: "Judge", className: "left-[70%] top-[25%] bg-orange border-white/20 shadow-md" },
-    { label: "Showcase", className: "left-[86%] top-[65%] bg-green-light border-white/20 shadow-md" }
+    { label: "Plan", x: "12%", y: "42%", className: "bg-yellow border-white/20 shadow-md" },
+    { label: "Launch", x: "34%", y: "19%", className: "bg-blue text-white border-white/20 shadow-md" },
+    { label: "Run", x: "52%", y: "65%", className: "bg-red text-white border-white/20 shadow-md" },
+    { label: "Judge", x: "72%", y: "35%", className: "bg-orange border-white/20 shadow-md" },
+    { label: "Showcase", x: "88%", y: "73%", className: "bg-green-light border-white/20 shadow-md" }
   ];
 
   return (
@@ -18,23 +18,28 @@ function EventCommandBoard() {
       <div className="clay-grid absolute inset-0 opacity-45" />
       
       {/* Route line */}
-      <svg className="absolute inset-0 h-full w-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M 120 220 Q 250 80 340 100 T 520 340 T 720 180 T 880 380" fill="none" stroke="#ef333a" strokeWidth="4" strokeDasharray="8, 6" />
+      <svg className="absolute inset-0 h-full w-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 12 42 Q 25 15 34 19 T 52 65 T 72 35 T 88 73" fill="none" stroke="#ef333a" strokeWidth="0.8" strokeDasharray="1.6, 1.2" vectorEffect="non-scaling-stroke" />
       </svg>
       
       {nodes.map((node, index) => (
-        <motion.div
+        <div
           key={node.label}
-          initial={{ scale: 0.8, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: index * 0.15 }}
-          whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 0.5 : -0.5 }}
-          className={`clay-card absolute ${node.className} cursor-pointer px-4 py-2.5 rounded-full`}
-          style={{ "--node-index": index } as CSSProperties}
+          className="absolute -translate-x-1/2 -translate-y-1/2"
+          style={{ left: node.x, top: node.y }}
         >
-          <span className="block text-[11px] font-display uppercase leading-none font-black text-ink">{node.label}</span>
-        </motion.div>
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.15 }}
+            whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 0.5 : -0.5 }}
+            className={`clay-card ${node.className} cursor-pointer px-4 py-2.5 rounded-full`}
+            style={{ "--node-index": index } as CSSProperties}
+          >
+            <span className="block text-[11px] font-display uppercase leading-none font-black text-ink">{node.label}</span>
+          </motion.div>
+        </div>
       ))}
 
       <div className="absolute bottom-8 left-8 rounded-[12px] clay-card bg-paper px-5 py-4 text-ink">
