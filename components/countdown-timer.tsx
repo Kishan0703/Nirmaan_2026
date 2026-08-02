@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { EVENT_START_ISO } from "@/lib/config";
 
 export function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, active: true });
 
   useEffect(() => {
-    const targetDate = new Date("2026-09-18T09:00:00+05:30").getTime();
+    const targetDate = new Date(EVENT_START_ISO).getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const difference = targetDate - now;

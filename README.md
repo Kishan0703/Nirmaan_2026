@@ -1,8 +1,6 @@
 # Nirmaan Hackathon Website
 
-Nirmaan is a design-led hackathon event for builders, students, mentors, sponsors, and campus communities. This website presents the event experience, tracks, schedule, sponsors, submissions, and demo-day flow.
-
-The visual references for the site are available in the [`reference`](./reference) folder.
+Nirmaan is a national-level, design-led hackathon for student builders across India. This website presents the event experience, tracks, timeline, sponsors, submissions, venue details, team information, and demo-day flow.
 
 ## Tech Stack
 
@@ -10,6 +8,18 @@ The visual references for the site are available in the [`reference`](./referenc
 - React 18
 - TypeScript
 - Tailwind CSS
+- Framer Motion
+- Lucide React
+
+## Configuration
+
+The registration CTA can be connected to an external registration page:
+
+```bash
+NEXT_PUBLIC_REGISTRATION_URL=https://example.com/register
+```
+
+When this value is not set, the registration CTA opens the built-in participation modal instead of linking to a placeholder URL.
 
 ## Getting Started
 
@@ -55,7 +65,19 @@ npm run lint
 - [`components`](./components) - Reusable UI components and the main site experience.
 - [`lib`](./lib) - Site data such as navigation, tracks, schedule, sponsors, and submissions.
 - [`public`](./public) - Static assets, fonts, icons, and images.
+- [`docs`](./docs) - Project plans, design notes, hosting specs, and local agent skills.
 - [`reference`](./reference) - Reference images for the intended visual direction.
+
+## Production Checks
+
+Before shipping changes, run:
+
+```bash
+npm run lint
+npm run build
+```
+
+For UI changes, include screenshots or recordings in the pull request. For cleanup-only changes, include the commands run and confirm that the site still builds.
 
 ## Contributing
 

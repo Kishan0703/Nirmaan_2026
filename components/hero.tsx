@@ -2,13 +2,15 @@
 
 import Image from "next/image";
 import { CSSProperties } from "react";
-import { motion } from "framer-motion";
-import { Radio } from "lucide-react";
 import { ArrowUpRight } from "@/components/icons";
 import { InteractiveTiltCard } from "./helpers";
+import { REGISTRATION_URL } from "@/lib/config";
 import { liveMetrics } from "@/lib/data";
 
 export function Hero({ onBook }: { onBook?: () => void }) {
+  const registerCtaClassName =
+    "clay-card rounded-pill bg-yellow text-ink px-[30px] py-[15px] text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30 flex items-center gap-2";
+
   return (
     <section id="top" className="relative grid min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft lg:min-h-[calc(100dvh-50px)] bg-paper">
       <Image
@@ -69,15 +71,26 @@ export function Hero({ onBook }: { onBook?: () => void }) {
             National-level 24-hour innovation challenge for student builders across India. Run an intense sprint from idea to working prototype with real-world impact.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="clay-card rounded-pill bg-yellow text-ink px-[30px] py-[15px] text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30 flex items-center gap-2"
-            >
-              <span>Register on Unstop</span>
-              <ArrowUpRight className="h-[18px] w-[18px]" />
-            </a>
+            {REGISTRATION_URL ? (
+              <a
+                href={REGISTRATION_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={registerCtaClassName}
+              >
+                <span>Register on Unstop</span>
+                <ArrowUpRight className="h-[18px] w-[18px]" />
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={onBook}
+                className={registerCtaClassName}
+              >
+                <span>Register on Unstop</span>
+                <ArrowUpRight className="h-[18px] w-[18px]" />
+              </button>
+            )}
             <a
               href="#tracks"
               className="clay-card rounded-pill bg-paper text-ink px-[30px] py-[15px] text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30"

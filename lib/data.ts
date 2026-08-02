@@ -1,4 +1,34 @@
-export const menuItems = [
+type MenuItem = {
+  index: string;
+  label: string;
+  href: string;
+  color: string;
+  external?: boolean;
+};
+
+type EventFlowCard = {
+  title: string;
+  subtitle: string;
+  image: string;
+  speed: "fast" | "slow";
+  details: string[];
+};
+
+export type TrackType = "software" | "hardware";
+
+type TrackCard = {
+  title: string;
+  prompt: string;
+  color: string;
+  type: TrackType;
+};
+
+type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+export const menuItems: MenuItem[] = [
   { index: "01", label: "Overview", href: "#overview", color: "bg-blue text-white" },
   { index: "02", label: "Problem Statements", href: "#tracks", color: "bg-yellow text-ink" },
   { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange text-white" },
@@ -7,7 +37,7 @@ export const menuItems = [
   { index: "06", label: "FAQ & Team", href: "#faq", color: "bg-purple text-white", external: true }
 ];
 
-export const eventFlowCards = [
+export const eventFlowCards: EventFlowCard[] = [
   {
     title: "Plan",
     subtitle: "Shape the build brief",
@@ -84,7 +114,7 @@ export const projectSubmissions = [
   { team: "Signal Forge", track: "Hardware Innovation", status: "Prototype live", score: "84" }
 ];
 
-export const trackCards = [
+export const trackCards: TrackCard[] = [
   // Software (Embedded Systems / IoT) Tracks
   { title: "Embedded Systems", prompt: "Blend of embedded computing, connectivity, and software", color: "bg-blue", type: "software" },
   { title: "IoT Multidisciplinary", prompt: "Connected devices, custom casing, and systems-level logic", color: "bg-yellow", type: "software" },
@@ -132,7 +162,7 @@ export const galleryImages = [
   { src: "/assets/images/nirmaan-hero.png", alt: "Showcase winner ceremony", caption: "Loot award distribution" }
 ];
 
-export const faqs = [
+export const faqs: FaqItem[] = [
   {
     question: "Who can participate in Nirmaan?",
     answer: "Nirmaan is open to student builders and teams from colleges across India. Designers, developers, and hardware engineers are all welcome!"

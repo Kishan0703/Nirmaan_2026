@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { FormEvent, MutableRefObject } from "react";
 import { ArrowUpRight, CloseIcon, DownArrows } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { menuItems } from "@/lib/data";
@@ -28,6 +29,9 @@ import { Marquee, SectionTitle } from "./helpers";
 import { AnimatePresence } from "framer-motion";
 import { Preloader } from "./preloader";
 
+const MARQUEE_ONE_ITEMS = ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"];
+const MARQUEE_TWO_ITEMS = ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"];
+
 // Side Rail Navigation (Matching reference style)
 function Rail({ onBook }: { onBook: () => void }) {
   return (
@@ -44,7 +48,7 @@ function Rail({ onBook }: { onBook: () => void }) {
           <a
             key={item.index}
             href={item.href}
-            className={`${item.color} group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] p-[14px] transition-all hover:scale-[1.02] focus:outline-none`}
+            className={`${item.color} group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] p-[14px] transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper`}
           >
             <div className="flex items-center justify-between w-full">
               <span className="font-aeonik text-[13px] font-normal opacity-70 leading-none">
@@ -64,7 +68,7 @@ function Rail({ onBook }: { onBook: () => void }) {
         <button
           type="button"
           onClick={onBook}
-          className="group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] bg-purple p-[14px] text-white transition-all hover:scale-[1.02] focus:outline-none text-left"
+          className="group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] bg-purple p-[14px] text-white transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper text-left"
         >
           <div className="flex items-center justify-between w-full">
             <span className="font-aeonik text-[13px] font-normal opacity-70 leading-none">
@@ -93,13 +97,18 @@ function Rail({ onBook }: { onBook: () => void }) {
 
 // Mobile Header (Claymorphic)
 function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (value: boolean) => void; onBook: () => void }) {
+  const handleBook = () => {
+    setOpen(false);
+    onBook();
+  };
+
   return (
     <header className="fixed left-0 top-0 z-40 flex w-full items-center justify-between bg-paper/80 backdrop-blur-md border-b border-ink/5 px-5 py-3 lg:hidden">
       <Logo />
       <div className="flex items-center gap-2">
         <button
           type="button"
-          onClick={onBook}
+          onClick={handleBook}
           className="clay-card rounded-pill bg-purple px-4 py-2 text-xs font-display uppercase text-white font-black"
         >
           Join Nirmaan
@@ -109,17 +118,18 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
           aria-expanded={open}
           aria-label="Toggle menu"
           onClick={() => setOpen(!open)}
-          className="grid h-10 w-10 place-content-center rounded-full bg-ink text-white"
+          className="grid h-10 w-10 place-content-center rounded-full bg-ink text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
         >
           <span className="hamburger" />
         </button>
       </div>
-      <div className={`mobile-menu ${open ? "open" : ""} border-b border-ink/5`}>
+      <div className={`mobile-menu ${open ? "open" : ""} border-b border-ink/5`} aria-hidden={!open}>
         {menuItems.map((item) => (
           <a
             key={item.index}
             href={item.href}
             onClick={() => setOpen(false)}
+            tabIndex={open ? 0 : -1}
             className={`${item.color} clay-card rounded-[12px] p-4 font-display text-lg uppercase`}
           >
             {item.label}
@@ -131,35 +141,68 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
 }
 
 // Onboarding Modal (Claymorphic)
-function ParticipationModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+function ParticipationModal({ open, onClose, returnFocusRef }: { open: boolean; onClose: () => void; returnFocusRef: MutableRefObject<HTMLElement | null> }) {
   const initialFocusRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (!open) return;
+    const returnFocusElement = returnFocusRef.current;
+    setSubmitted(false);
     initialFocusRef.current?.focus();
+
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusableElements = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      const focusable = Array.from(focusableElements ?? []);
+
+      if (!focusable.length) {
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
+
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKeyDown);
+      returnFocusElement?.focus();
     };
-  }, [open, onClose]);
+  }, [open, onClose, returnFocusRef]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    console.log(Object.fromEntries(formData));
-    onClose();
+    event.currentTarget.reset();
+    setSubmitted(true);
   };
 
   return (
     <aside aria-hidden={!open} className={`modal-shell ${open ? "open" : ""}`}>
       <button type="button" className="absolute inset-0 bg-ink/60 backdrop-blur-sm" aria-label="Close form" onClick={onClose} />
       
-      <div role="dialog" aria-modal="true" aria-labelledby="participation-title" className="modal-panel border-l border-white/20">
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="participation-title" className="modal-panel border-l border-white/20">
         <button
           type="button"
           onClick={onClose}
@@ -180,8 +223,14 @@ function ParticipationModal({ open, onClose }: { open: boolean; onClose: () => v
           <div className="flex items-center gap-4 bg-[#fcedde] border border-white/40 rounded-[14px] p-4 mb-2 shadow-sm">
             <Sparkles size={36} className="text-yellow animate-bounce" />
             <div>
-              <p className="font-display text-sm uppercase text-ink font-black">INITIATE MATCHMAKING</p>
-              <p className="text-xs text-gray-700 font-bold">Register as a builder, mentor, or sponsor for Nirmaan 2026.</p>
+              <p className="font-display text-sm uppercase text-ink font-black">
+                {submitted ? "REQUEST RECEIVED" : "INITIATE MATCHMAKING"}
+              </p>
+              <p className="text-xs text-gray-700 font-bold" aria-live="polite">
+                {submitted
+                  ? "Your details are ready for organizer follow-up. No data was sent from this preview form."
+                  : "Register as a builder, mentor, or sponsor for Nirmaan 2026."}
+              </p>
             </div>
           </div>
 
@@ -242,9 +291,14 @@ export function SiteExperience() {
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const lastModalTriggerRef = useRef<HTMLElement | null>(null);
 
-  const marqueeOne = useMemo(() => ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"], []);
-  const marqueeTwo = useMemo(() => ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"], []);
+  const openModal = useCallback((trigger?: HTMLElement | null) => {
+    if (trigger) {
+      lastModalTriggerRef.current = trigger;
+    }
+    setModalOpen(true);
+  }, []);
 
   return (
     <>
@@ -252,23 +306,23 @@ export function SiteExperience() {
         {loading && <Preloader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
-      <Rail onBook={() => setModalOpen(true)} />
-      <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => setModalOpen(true)} />
+      <Rail onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
+      <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       
       <main className="relative ml-0 overflow-x-clip px-0 pt-[75px] lg:ml-[200px] lg:px-0 lg:pr-5 lg:pt-[30px]">
         <article className="home">
-          <Hero onBook={() => setModalOpen(true)} />
+          <Hero onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           <ReverseCountdownClock />
           <EventOverview />
-          <Marquee color="bg-red" textColor="text-yellow" items={marqueeOne} />
+          <Marquee color="bg-red" textColor="text-yellow" items={MARQUEE_ONE_ITEMS} />
           
           <Announcements />
           
           <EventFlow />
           <ScheduleBoard />
-          <Marquee color="bg-blue" textColor="text-green-light" items={marqueeTwo} />
+          <Marquee color="bg-blue" textColor="text-green-light" items={MARQUEE_TWO_ITEMS} />
           
-          <Tracks onBook={() => setModalOpen(true)} />
+          <Tracks onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           <BugSquasherGame />
           
           <SubmissionBoard />
@@ -278,7 +332,7 @@ export function SiteExperience() {
           <FAQSection />
           
           <SponsorWall />
-          <Community onBook={() => setModalOpen(true)} />
+          <Community onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           
           <SectionTitle>Judging Criteria</SectionTitle>
           <Values />
@@ -289,7 +343,7 @@ export function SiteExperience() {
         </article>
       </main>
       
-      <ParticipationModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <ParticipationModal open={modalOpen} onClose={() => setModalOpen(false)} returnFocusRef={lastModalTriggerRef} />
     </>
   );
 }

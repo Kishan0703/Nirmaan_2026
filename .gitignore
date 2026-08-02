@@ -4,4 +4,8 @@ out
 *.log
 .env*.local
 index.html
-NIRMAAN_HOSTING_SITE_DESIGN.md
+/docs/NIRMAAN_HOSTING_SITE_DESIGN.md
+.DS_Store
+**/.DS_Store
+tsconfig.tsbuildinfo
+/docs/cleanplan.md

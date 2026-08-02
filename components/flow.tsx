@@ -76,7 +76,7 @@ export function EventFlow() {
             >
               {eventFlowCards.map((card, idx) => (
                 <div 
-                  key={idx} 
+                  key={card.title} 
                   className="shrink-0 w-[280px] sm:w-[320px] md:w-[360px] flex flex-col gap-4"
                 >
                   {/* Stage Image */}
@@ -118,4 +118,3 @@ export function EventFlow() {
     </section>
   );
 }
-
