@@ -3,21 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, PointerEvent } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import { EVENT_START_ISO } from "@/lib/config";
 
 const typedLines = {
   left: ["build();", "commit ideas", "prototype fast", "debug the night"],
   right: ["ship demo", "mentor sync", "pitch ready", "final submit"]
 };
 
-const initialCountdown = {
-  days: 47,
-  hrs: 13,
-  mins: 48,
-  secs: 29
-};
+const EVENT_START_TIME = new Date(EVENT_START_ISO).getTime();
 
-function getTotalSeconds() {
-  return (((initialCountdown.days * 24 + initialCountdown.hrs) * 60 + initialCountdown.mins) * 60) + initialCountdown.secs;
+function getRemainingSeconds() {
+  return Math.max(0, Math.floor((EVENT_START_TIME - Date.now()) / 1000));
 }
 
 function splitTime(totalSeconds: number) {
@@ -72,14 +68,13 @@ function TypingText({ words, align = "left" }: { words: string[]; align?: "left"
 
 export function ReverseCountdownClock() {
   const clockRef = useRef<HTMLDivElement>(null);
-  const [remainingSeconds, setRemainingSeconds] = useState(getTotalSeconds);
+  const [remainingSeconds, setRemainingSeconds] = useState(getRemainingSeconds);
   const [isScrubbing, setIsScrubbing] = useState(false);
   const tiltX = useSpring(useMotionValue(0), { stiffness: 220, damping: 24, mass: 0.45 });
   const tiltY = useSpring(useMotionValue(0), { stiffness: 220, damping: 24, mass: 0.45 });
   const time = splitTime(remainingSeconds);
-  const elapsedSeconds = getTotalSeconds() - remainingSeconds;
-  const secondAngle = initialCountdown.secs * 6 - elapsedSeconds * 6;
-  const minuteAngle = (initialCountdown.mins + initialCountdown.secs / 60) * 6 - elapsedSeconds * 0.1;
+  const secondAngle = time.secs * 6;
+  const minuteAngle = (time.mins + time.secs / 60) * 6;
   const countdownUnits = [
     [padTime(time.days), "days"],
     [padTime(time.hrs), "hrs"],
@@ -93,7 +88,7 @@ export function ReverseCountdownClock() {
     }
 
     const timer = window.setInterval(() => {
-      setRemainingSeconds((current) => Math.max(0, current - 1));
+      setRemainingSeconds(getRemainingSeconds());
     }, 1000);
 
     return () => window.clearInterval(timer);
