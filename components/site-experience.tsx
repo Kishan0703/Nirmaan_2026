@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { FormEvent, MutableRefObject } from "react";
 import { ArrowUpRight, CloseIcon, DownArrows } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { menuItems } from "@/lib/data";
@@ -96,13 +97,18 @@ function Rail({ onBook }: { onBook: () => void }) {
 
 // Mobile Header (Claymorphic)
 function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (value: boolean) => void; onBook: () => void }) {
+  const handleBook = () => {
+    setOpen(false);
+    onBook();
+  };
+
   return (
     <header className="fixed left-0 top-0 z-40 flex w-full items-center justify-between bg-paper/80 backdrop-blur-md border-b border-ink/5 px-5 py-3 lg:hidden">
       <Logo />
       <div className="flex items-center gap-2">
         <button
           type="button"
-          onClick={onBook}
+          onClick={handleBook}
           className="clay-card rounded-pill bg-purple px-4 py-2 text-xs font-display uppercase text-white font-black"
         >
           Join Nirmaan
@@ -117,12 +123,13 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
           <span className="hamburger" />
         </button>
       </div>
-      <div className={`mobile-menu ${open ? "open" : ""} border-b border-ink/5`}>
+      <div className={`mobile-menu ${open ? "open" : ""} border-b border-ink/5`} aria-hidden={!open}>
         {menuItems.map((item) => (
           <a
             key={item.index}
             href={item.href}
             onClick={() => setOpen(false)}
+            tabIndex={open ? 0 : -1}
             className={`${item.color} clay-card rounded-[12px] p-4 font-display text-lg uppercase`}
           >
             {item.label}
@@ -134,24 +141,56 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
 }
 
 // Onboarding Modal (Claymorphic)
-function ParticipationModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+function ParticipationModal({ open, onClose, returnFocusRef }: { open: boolean; onClose: () => void; returnFocusRef: MutableRefObject<HTMLElement | null> }) {
   const initialFocusRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (!open) return;
+    const returnFocusElement = returnFocusRef.current;
     setSubmitted(false);
     initialFocusRef.current?.focus();
+
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusableElements = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      const focusable = Array.from(focusableElements ?? []);
+
+      if (!focusable.length) {
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
+
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKeyDown);
+      returnFocusElement?.focus();
     };
-  }, [open, onClose]);
+  }, [open, onClose, returnFocusRef]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -163,7 +202,7 @@ function ParticipationModal({ open, onClose }: { open: boolean; onClose: () => v
     <aside aria-hidden={!open} className={`modal-shell ${open ? "open" : ""}`}>
       <button type="button" className="absolute inset-0 bg-ink/60 backdrop-blur-sm" aria-label="Close form" onClick={onClose} />
       
-      <div role="dialog" aria-modal="true" aria-labelledby="participation-title" className="modal-panel border-l border-white/20">
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="participation-title" className="modal-panel border-l border-white/20">
         <button
           type="button"
           onClick={onClose}
@@ -252,6 +291,14 @@ export function SiteExperience() {
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const lastModalTriggerRef = useRef<HTMLElement | null>(null);
+
+  const openModal = useCallback((trigger?: HTMLElement | null) => {
+    if (trigger) {
+      lastModalTriggerRef.current = trigger;
+    }
+    setModalOpen(true);
+  }, []);
 
   return (
     <>
@@ -259,12 +306,12 @@ export function SiteExperience() {
         {loading && <Preloader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
-      <Rail onBook={() => setModalOpen(true)} />
-      <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => setModalOpen(true)} />
+      <Rail onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
+      <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       
       <main className="relative ml-0 overflow-x-clip px-0 pt-[75px] lg:ml-[200px] lg:px-0 lg:pr-5 lg:pt-[30px]">
         <article className="home">
-          <Hero onBook={() => setModalOpen(true)} />
+          <Hero onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           <ReverseCountdownClock />
           <EventOverview />
           <Marquee color="bg-red" textColor="text-yellow" items={MARQUEE_ONE_ITEMS} />
@@ -275,7 +322,7 @@ export function SiteExperience() {
           <ScheduleBoard />
           <Marquee color="bg-blue" textColor="text-green-light" items={MARQUEE_TWO_ITEMS} />
           
-          <Tracks onBook={() => setModalOpen(true)} />
+          <Tracks onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           <BugSquasherGame />
           
           <SubmissionBoard />
@@ -285,7 +332,7 @@ export function SiteExperience() {
           <FAQSection />
           
           <SponsorWall />
-          <Community onBook={() => setModalOpen(true)} />
+          <Community onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           
           <SectionTitle>Judging Criteria</SectionTitle>
           <Values />
@@ -296,7 +343,7 @@ export function SiteExperience() {
         </article>
       </main>
       
-      <ParticipationModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <ParticipationModal open={modalOpen} onClose={() => setModalOpen(false)} returnFocusRef={lastModalTriggerRef} />
     </>
   );
 }
