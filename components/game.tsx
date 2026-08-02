@@ -1,26 +1,50 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
+
+const GAME_DURATION_SECONDS = 30;
+const HIGH_SCORE_STORAGE_KEY = "nirmaan_high_score";
+const BUG_SIZE = 40;
+const BUG_LIFETIME_MS = 2000;
+const BUG_SPAWN_INTERVAL_MS = 700;
+
+type Bug = {
+  id: number;
+  x: number;
+  y: number;
+};
 
 export function BugSquasherGame() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(30);
-  const [bugs, setBugs] = useState<{ id: number; x: number; y: number }[]>([]);
+  const [timeLeft, setTimeLeft] = useState(GAME_DURATION_SECONDS);
+  const [bugs, setBugs] = useState<Bug[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+  const bugTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("nirmaan_high_score");
-    if (saved) setHighScore(parseInt(saved, 10));
+  const clearBugTimeouts = useCallback(() => {
+    bugTimeoutsRef.current.forEach(clearTimeout);
+    bugTimeoutsRef.current = [];
   }, []);
 
+  useEffect(() => {
+    const saved = localStorage.getItem(HIGH_SCORE_STORAGE_KEY);
+    const parsedScore = saved ? Number.parseInt(saved, 10) : 0;
+    if (Number.isFinite(parsedScore)) {
+      setHighScore(parsedScore);
+    }
+
+    return clearBugTimeouts;
+  }, [clearBugTimeouts]);
+
   const startGame = () => {
+    clearBugTimeouts();
     setIsPlaying(true);
     setScore(0);
-    setTimeLeft(30);
+    setTimeLeft(GAME_DURATION_SECONDS);
     setBugs([]);
   };
 
@@ -28,9 +52,10 @@ export function BugSquasherGame() {
     if (!isPlaying) return;
     if (timeLeft <= 0) {
       setIsPlaying(false);
+      clearBugTimeouts();
       if (score > highScore) {
         setHighScore(score);
-        localStorage.setItem("nirmaan_high_score", score.toString());
+        localStorage.setItem(HIGH_SCORE_STORAGE_KEY, score.toString());
       }
       return;
     }
@@ -40,7 +65,7 @@ export function BugSquasherGame() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [isPlaying, timeLeft, score, highScore]);
+  }, [isPlaying, timeLeft, score, highScore, clearBugTimeouts]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -48,20 +73,25 @@ export function BugSquasherGame() {
     const spawnInterval = setInterval(() => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const x = Math.random() * (rect.width - 40);
-      const y = Math.random() * (rect.height - 40);
+      const x = Math.random() * Math.max(0, rect.width - BUG_SIZE);
+      const y = Math.random() * Math.max(0, rect.height - BUG_SIZE);
       const id = Date.now() + Math.random();
 
       setBugs((b) => [...b, { id, x, y }]);
 
-      setTimeout(() => {
+      const removalTimeout = setTimeout(() => {
         setBugs((currentBugs) => currentBugs.filter((bug) => bug.id !== id));
-      }, 2000);
+        bugTimeoutsRef.current = bugTimeoutsRef.current.filter((timeout) => timeout !== removalTimeout);
+      }, BUG_LIFETIME_MS);
 
-    }, 700);
+      bugTimeoutsRef.current.push(removalTimeout);
+    }, BUG_SPAWN_INTERVAL_MS);
 
-    return () => clearInterval(spawnInterval);
-  }, [isPlaying]);
+    return () => {
+      clearInterval(spawnInterval);
+      clearBugTimeouts();
+    };
+  }, [isPlaying, clearBugTimeouts]);
 
   const squashBug = (id: number) => {
     setScore((s) => s + 10);
