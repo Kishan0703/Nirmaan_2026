@@ -1,9 +1,16 @@
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <a href="#top" aria-label="Nirmaan home" className={`flex flex-col items-center justify-center leading-none group ${className}`}>
-      <span className="font-display text-[22px] font-black uppercase tracking-tight text-ink transition-transform duration-300 group-hover:scale-[1.02] text-center">
-        NIRMAAN 2026
+    <a
+      href="#top"
+      aria-label="Nirmaan home"
+      className={`inline-flex items-baseline leading-none group ${className}`}
+    >
+      <span className="font-display text-[46px] lg:text-[48px] font-black lowercase tracking-tighter text-ink leading-none transition-transform duration-300 group-hover:scale-[1.01]">
+        nirmaan
+      </span>
+      <span className="font-display text-[46px] lg:text-[48px] font-black text-green-light leading-none transition-transform duration-300 group-hover:scale-[1.01]">
+        .
       </span>
     </a>
   );
