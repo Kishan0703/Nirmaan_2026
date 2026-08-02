@@ -133,9 +133,11 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
 // Onboarding Modal (Claymorphic)
 function ParticipationModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const initialFocusRef = useRef<HTMLInputElement>(null);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (!open) return;
+    setSubmitted(false);
     initialFocusRef.current?.focus();
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -150,9 +152,8 @@ function ParticipationModal({ open, onClose }: { open: boolean; onClose: () => v
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    console.log(Object.fromEntries(formData));
-    onClose();
+    event.currentTarget.reset();
+    setSubmitted(true);
   };
 
   return (
@@ -180,8 +181,14 @@ function ParticipationModal({ open, onClose }: { open: boolean; onClose: () => v
           <div className="flex items-center gap-4 bg-[#fcedde] border border-white/40 rounded-[14px] p-4 mb-2 shadow-sm">
             <Sparkles size={36} className="text-yellow animate-bounce" />
             <div>
-              <p className="font-display text-sm uppercase text-ink font-black">INITIATE MATCHMAKING</p>
-              <p className="text-xs text-gray-700 font-bold">Register as a builder, mentor, or sponsor for Nirmaan 2026.</p>
+              <p className="font-display text-sm uppercase text-ink font-black">
+                {submitted ? "REQUEST RECEIVED" : "INITIATE MATCHMAKING"}
+              </p>
+              <p className="text-xs text-gray-700 font-bold" aria-live="polite">
+                {submitted
+                  ? "Your details are ready for organizer follow-up. No data was sent from this preview form."
+                  : "Register as a builder, mentor, or sponsor for Nirmaan 2026."}
+              </p>
             </div>
           </div>
 
