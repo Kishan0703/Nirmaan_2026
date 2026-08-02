@@ -40,7 +40,6 @@ Editorial, premium, calm. Big full-bleed photography + generous whitespace. Feel
 - 3-column pillar block ("For People / By Design / With Care") — reusable for "Why join / Tracks / Values"
 - Sticky nav with CTA button — reusable for "Register Now"
 - Footer: logo + legal links + socials, minimal
-
 ## 7. Adaptation Notes for Hackathon Site
 - Hero: swap lifestyle photo for event/venue or abstract tech visual + headline + "Register Now" CTA
 - Icon row → hackathon perks (Wifi, Food, Swag, Mentors, 24/7 access, Prizes)

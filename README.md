@@ -67,7 +67,6 @@ npm run lint
 - [`public`](./public) - Static assets, fonts, icons, and images.
 - [`docs`](./docs) - Project plans, design notes, hosting specs, and local agent skills.
 - [`reference`](./reference) - Reference images for the intended visual direction.
-- [`scripts`](./scripts) - Utility scripts for asset workflows.
 
 ## Production Checks
 
