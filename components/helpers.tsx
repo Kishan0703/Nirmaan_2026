@@ -49,11 +49,11 @@ export function Marquee({ color, textColor, items }: { color: string; textColor:
   const repeated = [...items, ...items, ...items, ...items];
   return (
     <section className={`my-gap overflow-hidden border-y border-ink/5 rounded-none ${color}`} aria-label={items.join(", ")}>
-      <div className="flex w-max animate-marquee items-center gap-8 py-[18px]">
+      <div className="flex w-max animate-marquee items-center gap-6 sm:gap-8 py-3.5 sm:py-[18px]">
         {repeated.map((item, index) => (
-          <div key={`${item}-${index}`} className={`flex items-center gap-8 font-display text-[16px] uppercase font-black leading-none ${textColor}`}>
+          <div key={`${item}-${index}`} className={`flex items-center gap-6 sm:gap-8 font-display text-sm sm:text-[16px] uppercase font-black leading-none ${textColor}`}>
             <span className="whitespace-nowrap">{item}</span>
-            <span className="h-[10px] w-[10px] rotate-45 bg-current opacity-70" />
+            <span className="h-[8px] w-[8px] sm:h-[10px] sm:w-[10px] rotate-45 bg-current opacity-70" />
           </div>
         ))}
       </div>
@@ -66,9 +66,9 @@ import { DownArrows } from "@/components/icons";
 
 export function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <section className="my-gap flex items-center justify-between border-y border-ink/5 bg-blue px-box py-[22px] text-yellow" data-reveal>
+    <section className="my-gap flex items-center justify-between border-y border-ink/5 bg-blue px-3.5 sm:px-box py-3.5 sm:py-[22px] text-yellow" data-reveal>
       <DownArrows />
-      <h2 className="text-center font-display text-[26px] uppercase tracking-tight text-ink font-black">{children}</h2>
+      <h2 className="text-center font-display text-lg sm:text-[26px] uppercase tracking-tight text-ink font-black">{children}</h2>
       <DownArrows />
     </section>
   );

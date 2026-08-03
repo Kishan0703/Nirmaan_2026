@@ -98,18 +98,18 @@ export function BugSquasherGame() {
     setShowNameModal(false);
   };
 
-  const submitScoreToLeaderboard = useCallback(async (finalScore: number) => {
+  const submitScoreToLeaderboard = async (finalScore: number) => {
     if (finalScore <= 0) return;
-    const currentName = playerName.trim() || "Anonymous Bug Squasher";
 
     try {
+      const activeName = playerName || "Anonymous Bug Squasher";
       const res = await fetch("/api/leaderboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: currentName,
+          id: playerId,
+          name: activeName,
           score: finalScore,
-          userId: playerId,
         }),
       });
 
@@ -118,42 +118,39 @@ export function BugSquasherGame() {
         if (data.leaderboard) {
           setLeaderboard(data.leaderboard);
         }
-        if (data.userRank) {
-          setLastSubmittedRank(data.userRank);
+        if (data.rank) {
+          setLastSubmittedRank(data.rank);
         }
       }
     } catch {
-      // Fallback
+      // Silent error fallback
     }
-  }, [playerName, playerId]);
-
-  const startGame = () => {
-    if (!playerName.trim()) {
-      setShowNameModal(true);
-      return;
-    }
-
-    clearBugTimeouts();
-    setIsPlaying(true);
-    setScore(0);
-    setTimeLeft(GAME_DURATION_SECONDS);
-    setBugs([]);
-    setLastSubmittedRank(null);
   };
 
-  // Game timer loop
+  const endGame = useCallback(() => {
+    setIsPlaying(false);
+    clearBugTimeouts();
+    setBugs([]);
+
+    setScore((finalScore) => {
+      setHighScore((currentHigh) => {
+        if (finalScore > currentHigh) {
+          localStorage.setItem(HIGH_SCORE_STORAGE_KEY, finalScore.toString());
+          return finalScore;
+        }
+        return currentHigh;
+      });
+
+      submitScoreToLeaderboard(finalScore);
+      return finalScore;
+    });
+  }, [clearBugTimeouts]);
+
   useEffect(() => {
     if (!isPlaying) return;
+
     if (timeLeft <= 0) {
-      setIsPlaying(false);
-      clearBugTimeouts();
-
-      if (score > highScore) {
-        setHighScore(score);
-        localStorage.setItem(HIGH_SCORE_STORAGE_KEY, score.toString());
-      }
-
-      submitScoreToLeaderboard(score);
+      endGame();
       return;
     }
 
@@ -162,64 +159,79 @@ export function BugSquasherGame() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [isPlaying, timeLeft, score, highScore, clearBugTimeouts, submitScoreToLeaderboard]);
+  }, [isPlaying, timeLeft, endGame]);
 
-  // Dynamic spawn interval based on remaining time:
-  // Starts slow (~1400ms at 30s) and speeds up to (~380ms at 0s)
-  const currentSpawnInterval = Math.max(
-    380,
-    Math.round(380 + (timeLeft / GAME_DURATION_SECONDS) * 1020)
-  );
+  const spawnBug = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-  // Bug spawning loop
+    const width = container.clientWidth - BUG_SIZE;
+    const height = container.clientHeight - BUG_SIZE;
+
+    if (width <= 0 || height <= 0) return;
+
+    const newBug: Bug = {
+      id: Date.now() + Math.random(),
+      x: Math.floor(Math.random() * width),
+      y: Math.floor(Math.random() * height),
+    };
+
+    setBugs((current) => [...current.slice(-5), newBug]);
+
+    const timeout = setTimeout(() => {
+      setBugs((current) => current.filter((b) => b.id !== newBug.id));
+    }, BUG_LIFETIME_MS);
+
+    bugTimeoutsRef.current.push(timeout);
+  }, []);
+
+  const currentSpawnInterval = Math.max(300, BUG_SPAWN_INTERVAL_MS - Math.floor(score / 50) * 50);
+
   useEffect(() => {
     if (!isPlaying) return;
 
-    const spawnNextBug = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = Math.random() * Math.max(0, rect.width - BUG_SIZE);
-      const y = Math.random() * Math.max(0, rect.height - BUG_SIZE);
-      const id = Date.now() + Math.random();
+    spawnBug();
+    const interval = setInterval(spawnBug, currentSpawnInterval);
 
-      setBugs((b) => [...b, { id, x, y }]);
-
-      const removalTimeout = setTimeout(() => {
-        setBugs((currentBugs) => currentBugs.filter((bug) => bug.id !== id));
-        bugTimeoutsRef.current = bugTimeoutsRef.current.filter((t) => t !== removalTimeout);
-      }, BUG_LIFETIME_MS);
-
-      bugTimeoutsRef.current.push(removalTimeout);
-    };
-
-    const timer = setInterval(spawnNextBug, currentSpawnInterval);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, [isPlaying, currentSpawnInterval]);
+    return () => clearInterval(interval);
+  }, [isPlaying, currentSpawnInterval, spawnBug]);
 
   const squashBug = (id: number) => {
     setScore((s) => s + 10);
     setBugs((b) => b.filter((bug) => bug.id !== id));
   };
 
+  const startGame = () => {
+    if (!playerName) {
+      setShowNameModal(true);
+      return;
+    }
+    clearBugTimeouts();
+    setBugs([]);
+    setScore(0);
+    setTimeLeft(GAME_DURATION_SECONDS);
+    setLastSubmittedRank(null);
+    setIsPlaying(true);
+  };
+
   return (
     <section id="game" className="my-gap" data-reveal>
-      <div className="rounded-brand bg-red-light p-box clay-card text-white flex flex-col gap-6">
+      <div className="rounded-brand bg-red-light p-4 sm:p-box clay-card text-white flex flex-col gap-4 sm:gap-6 overflow-hidden">
 
         {/* Top Header */}
-        <div className="flex flex-wrap items-center justify-between gap-5 border-b border-white/20 pb-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/20 pb-3 sm:pb-4">
           <div>
-            <h2 className="font-display text-section uppercase text-white font-black">Bug Squasher</h2>
+            <h2 className="font-display text-2xl sm:text-section uppercase text-white font-black leading-tight">
+              Bug Squasher
+            </h2>
           </div>
 
           {/* User Profile + Stats */}
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
 
             {/* Player Tag Profile */}
-            <div className="clay-card rounded-[12px] bg-paper px-3 py-1.5 text-ink flex items-center gap-2">
-              <User size={16} className="text-gray-500" />
+            <div className="clay-card rounded-[12px] bg-paper px-2.5 py-1 sm:px-3 sm:py-1.5 text-ink flex items-center gap-1.5 shadow-sm">
+              <User size={14} className="text-gray-500 shrink-0" />
               {isEditingName ? (
                 <div className="flex items-center gap-1">
                   <input
@@ -227,7 +239,7 @@ export function BugSquasherGame() {
                     value={tempNameInput}
                     onChange={(e) => setTempNameInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && savePlayerName(tempNameInput)}
-                    className="w-24 rounded border border-ink/20 px-1.5 py-0.5 text-xs font-bold text-ink"
+                    className="w-20 sm:w-24 rounded border border-ink/20 px-1 py-0.5 text-xs font-bold text-ink"
                     placeholder="Enter name"
                     autoFocus
                   />
@@ -239,8 +251,8 @@ export function BugSquasherGame() {
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-1.5">
-                  <span className="font-display text-sm font-black text-ink">
+                <div className="flex items-center gap-1">
+                  <span className="font-display text-xs sm:text-sm font-black text-ink truncate max-w-[90px] sm:max-w-none">
                     {playerName || "Anonymous"}
                   </span>
                   <button
@@ -248,57 +260,57 @@ export function BugSquasherGame() {
                       setTempNameInput(playerName);
                       setIsEditingName(true);
                     }}
-                    className="text-gray-400 hover:text-ink transition-colors"
+                    className="text-gray-400 hover:text-ink transition-colors p-0.5"
                     title="Change Player Name"
                   >
-                    <Edit2 size={12} />
+                    <Edit2 size={11} />
                   </button>
                 </div>
               )}
             </div>
 
-            <div className="clay-card rounded-[12px] bg-paper px-4 py-2 text-ink text-center">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-700">Time Left</p>
-              <p className="font-display text-lg font-black">{timeLeft}s</p>
+            <div className="clay-card rounded-[12px] bg-paper px-2.5 py-1 sm:px-4 sm:py-2 text-ink text-center shadow-sm">
+              <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-700">Time Left</p>
+              <p className="font-display text-sm sm:text-lg font-black">{timeLeft}s</p>
             </div>
-            <div className="clay-card rounded-[12px] bg-paper px-4 py-2 text-ink text-center">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-700">Score</p>
-              <p className="font-display text-lg font-black">{score}</p>
+            <div className="clay-card rounded-[12px] bg-paper px-2.5 py-1 sm:px-4 sm:py-2 text-ink text-center shadow-sm">
+              <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-700">Score</p>
+              <p className="font-display text-sm sm:text-lg font-black">{score}</p>
             </div>
-            <div className="clay-card rounded-[12px] bg-paper px-4 py-2 text-ink text-center">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-700">High Score</p>
-              <p className="font-display text-lg font-black">{highScore}</p>
+            <div className="clay-card rounded-[12px] bg-paper px-2.5 py-1 sm:px-4 sm:py-2 text-ink text-center shadow-sm">
+              <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-700">High Score</p>
+              <p className="font-display text-sm sm:text-lg font-black">{highScore}</p>
             </div>
           </div>
         </div>
 
-        <p className="text-body-xl text-white/90 font-medium">
+        <p className="text-xs sm:text-body-xl text-white/95 font-medium leading-snug">
           Quickly click or tap the red bugs as they spawn on the board below! Compete on the global leaderboard.
         </p>
 
         {/* Main Section Grid: Game Area + Leaderboard */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
 
           {/* Game Canvas (2 Cols on LG) */}
           <div className="lg:col-span-2 flex flex-col gap-3">
             <div
               ref={containerRef}
-              className="relative h-[320px] w-full bg-ink/40 border border-white/10 rounded-[18px] overflow-hidden flex items-center justify-center cursor-crosshair shadow-inner"
+              className="relative h-[250px] sm:h-[320px] w-full bg-ink/40 border border-white/10 rounded-[18px] overflow-hidden flex items-center justify-center cursor-crosshair shadow-inner"
             >
               {!isPlaying && (
-                <div className="text-center z-10 flex flex-col items-center gap-3 p-4">
-                  <Trophy size={44} className="text-yellow animate-bounce" />
-                  <h3 className="font-display text-xl uppercase font-black">Ready to Debug?</h3>
+                <div className="text-center z-10 flex flex-col items-center gap-2.5 p-4">
+                  <Trophy size={36} className="text-yellow animate-bounce" />
+                  <h3 className="font-display text-lg sm:text-xl uppercase font-black">Ready to Debug?</h3>
 
                   {lastSubmittedRank && (
-                    <div className="rounded-pill bg-white/20 backdrop-blur-md px-4 py-1.5 text-xs font-bold text-yellow border border-yellow/30 animate-pulse">
+                    <div className="rounded-pill bg-white/20 backdrop-blur-md px-3 py-1 text-xs font-bold text-yellow border border-yellow/30 animate-pulse">
                       🎉 Ranked #{lastSubmittedRank} on the Global Leaderboard!
                     </div>
                   )}
 
                   <button
                     onClick={startGame}
-                    className="clay-card rounded-pill bg-yellow px-8 py-3.5 text-sm font-display uppercase font-black text-ink hover:scale-105 transition-transform"
+                    className="clay-card rounded-pill bg-yellow px-6 py-2.5 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-display uppercase font-black text-ink hover:scale-105 transition-transform shadow-md"
                   >
                     {playerName ? "Start Lobby Game" : "Set Name & Play"}
                   </button>
@@ -322,110 +334,101 @@ export function BugSquasherGame() {
             </div>
           </div>
 
-          {/* Global Leaderboard Panel (1 Col on LG) */}
-          <div className="clay-card rounded-[18px] bg-paper/95 p-5 text-ink flex flex-col gap-4 shadow-lg border border-white/40">
-            <div className="flex items-center justify-between border-b border-ink/10 pb-3">
-              <div className="flex items-center gap-2">
-                <Medal size={20} className="text-yellow" />
-                <h3 className="font-display text-lg uppercase font-black">Global Top 10</h3>
+          {/* Leaderboard Column */}
+          <div className="lg:col-span-1 flex flex-col gap-3">
+            <div className="rounded-[18px] bg-ink/60 border border-white/15 p-3.5 sm:p-4 flex flex-col gap-3 h-[250px] sm:h-[320px]">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <div className="flex items-center gap-1.5">
+                  <Medal size={16} className="text-yellow" />
+                  <span className="font-display text-xs uppercase font-black text-white">Global Leaderboard</span>
+                </div>
+                <button
+                  onClick={fetchLeaderboard}
+                  className="text-gray-400 hover:text-white transition-colors"
+                  title="Refresh Leaderboard"
+                >
+                  <RefreshCw size={12} className={isLoadingLeaderboard ? "animate-spin" : ""} />
+                </button>
               </div>
-              <button
-                onClick={fetchLeaderboard}
-                className="text-gray-500 hover:text-ink transition-colors p-1"
-                title="Refresh Leaderboard"
-              >
-                <RefreshCw size={14} className={isLoadingLeaderboard ? "animate-spin" : ""} />
-              </button>
-            </div>
 
-            {/* Leaderboard Entries List */}
-            <div className="flex flex-col gap-2 max-h-[250px] overflow-y-auto pr-1">
-              {isLoadingLeaderboard && leaderboard.length === 0 ? (
-                <p className="text-xs text-center py-6 text-gray-500 font-medium">Loading scores...</p>
-              ) : leaderboard.length === 0 ? (
-                <p className="text-xs text-center py-6 text-gray-500 font-medium">No scores submitted yet. Be the first!</p>
-              ) : (
-                leaderboard.map((item, idx) => {
-                  const isCurrentPlayer = item.id === playerId || item.name.toLowerCase() === playerName.toLowerCase();
-                  const rankNum = idx + 1;
-                  const rankBadge =
-                    rankNum === 1 ? "🥇" : rankNum === 2 ? "🥈" : rankNum === 3 ? "🥉" : `#${rankNum}`;
+              <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 scrollbar-thin">
+                {isLoadingLeaderboard && (
+                  <div className="text-center py-8 text-xs text-gray-400 font-medium">Loading rankings...</div>
+                )}
 
-                  return (
-                    <div
-                      key={item.id || idx}
-                      className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                        isCurrentPlayer
-                          ? "bg-yellow/30 border border-yellow/60 text-ink font-bold"
-                          : "bg-black/5 hover:bg-black/10 text-ink"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5 truncate">
-                        <span className="w-6 text-center font-display font-black text-sm">{rankBadge}</span>
-                        <span className="truncate">{item.name}</span>
+                {!isLoadingLeaderboard && leaderboard.length === 0 && (
+                  <div className="text-center py-8 text-xs text-gray-400 font-medium">No scores yet. Be the first!</div>
+                )}
+
+                {!isLoadingLeaderboard &&
+                  leaderboard.map((item, idx) => {
+                    const isCurrentPlayer = item.id === playerId;
+                    return (
+                      <div
+                        key={item.id || idx}
+                        className={`flex items-center justify-between px-2.5 py-1.5 rounded-[10px] text-xs font-bold ${
+                          isCurrentPlayer ? "bg-yellow/20 text-yellow border border-yellow/30" : "bg-white/5 text-gray-200"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="font-display text-[10px] opacity-70 w-4">#{idx + 1}</span>
+                          <span className="truncate max-w-[110px]">{item.name}</span>
+                        </div>
+                        <span className="font-display text-xs font-black text-yellow ml-2">{item.score}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-display font-black text-sm text-ink">{item.score}</span>
-                      </div>
-                    </div>
-                  );
-                })
-              )}
+                    );
+                  })}
+              </div>
             </div>
           </div>
+
         </div>
-
-        {/* Modal: Set Name Prompt (if not set before first game) */}
-        <AnimatePresence>
-          {showNameModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="clay-card rounded-[24px] bg-paper p-6 text-ink max-w-sm w-full flex flex-col gap-4 shadow-2xl border border-white"
-              >
-                <div className="flex items-center gap-2 text-red font-display uppercase font-black text-lg">
-                  <User size={22} />
-                  <span>Choose Your Player Tag</span>
-                </div>
-                <p className="text-xs text-gray-600 font-medium leading-relaxed">
-                  Enter your handle so your high scores can be saved to the Global Bug Squasher Leaderboard!
-                </p>
-
-                <input
-                  type="text"
-                  value={tempNameInput}
-                  onChange={(e) => setTempNameInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && tempNameInput.trim()) {
-                      savePlayerName(tempNameInput);
-                      startGame();
-                    }
-                  }}
-                  placeholder="e.g. CodeNinja, BugSlayer"
-                  className="rounded-xl border border-ink/20 bg-white px-4 py-2.5 text-sm font-bold text-ink focus:outline-none focus:ring-2 focus:ring-red"
-                  maxLength={20}
-                  autoFocus
-                />
-
-                <div className="flex gap-2 justify-end pt-2">
-                  <button
-                    onClick={() => {
-                      savePlayerName(tempNameInput || "Anonymous Bug Squasher");
-                      startGame();
-                    }}
-                    className="clay-card rounded-pill bg-yellow px-6 py-2.5 text-xs font-display uppercase font-black text-ink"
-                  >
-                    Save & Play!
-                  </button>
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
-
       </div>
+
+      {/* Name Input Modal */}
+      <AnimatePresence>
+        {showNameModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/80 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="w-full max-w-sm rounded-[24px] bg-paper p-6 clay-card text-ink shadow-2xl border-2 border-white/60"
+            >
+              <h3 className="font-display text-xl uppercase font-black text-ink mb-1">Enter Player Name</h3>
+              <p className="text-xs text-gray-600 font-bold mb-4">Set your display name to submit scores to the global leaderboard.</p>
+
+              <input
+                type="text"
+                value={tempNameInput}
+                onChange={(e) => setTempNameInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && savePlayerName(tempNameInput)}
+                className="w-full rounded-[12px] border-2 border-ink/20 p-3 font-display text-sm font-bold text-ink mb-4 focus:outline-none focus:border-red"
+                placeholder="e.g. MasterDebugger"
+                autoFocus
+              />
+
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  onClick={() => setShowNameModal(false)}
+                  className="px-4 py-2 text-xs font-bold text-gray-500 hover:text-ink"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    savePlayerName(tempNameInput);
+                    startGame();
+                  }}
+                  className="rounded-pill bg-yellow px-5 py-2 text-xs font-display uppercase font-black text-ink shadow-md"
+                >
+                  Save & Play
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
