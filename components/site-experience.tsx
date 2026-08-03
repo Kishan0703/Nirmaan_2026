@@ -10,7 +10,6 @@ import { Sparkles } from "lucide-react";
 // Section imports
 import { Hero } from "./hero";
 import { ReverseCountdownClock } from "./reverse-countdown-clock";
-import { EventOverview } from "./overview";
 import { Announcements } from "./announcements";
 import { EventFlow } from "./flow";
 import { ScheduleBoard } from "./schedule";
@@ -313,7 +312,6 @@ export function SiteExperience() {
         <article className="home">
           <Hero onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           <ReverseCountdownClock />
-          <EventOverview />
           <Marquee color="bg-red" textColor="text-yellow" items={MARQUEE_ONE_ITEMS} />
           
           <Announcements />
