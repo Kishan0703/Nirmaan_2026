@@ -4,7 +4,7 @@ import { announcements } from "@/lib/data";
 
 export function Announcements() {
   return (
-    <section className="my-gap" data-reveal>
+    <section id="overview" className="my-gap" data-reveal>
       <div className="clay-card bg-paper p-box rounded-brand border-2 border-white/40">
         <h2 className="font-display text-section uppercase tracking-tight text-ink font-black mb-6">
           Live Announcements & Broadcast

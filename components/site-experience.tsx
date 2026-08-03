@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { FormEvent, MutableRefObject } from "react";
-import { ArrowUpRight, CloseIcon, DownArrows } from "@/components/icons";
+import { ArrowUpRight, CloseIcon, DownArrows, SocialInstagram, SocialTwitter, SocialLinkedin, SocialGithub } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { menuItems } from "@/lib/data";
 import { Sparkles } from "lucide-react";
@@ -34,30 +34,30 @@ const MARQUEE_TWO_ITEMS = ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game ru
 // Side Rail Navigation (Matching reference style)
 function Rail({ onBook }: { onBook: () => void }) {
   return (
-    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[200px] flex-col px-[10px] py-[14px] lg:flex justify-between bg-paper/20 backdrop-blur-md overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[200px] flex-col px-[10px] py-[12px] lg:flex justify-between bg-paper/20 backdrop-blur-md overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       
       {/* Top Header Section with Logo Block */}
       <div className="flex flex-col items-start gap-1 pb-1 px-1">
         <Logo />
       </div>
 
-      {/* Main Navigation Stack */}
-      <nav aria-label="Main navigation" className="flex flex-col gap-[8px] my-auto w-full">
+      {/* Main Navigation Stack (Compact Height) */}
+      <nav aria-label="Main navigation" className="flex flex-col gap-[6px] my-auto w-full">
         {menuItems.map((item) => (
           <a
             key={item.index}
             href={item.href}
-            className={`${item.color} group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] p-[14px] transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper`}
+            className={`${item.color} group clay-card relative flex h-[58px] w-full shrink-0 flex-col justify-between rounded-[12px] p-[10px] transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper`}
           >
             <div className="flex items-center justify-between w-full">
-              <span className="font-aeonik text-[13px] font-normal opacity-70 leading-none">
+              <span className="font-aeonik text-[11px] font-normal opacity-75 leading-none">
                 {item.index}
               </span>
               {item.external && (
-                <ArrowUpRight className="h-[14px] w-[14px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight className="h-[12px] w-[12px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               )}
             </div>
-            <span className="font-aeonik text-[15px] font-bold leading-[1.18] text-left">
+            <span className="font-aeonik text-[13px] font-bold leading-tight text-left">
               {item.label}
             </span>
           </a>
@@ -67,28 +67,68 @@ function Rail({ onBook }: { onBook: () => void }) {
         <button
           type="button"
           onClick={onBook}
-          className="group clay-card relative flex h-[92px] w-full shrink-0 flex-col justify-between rounded-[14px] bg-purple p-[14px] text-white transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper text-left"
+          className="group clay-card relative flex h-[58px] w-full shrink-0 flex-col justify-between rounded-[12px] bg-purple p-[10px] text-white transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper text-left"
         >
           <div className="flex items-center justify-between w-full">
-            <span className="font-aeonik text-[13px] font-normal opacity-70 leading-none">
+            <span className="font-aeonik text-[11px] font-normal opacity-75 leading-none">
               07
             </span>
-            <ArrowUpRight className="h-[14px] w-[14px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="h-[12px] w-[12px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
-          <span className="font-aeonik text-[15px] font-bold leading-[1.18]">
+          <span className="font-aeonik text-[13px] font-bold leading-tight">
             Join Nirmaan
           </span>
         </button>
       </nav>
       
-      {/* Bottom tag/info */}
-      <div className="pt-1">
+      {/* Bottom Section: Nirmaan 2026 Tag + Social Media Icons */}
+      <div className="pt-1 flex flex-col gap-2">
         <a
           href="#top"
-          className="flex h-[36px] w-full items-center justify-center rounded-[12px] clay-card bg-paper text-ink px-3 transition-transform hover:scale-[1.01]"
+          className="flex h-[34px] w-full items-center justify-center rounded-[10px] clay-card bg-paper text-ink px-3 transition-transform hover:scale-[1.01]"
         >
           <span className="font-aeonik text-[11px] uppercase tracking-wider font-bold text-gray-700">Nirmaan 2026</span>
         </a>
+
+        {/* Social Media Icons Row */}
+        <div className="flex items-center justify-between px-1">
+          <a
+            href="https://www.instagram.com/codingclub_bmsit/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="flex h-8 w-8 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-red hover:scale-110 transition-all shadow-sm"
+          >
+            <SocialInstagram className="w-3.5 h-3.5" />
+          </a>
+          <a
+            href="https://twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter / X"
+            className="flex h-8 w-8 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue hover:scale-110 transition-all shadow-sm"
+          >
+            <SocialTwitter className="w-3.5 h-3.5" />
+          </a>
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            className="flex h-8 w-8 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-purple hover:scale-110 transition-all shadow-sm"
+          >
+            <SocialLinkedin className="w-3.5 h-3.5" />
+          </a>
+          <a
+            href="https://github.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="flex h-8 w-8 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-orange hover:scale-110 transition-all shadow-sm"
+          >
+            <SocialGithub className="w-3.5 h-3.5" />
+          </a>
+        </div>
       </div>
     </header>
   );
@@ -310,33 +350,46 @@ export function SiteExperience() {
       
       <main className="relative ml-0 overflow-x-clip px-0 pt-[75px] lg:ml-[200px] lg:px-0 lg:pr-5 lg:pt-[30px]">
         <article className="home">
+          {/* Hero & Countdown */}
           <Hero onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           <ReverseCountdownClock />
           <Marquee color="bg-red" textColor="text-yellow" items={MARQUEE_ONE_ITEMS} />
           
+          {/* 01. Overview & Announcements */}
           <Announcements />
           
-          <EventFlow />
-          <ScheduleBoard />
-          <Marquee color="bg-blue" textColor="text-green-light" items={MARQUEE_TWO_ITEMS} />
-          
+          {/* 02. Problem Statements & Tracks */}
           <Tracks onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
-          <BugSquasherGame />
           
-          <SubmissionBoard />
-          <GallerySection />
-          
-          <LocationMap />
-          <FAQSection />
-          
-          <SponsorWall />
-          <Community onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
-          
+          {/* Judging Criteria */}
           <SectionTitle>Judging Criteria</SectionTitle>
           <Values />
+
+          {/* 03. Timeline & Event Flow */}
+          <ScheduleBoard />
+          <EventFlow />
           
+          <Marquee color="bg-blue" textColor="text-green-light" items={MARQUEE_TWO_ITEMS} />
+          
+          {/* 04. Bug Squasher Game & Submissions */}
+          <BugSquasherGame />
+          <SubmissionBoard />
+          
+          {/* Sponsors & Gallery */}
+          <SponsorWall />
+          <GallerySection />
+          
+          {/* 05. Location Map */}
+          <LocationMap />
+          
+          {/* 06. FAQ & Team Directory */}
+          <FAQSection />
           <TeamSection />
           
+          {/* Community Join CTA */}
+          <Community onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
+          
+          {/* Footer */}
           <Footer />
         </article>
       </main>
