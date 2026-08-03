@@ -81,12 +81,12 @@ function Rail({ onBook }: { onBook: () => void }) {
           </span>
         </button>
       </nav>
-      
-      {/* Bottom Section: Nirmaan 2026 Tag + Social Media Icons */}
-      <div className="pt-1 flex flex-col gap-2">
+
+      {/* Bottom Legal / Year Box & Social Icons */}
+      <div className="flex flex-col gap-2 pt-2 border-t border-ink/10">
         <a
           href="#top"
-          className="flex h-[34px] w-full items-center justify-center rounded-[10px] clay-card bg-paper text-ink px-3 transition-transform hover:scale-[1.01]"
+          className="group clay-card flex w-full items-center justify-center rounded-[12px] bg-paper py-1.5 transition-all hover:scale-[1.02]"
         >
           <span className="font-aeonik text-[11px] uppercase tracking-wider font-bold text-gray-700">Nirmaan 2026</span>
         </a>
@@ -143,13 +143,13 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
   };
 
   return (
-    <header className="fixed left-0 top-0 z-40 flex w-full items-center justify-between bg-paper/80 backdrop-blur-md border-b border-ink/5 px-5 py-3 lg:hidden">
+    <header className="fixed left-0 top-0 z-40 flex w-full items-center justify-between bg-paper/90 backdrop-blur-md border-b border-ink/10 px-4 sm:px-5 py-2.5 sm:py-3 lg:hidden shadow-sm h-[64px]">
       <Logo />
       <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={handleBook}
-          className="clay-card rounded-pill bg-purple px-4 py-2 text-xs font-display uppercase text-white font-black"
+          className="clay-card rounded-pill bg-purple px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-display uppercase text-white font-black active:scale-95 transition-transform"
         >
           Join Nirmaan
         </button>
@@ -158,7 +158,7 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
           aria-expanded={open}
           aria-label="Toggle menu"
           onClick={() => setOpen(!open)}
-          className="grid h-10 w-10 place-content-center rounded-full bg-ink text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+          className="grid h-9 w-9 sm:h-10 sm:w-10 place-content-center rounded-full bg-ink text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper active:scale-95 transition-transform"
         >
           <span className="hamburger" />
         </button>
@@ -178,7 +178,7 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
         ))}
 
         {/* Mobile Social Bar */}
-        <div className="pt-2 border-t border-ink/10 flex items-center justify-around">
+        <div className="flex items-center justify-around pt-3 border-t border-ink/10">
           <a
             href="https://www.instagram.com/codingclub_bmsit/"
             target="_blank"
@@ -221,39 +221,45 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
   );
 }
 
-// Onboarding Modal (Claymorphic)
-function ParticipationModal({ open, onClose, returnFocusRef }: { open: boolean; onClose: () => void; returnFocusRef: MutableRefObject<HTMLElement | null> }) {
-  const initialFocusRef = useRef<HTMLInputElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
+// Interactive Participation Modal Component
+function ParticipationModal({
+  open,
+  onClose,
+  returnFocusRef,
+}: {
+  open: boolean;
+  onClose: () => void;
+  returnFocusRef: MutableRefObject<HTMLElement | null>;
+}) {
+  const modalRef = useRef<HTMLDivElement>(null);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    if (!open) return;
-    const returnFocusElement = returnFocusRef.current;
-    setSubmitted(false);
-    initialFocusRef.current?.focus();
+    if (!open) {
+      setSubmitted(false);
+      return;
+    }
 
-    const onKeyDown = (event: KeyboardEvent) => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    focusableElements?.[0]?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
         return;
       }
 
-      if (event.key !== "Tab") {
+      if (event.key !== "Tab" || !focusableElements || focusableElements.length === 0) {
         return;
       }
 
-      const focusableElements = dialogRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      );
-      const focusable = Array.from(focusableElements ?? []);
-
-      if (!focusable.length) {
-        return;
-      }
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
 
       if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
@@ -264,105 +270,106 @@ function ParticipationModal({ open, onClose, returnFocusRef }: { open: boolean; 
       }
     };
 
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKeyDown);
-      returnFocusElement?.focus();
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+      returnFocusRef.current?.focus();
     };
   }, [open, onClose, returnFocusRef]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.currentTarget.reset();
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setSubmitted(true);
   };
 
+  if (!open) return null;
+
   return (
-    <aside aria-hidden={!open} className={`modal-shell ${open ? "open" : ""}`}>
-      <button type="button" className="absolute inset-0 bg-ink/60 backdrop-blur-sm" aria-label="Close form" onClick={onClose} />
-      
-      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="participation-title" className="modal-panel border-l border-white/20">
+    <aside className="dialog-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div ref={modalRef} className="dialog-content text-ink">
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close"
-          className="absolute right-6 top-6 z-20 grid h-12 w-12 place-content-center rounded-full bg-ink text-white hover:bg-red"
+          aria-label="Close dialog"
+          className="clay-card rounded-full bg-ink p-2 text-white hover:bg-red focus:outline-none focus-visible:ring-2 focus-visible:ring-purple absolute top-4 right-4"
         >
           <CloseIcon />
         </button>
-        
-        <div className="flex items-center justify-between bg-orange border-b border-white/20 px-6 py-[22px] text-yellow">
-          <DownArrows />
-          <h2 id="participation-title" className="font-display text-section uppercase tracking-tight text-ink font-black">Register for Nirmaan</h2>
-          <DownArrows />
-        </div>
-        
-        <form onSubmit={handleSubmit} className="grid gap-4 p-box bg-paper">
-          
-          <div className="flex items-center gap-4 bg-[#fcedde] border border-white/40 rounded-[14px] p-4 mb-2 shadow-sm">
-            <Sparkles size={36} className="text-yellow animate-bounce" />
-            <div>
-              <p className="font-display text-sm uppercase text-ink font-black">
-                {submitted ? "REQUEST RECEIVED" : "INITIATE MATCHMAKING"}
-              </p>
-              <p className="text-xs text-gray-700 font-bold" aria-live="polite">
-                {submitted
-                  ? "Your details are ready for organizer follow-up. No data was sent from this preview form."
-                  : "Register as a builder, mentor, or sponsor for Nirmaan 2026."}
-              </p>
-            </div>
-          </div>
 
-          <label className="field">
-            <span className="text-xs tracking-wide">Player Name</span>
-            <input ref={initialFocusRef} name="name" placeholder="eg. Player_One" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
-          </label>
-          
-          <label className="field">
-            <span className="text-xs tracking-wide">Guild / College / Organisation</span>
-            <input name="organization" placeholder="eg. Zero_Junction" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
-          </label>
-          
-          <label className="field">
-            <span className="text-xs tracking-wide">Comms Email</span>
-            <input name="email" type="email" placeholder="eg. player@lobby.gg" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
-          </label>
-          
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="field">
-              <span className="text-xs tracking-wide">Expected Party Size</span>
-              <input name="participants" type="number" min="1" defaultValue="1" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
-            </label>
-            <label className="field">
-              <span className="text-xs tracking-wide">Spawn Date</span>
-              <input name="targetMonth" type="month" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
-            </label>
+        <div className="mb-6 flex items-center gap-3">
+          <div className="rounded-full bg-yellow p-3 text-ink clay-card">
+            <Sparkles size={24} />
           </div>
-          
-          <label className="field">
-            <span className="text-xs tracking-wide">Choose Lobby Role</span>
-            <select name="role" defaultValue="Builder" className="border-2 border-white/40 bg-white/45 p-4 rounded-[18px]">
-              <option>Builder</option>
-              <option>Mentor / Game Master</option>
-              <option>Sponsor Guild</option>
-              <option>Volunteer</option>
-            </select>
-          </label>
-          
-          <label className="field">
-            <span className="text-xs tracking-wide">Player Objectives & Notes</span>
-            <textarea name="notes" rows={3} placeholder="Describe your tracks, tech gear, or how you want to support Nirmaan." className="border-2 border-white/40 bg-white/45 focus:bg-white" />
-          </label>
-          
-          <button
-            className="mt-2 rounded-pill bg-green px-8 py-4 font-display text-lg uppercase text-ink hover:bg-white active:translate-y-1 clay-card font-black"
-            type="submit"
-          >
-            START QUEST
-          </button>
-        </form>
+          <div>
+            <h2 id="modal-title" className="font-display text-2xl uppercase tracking-tight text-ink font-black">
+              JOIN NIRMAAN 2026
+            </h2>
+            <p className="text-xs font-bold text-gray-700">Enter your details to register as a builder or mentor.</p>
+          </div>
+        </div>
+
+        {submitted ? (
+          <div className="rounded-[20px] bg-green-light/30 border-2 border-green/40 p-6 text-center shadow-sm">
+            <h3 className="font-display text-xl uppercase font-black text-ink mb-2">🎉 Quest Registered!</h3>
+            <p className="text-sm font-semibold text-ink/90">
+              Welcome to the Nirmaan lobby! Check your email inbox for Discord guild invites and check-in updates.
+            </p>
+            <button
+              onClick={onClose}
+              className="mt-5 rounded-pill bg-ink text-white px-6 py-2.5 font-display text-xs uppercase font-black hover:bg-purple shadow-md"
+            >
+              Back to Arena
+            </button>
+          </div>
+        ) : (
+          <form className="grid gap-4 text-ink" onSubmit={handleSubmit}>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="field">
+                <span className="text-xs tracking-wide">Player Name</span>
+                <input name="fullName" type="text" required placeholder="Arnav Paniya" className="border-2 border-white/40 bg-white/45 focus:bg-white" />
+              </label>
+              <label className="field">
+                <span className="text-xs tracking-wide">Email Handle</span>
+                <input name="email" type="email" required placeholder="builder@nirmaan.tech" className="border-2 border-white/40 bg-white/45 focus:bg-white" />
+              </label>
+            </div>
+            
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="field">
+                <span className="text-xs tracking-wide">Guild / Institution</span>
+                <input name="teamName" type="text" required placeholder="BMSIT Bangalore" className="border-2 border-white/40 bg-white/45 focus:bg-white" />
+              </label>
+              <label className="field">
+                <span className="text-xs tracking-wide">Target Month</span>
+                <input name="targetMonth" type="month" required className="border-2 border-white/40 bg-white/45 focus:bg-white" />
+              </label>
+            </div>
+            
+            <label className="field">
+              <span className="text-xs tracking-wide">Choose Lobby Role</span>
+              <select name="role" defaultValue="Builder" className="border-2 border-white/40 bg-white/45 p-4 rounded-[18px]">
+                <option>Builder</option>
+                <option>Mentor / Game Master</option>
+                <option>Sponsor Guild</option>
+                <option>Volunteer</option>
+              </select>
+            </label>
+            
+            <label className="field">
+              <span className="text-xs tracking-wide">Player Objectives & Notes</span>
+              <textarea name="notes" rows={3} placeholder="Describe your tracks, tech gear, or how you want to support Nirmaan." className="border-2 border-white/40 bg-white/45 focus:bg-white" />
+            </label>
+            
+            <button
+              className="mt-2 rounded-pill bg-green px-8 py-4 font-display text-lg uppercase text-ink hover:bg-white active:translate-y-1 clay-card font-black"
+              type="submit"
+            >
+              START QUEST
+            </button>
+          </form>
+        )}
       </div>
     </aside>
   );
@@ -390,7 +397,7 @@ export function SiteExperience() {
       <Rail onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       
-      <main className="relative ml-0 overflow-x-clip px-0 pt-[75px] lg:ml-[200px] lg:px-0 lg:pr-5 lg:pt-[30px]">
+      <main className="relative ml-0 overflow-x-clip px-2.5 sm:px-0 pt-[68px] lg:ml-[200px] lg:px-0 lg:pr-5 lg:pt-[30px]">
         <article className="home">
           {/* Hero & Countdown */}
           <Hero onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
