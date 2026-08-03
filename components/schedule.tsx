@@ -7,11 +7,12 @@ import { Trophy3D } from "./trophy-3d";
 export function ScheduleBoard() {
   return (
     <section id="schedule" className="my-gap grid gap-gap lg:grid-cols-[.9fr_1.1fr]" data-reveal>
+      {/* Left 3D Trophy Card */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="rounded-brand bg-orange p-box clay-card flex flex-col justify-between min-h-[560px]"
+        className="rounded-brand bg-orange p-box clay-card flex flex-col justify-between min-h-0 lg:min-h-[560px]"
       >
         <div>
           <h2 className="font-display text-section uppercase text-ink">A run-of-show for builders</h2>
@@ -20,7 +21,7 @@ export function ScheduleBoard() {
           </p>
         </div>
 
-        {/* 3D Metallic Trophy Cup occupying the leftover space */}
+        {/* 3D Metallic Trophy Cup */}
         <div className="my-2 flex items-center justify-center">
           <Trophy3D />
         </div>
@@ -32,18 +33,19 @@ export function ScheduleBoard() {
         </div>
       </motion.div>
 
+      {/* Right Schedule Items List */}
       <div className="rounded-brand bg-paper p-4 clay-card">
         <div className="grid gap-3">
           {scheduleItems.map((item) => (
             <article
               key={`${item.time}-${item.title}`}
-              className="schedule-row grid gap-4 rounded-[18px] bg-white/60 p-4 shadow-sm hover:translate-x-1 transition-transform md:grid-cols-[100px_1fr_130px] border border-white/40"
+              className="schedule-row grid gap-3 sm:gap-4 rounded-[18px] bg-white/60 p-3 sm:p-4 shadow-sm hover:translate-x-1 transition-transform sm:grid-cols-[100px_1fr] md:grid-cols-[100px_1fr_130px] border border-white/40"
             >
-              <div className={`grid min-h-[66px] place-content-center rounded-[12px] ${item.color} clay-card`}>
-                <span className="font-display text-[22px] leading-none uppercase font-black">{item.time}</span>
+              <div className={`grid min-h-[54px] sm:min-h-[66px] place-content-center rounded-[12px] ${item.color} clay-card`}>
+                <span className="font-display text-lg sm:text-[22px] leading-none uppercase font-black">{item.time}</span>
               </div>
               <div className="self-center">
-                <h3 className="font-display text-[18px] uppercase leading-none text-ink font-black">{item.title}</h3>
+                <h3 className="font-display text-base sm:text-[18px] uppercase leading-none text-ink font-black">{item.title}</h3>
                 <p className="mt-1 text-xs text-gray-800 font-bold leading-normal">{item.detail}</p>
               </div>
             </article>
