@@ -68,19 +68,15 @@ function TypingText({ words, align = "left" }: { words: string[]; align?: "left"
 
 export function ReverseCountdownClock() {
   const clockRef = useRef<HTMLDivElement>(null);
-  const [remainingSeconds, setRemainingSeconds] = useState(getRemainingSeconds);
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
   const [isScrubbing, setIsScrubbing] = useState(false);
   const tiltX = useSpring(useMotionValue(0), { stiffness: 220, damping: 24, mass: 0.45 });
   const tiltY = useSpring(useMotionValue(0), { stiffness: 220, damping: 24, mass: 0.45 });
-  const time = splitTime(remainingSeconds);
-  const secondAngle = time.secs * 6;
-  const minuteAngle = (time.mins + time.secs / 60) * 6;
-  const countdownUnits = [
-    [padTime(time.days), "days"],
-    [padTime(time.hrs), "hrs"],
-    [padTime(time.mins), "mins"],
-    [padTime(time.secs), "secs"]
-  ];
+
+  // Set real countdown value only on the client after hydration to avoid SSR mismatch
+  useEffect(() => {
+    setRemainingSeconds(getRemainingSeconds());
+  }, []);
 
   useEffect(() => {
     if (isScrubbing) {
@@ -93,6 +89,16 @@ export function ReverseCountdownClock() {
 
     return () => window.clearInterval(timer);
   }, [isScrubbing]);
+
+  const time = splitTime(remainingSeconds);
+  const secondAngle = time.secs * 6;
+  const minuteAngle = (time.mins + time.secs / 60) * 6;
+  const countdownUnits = [
+    [padTime(time.days), "days"],
+    [padTime(time.hrs), "hrs"],
+    [padTime(time.mins), "mins"],
+    [padTime(time.secs), "secs"]
+  ];
 
   const updateTilt = (event: PointerEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -184,54 +190,131 @@ export function ReverseCountdownClock() {
         </motion.div>
 
         <div className="order-1 flex flex-col items-center lg:order-2">
-          <motion.div
-            ref={clockRef}
-            role="slider"
-            tabIndex={0}
-            aria-label="Interactive countdown seconds dial"
-            aria-valuemin={0}
-            aria-valuemax={59}
-            aria-valuenow={time.secs}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-            onPointerLeave={handlePointerLeave}
-            onKeyDown={handleKeyDown}
-            className="real-clock relative aspect-square w-[min(66vw,410px)] cursor-grab touch-none rounded-full border-[14px] border-white bg-[#f7f3ef] shadow-[0_22px_54px_rgba(0,0,0,.16),0_7px_0_rgba(255,255,255,.92),inset_0_0_0_3px_rgba(0,0,0,.08)] active:cursor-grabbing"
-            initial={{ opacity: 0, scale: 0.86, y: 36 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-            style={{ rotateX: tiltX, rotateY: tiltY }}
-          >
-            {Array.from({ length: 12 }).map((_, index) => (
-              <span
-                key={index}
-                className="clock-tick absolute left-1/2 top-1/2 h-[15px] w-[5px] rounded-pill bg-ink"
-                style={{ transform: `translate(-50%, -50%) rotate(${index * 30}deg) translateY(calc(-1 * min(28vw, 176px)))` }}
-              />
-            ))}
-            <span className="clock-number left-1/2 top-[13%] -translate-x-1/2">12</span>
-            <span className="clock-number right-[14%] top-1/2 -translate-y-1/2">3</span>
-            <span className="clock-number bottom-[12%] left-1/2 -translate-x-1/2">6</span>
-            <span className="clock-number left-[14%] top-1/2 -translate-y-1/2">9</span>
-            <motion.span
-              className="clock-hand-wrap absolute left-1/2 top-1/2"
-              animate={{ rotate: minuteAngle }}
-              transition={{ duration: 0.65, ease: [0.19, 1, 0.22, 1] }}
+          {/* Clock + stopwatch hardware wrapper */}
+          <div className="relative pt-[85px] pb-4">
+            <motion.div
+              ref={clockRef}
+              role="slider"
+              tabIndex={0}
+              aria-label="Interactive countdown seconds dial"
+              aria-valuemin={0}
+              aria-valuemax={59}
+              aria-valuenow={time.secs}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+              onPointerLeave={handlePointerLeave}
+              onKeyDown={handleKeyDown}
+              className="real-clock relative aspect-square w-[min(66vw,410px)] cursor-grab touch-none rounded-full border-[14px] border-white bg-[#f7f3ef] shadow-[0_22px_54px_rgba(0,0,0,.16),0_7px_0_rgba(255,255,255,.92),inset_0_0_0_3px_rgba(0,0,0,.08)] active:cursor-grabbing"
+              initial={{ opacity: 0, scale: 0.86, y: 36 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+              style={{ rotateX: tiltX, rotateY: tiltY }}
             >
-              <span className="clock-hand clock-hand-minute bg-ink" />
-            </motion.span>
-            <motion.span
-              className="clock-hand-wrap absolute left-1/2 top-1/2"
-              animate={{ rotate: secondAngle }}
-              transition={{ duration: 0.65, ease: [0.19, 1, 0.22, 1] }}
-            >
-              <span className="clock-hand clock-hand-second bg-red" />
-            </motion.span>
-            <span className="absolute left-1/2 top-1/2 h-11 w-11 -translate-x-1/2 -translate-y-1/2 rounded-full border-[4px] border-ink bg-yellow shadow-[0_0_0_14px_rgba(255,255,255,.75),0_9px_20px_rgba(0,0,0,.15)]" />
-          </motion.div>
+              {/* ── Top Crown & Ring Assembly (12 o'clock) ── */}
+              <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-[calc(100%-8px)] z-20 flex flex-col items-center pointer-events-none">
+                {/* Metallic Ring / Bail */}
+                <div
+                  className="w-[66px] h-[54px] rounded-full border-[7px] border-[#b8b4ae] shadow-[inset_0_2px_3px_rgba(255,255,255,.7),0_4px_12px_rgba(0,0,0,.25)]"
+                  style={{
+                    background: 'linear-gradient(180deg, #dcd8d2 0%, #9e9a94 50%, #c4c0ba 100%)',
+                    WebkitMaskImage: 'radial-gradient(ellipse 60% 54% at 50% 50%, transparent 56%, black 58%)',
+                    maskImage: 'radial-gradient(ellipse 60% 54% at 50% 50%, transparent 56%, black 58%)'
+                  }}
+                />
+                {/* Crown Button + Stem */}
+                <div className="-mt-[38px] z-10 flex flex-col items-center">
+                  {/* Ridged Crown Knob */}
+                  <div
+                    className="w-[28px] h-[26px] rounded-t-[5px] border border-[#8a867f]"
+                    style={{
+                      background: 'linear-gradient(90deg, #94908a 0%, #dedad4 25%, #ffffff 50%, #b5b1ab 75%, #85817b 100%)',
+                      backgroundImage: 'repeating-linear-gradient(90deg, #7a7670 0px, #7a7670 2px, #e8e4de 2px, #e8e4de 4px)',
+                      boxShadow: 'inset 0 2px 0 rgba(255,255,255,.7), 0 3px 6px rgba(0,0,0,.3)'
+                    }}
+                  />
+                  {/* Stem penetrating clock bezel */}
+                  <div
+                    className="w-[18px] h-[18px] border-x border-[#7a766f]"
+                    style={{
+                      background: 'linear-gradient(90deg, #8a867f 0%, #d4d0ca 45%, #ffffff 60%, #9e9a94 100%)',
+                      boxShadow: '0 4px 6px rgba(0,0,0,.2)'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* ── Left Pusher (10 o'clock) ── */}
+              <div className="absolute left-[25%] top-[6.7%] z-20 pointer-events-none -translate-x-1/2 -translate-y-1/2 -rotate-[30deg]">
+                <div className="flex flex-col items-center -translate-y-[45%]">
+                  {/* Button cap */}
+                  <div
+                    className="w-[22px] h-[14px] rounded-t-[4px] border border-[#8a867f]"
+                    style={{
+                      background: 'linear-gradient(90deg, #94908a 0%, #dedad4 30%, #ffffff 55%, #a8a49e 100%)',
+                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,.7), 0 3px 6px rgba(0,0,0,.25)'
+                    }}
+                  />
+                  {/* Pusher stem penetrating bezel */}
+                  <div
+                    className="w-[14px] h-[18px] border-x border-[#7a766f]"
+                    style={{
+                      background: 'linear-gradient(90deg, #8a867f 0%, #d4d0ca 40%, #ffffff 65%, #9e9a94 100%)'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* ── Right Pusher (2 o'clock) ── */}
+              <div className="absolute left-[75%] top-[6.7%] z-20 pointer-events-none -translate-x-1/2 -translate-y-1/2 rotate-[30deg]">
+                <div className="flex flex-col items-center -translate-y-[45%]">
+                  {/* Button cap */}
+                  <div
+                    className="w-[22px] h-[14px] rounded-t-[4px] border border-[#8a867f]"
+                    style={{
+                      background: 'linear-gradient(90deg, #94908a 0%, #dedad4 30%, #ffffff 55%, #a8a49e 100%)',
+                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,.7), 0 3px 6px rgba(0,0,0,.25)'
+                    }}
+                  />
+                  {/* Pusher stem penetrating bezel */}
+                  <div
+                    className="w-[14px] h-[18px] border-x border-[#7a766f]"
+                    style={{
+                      background: 'linear-gradient(90deg, #8a867f 0%, #d4d0ca 40%, #ffffff 65%, #9e9a94 100%)'
+                    }}
+                  />
+                </div>
+              </div>
+              {Array.from({ length: 12 }).map((_, index) => (
+                <span
+                  key={index}
+                  className="clock-tick absolute left-1/2 top-1/2 h-[15px] w-[5px] rounded-pill bg-ink"
+                  style={{ transform: `translate(-50%, -50%) rotate(${index * 30}deg) translateY(calc(-1 * min(28vw, 176px)))` }}
+                />
+              ))}
+              <span className="clock-number left-1/2 top-[13%] -translate-x-1/2">12</span>
+              <span className="clock-number right-[14%] top-1/2 -translate-y-1/2">3</span>
+              <span className="clock-number bottom-[12%] left-1/2 -translate-x-1/2">6</span>
+              <span className="clock-number left-[14%] top-1/2 -translate-y-1/2">9</span>
+              <motion.span
+                className="clock-hand-wrap absolute left-1/2 top-1/2"
+                animate={{ rotate: minuteAngle }}
+                transition={{ duration: 0.65, ease: [0.19, 1, 0.22, 1] }}
+              >
+                <span className="clock-hand clock-hand-minute bg-ink" />
+              </motion.span>
+              <motion.span
+                className="clock-hand-wrap absolute left-1/2 top-1/2"
+                animate={{ rotate: secondAngle }}
+                transition={{ duration: 0.65, ease: [0.19, 1, 0.22, 1] }}
+              >
+                <span className="clock-hand clock-hand-second bg-red" />
+              </motion.span>
+              <span className="absolute left-1/2 top-1/2 h-11 w-11 -translate-x-1/2 -translate-y-1/2 rounded-full border-[4px] border-ink bg-yellow shadow-[0_0_0_14px_rgba(255,255,255,.75),0_9px_20px_rgba(0,0,0,.15)]" />
+            </motion.div>
+          </div>
 
           <div className="mt-7 grid w-full max-w-[560px] grid-cols-4 gap-2 sm:gap-4">
             {countdownUnits.map(([value, label]) => (

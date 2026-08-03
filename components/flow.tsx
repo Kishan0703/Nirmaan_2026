@@ -10,6 +10,15 @@ export function EventFlow() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [scrollRange, setScrollRange] = useState(0);
+  const [windowHeight, setWindowHeight] = useState(0);
+
+  // Capture window height for dynamic section sizing
+  useEffect(() => {
+    const updateHeight = () => setWindowHeight(window.innerHeight);
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
 
   // Dynamically measure horizontal track scroll range for precise end-to-end alignment
   useEffect(() => {
@@ -20,37 +29,34 @@ export function EventFlow() {
     const calculateRange = () => {
       const trackWidth = track.scrollWidth;
       const containerWidth = container.clientWidth;
-      const paddingRight = 32;
-      const maxScroll = Math.max(0, trackWidth - containerWidth + paddingRight);
+      const maxScroll = Math.max(0, trackWidth - containerWidth);
       setScrollRange(maxScroll);
     };
 
     calculateRange();
 
-    const resizeObserver = new ResizeObserver(() => {
-      calculateRange();
-    });
-
+    const resizeObserver = new ResizeObserver(calculateRange);
     resizeObserver.observe(container);
     resizeObserver.observe(track);
 
     return () => resizeObserver.disconnect();
   }, []);
 
-  // Hook into vertical scroll progress of targetRef runway:
-  // "start start" -> Top of target section reaches top of viewport (pin begins, progress = 0)
-  // "end end"     -> Bottom of target section reaches bottom of viewport (pin ends, progress = 1)
+  const sectionHeight = windowHeight > 0 ? windowHeight + scrollRange : undefined;
+
   const { scrollYProgress } = useScroll({
     target: targetRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end end"],
   });
 
-  // Map scroll progress [0, 1] 1:1 to horizontal displacement [0, -scrollRange]
   const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   return (
-    <section ref={targetRef} className="relative h-[250vh] w-full">
-      {/* Inner Sticky Container pinned at top: 0, height: 100vh */}
+    <section
+      ref={targetRef}
+      className="relative w-full"
+      style={{ height: sectionHeight ? `${sectionHeight}px` : "250vh" }}
+    >
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden py-6 lg:py-10">
         <div className="flex gap-6 items-stretch h-[82vh] max-h-[680px] w-full px-4 lg:px-8 max-lg:flex-col">
           
@@ -79,7 +85,6 @@ export function EventFlow() {
                   key={card.title} 
                   className="shrink-0 w-[280px] sm:w-[320px] md:w-[360px] flex flex-col gap-4"
                 >
-                  {/* Stage Image */}
                   <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border-2 border-white/20 shadow-md">
                     <Image
                       src={card.image}
@@ -93,7 +98,6 @@ export function EventFlow() {
                     </span>
                   </div>
                   
-                  {/* Stage Details */}
                   <div className="clay-card bg-yellow p-5 rounded-[24px] text-ink flex-1 flex flex-col justify-between min-h-[220px]">
                     <div>
                       <h3 className="font-display text-[18px] uppercase font-black leading-tight">{card.title}</h3>

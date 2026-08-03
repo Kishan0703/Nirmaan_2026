@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { scheduleItems } from "@/lib/data";
+import { Trophy3D } from "./trophy-3d";
 
 export function ScheduleBoard() {
   return (
@@ -10,7 +11,7 @@ export function ScheduleBoard() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="rounded-brand bg-orange p-box clay-card flex flex-col justify-between min-h-[420px]"
+        className="rounded-brand bg-orange p-box clay-card flex flex-col justify-between min-h-[560px]"
       >
         <div>
           <h2 className="font-display text-section uppercase text-ink">A run-of-show for builders</h2>
@@ -18,9 +19,15 @@ export function ScheduleBoard() {
             The Nirmaan schedule keeps the hackathon moving: check-in, launch brief, team lock, mentor checkpoints, submission freeze, judging, and demo day.
           </p>
         </div>
-        <div className="mt-8 grid grid-cols-2 gap-3 border-t border-ink/10 pt-5">
+
+        {/* 3D Metallic Trophy Cup occupying the leftover space */}
+        <div className="my-2 flex items-center justify-center">
+          <Trophy3D />
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 gap-3 border-t border-ink/10 pt-5">
           {["24h build", "2 checkpoints", "5 mentor rooms", "1 demo stage"].map((item) => (
-            <div key={item} className="rounded-[12px] bg-paper px-4 py-3 font-display text-xs uppercase text-ink font-black clay-card">{item}</div>
+            <div key={item} className="rounded-[12px] bg-paper px-4 py-3 font-display text-xs uppercase text-ink font-black clay-card text-center">{item}</div>
           ))}
         </div>
       </motion.div>
@@ -38,9 +45,6 @@ export function ScheduleBoard() {
               <div className="self-center">
                 <h3 className="font-display text-[18px] uppercase leading-none text-ink font-black">{item.title}</h3>
                 <p className="mt-1 text-xs text-gray-800 font-bold leading-normal">{item.detail}</p>
-              </div>
-              <div className="self-center rounded-pill bg-ink text-yellow px-4 py-2.5 text-center text-[10px] font-display uppercase tracking-widest animate-pulse font-black shadow-sm">
-                AUTO NOTIFY
               </div>
             </article>
           ))}

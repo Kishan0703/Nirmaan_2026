@@ -34,9 +34,7 @@ export function Footer() {
           <p className="font-display text-[14px] uppercase tracking-tight text-ink font-black">
             © 2026 NIRMAAN 2026
           </p>
-          <p className="text-xs font-bold text-gray-700">
-            Web design by Big Horror. Code by Lemonjelly
-          </p>
+
         </div>
 
         {/* Outline Pill navigation items */}
