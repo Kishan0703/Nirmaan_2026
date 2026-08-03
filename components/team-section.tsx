@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Folder, ChevronRight, ArrowUpRight, ShieldCheck, User } from "lucide-react";
+import { Folder, ChevronRight, ArrowUpRight } from "lucide-react";
 
 type Member = {
   name: string;
@@ -133,6 +133,7 @@ function MemberAvatar({ member }: { member: Member }) {
           src={member.avatar}
           alt={member.name}
           fill
+          unoptimized
           onError={() => setImgError(true)}
           className="object-cover group-hover:scale-110 transition-transform duration-300"
         />
@@ -363,11 +364,7 @@ export function TeamSection() {
                         </div>
 
                         {/* Social Buttons Bottom Bar */}
-                        <div className="mt-4 pt-3 border-t border-ink/10 flex items-center justify-between">
-                          <span className="flex items-center gap-1 text-[10px] font-display uppercase font-black text-ink/50">
-                            <ShieldCheck size={12} className="text-green" /> VERIFIED
-                          </span>
-
+                        <div className="mt-4 pt-3 border-t border-ink/10 flex items-center justify-end">
                           <div className="flex items-center gap-1.5">
                             {member.github && (
                               <a
