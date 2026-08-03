@@ -14,6 +14,7 @@ import { Announcements } from "./announcements";
 import { EventFlow } from "./flow";
 import { ScheduleBoard } from "./schedule";
 import { Tracks } from "./tracks";
+import { PrizePoolSection } from "./prize-pool";
 import { BugSquasherGame } from "./game";
 import { SubmissionBoard } from "./submissions";
 import { GallerySection } from "./gallery";
@@ -162,18 +163,59 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
           <span className="hamburger" />
         </button>
       </div>
-      <div className={`mobile-menu ${open ? "open" : ""} border-b border-ink/5`} aria-hidden={!open}>
+      <div className={`mobile-menu ${open ? "open" : ""} border-b border-ink/5 flex flex-col gap-3 p-4`} aria-hidden={!open}>
         {menuItems.map((item) => (
           <a
             key={item.index}
             href={item.href}
             onClick={() => setOpen(false)}
             tabIndex={open ? 0 : -1}
-            className={`${item.color} clay-card rounded-[12px] p-4 font-display text-lg uppercase`}
+            className={`${item.color} clay-card rounded-[12px] p-4 font-display text-lg uppercase flex items-center justify-between`}
           >
-            {item.label}
+            <span>{item.label}</span>
+            <span className="font-aeonik text-xs opacity-75 font-normal">{item.index}</span>
           </a>
         ))}
+
+        {/* Mobile Social Bar */}
+        <div className="pt-2 border-t border-ink/10 flex items-center justify-around">
+          <a
+            href="https://www.instagram.com/codingclub_bmsit/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-red transition-all"
+          >
+            <SocialInstagram className="w-4 h-4" />
+          </a>
+          <a
+            href="https://twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter / X"
+            className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue transition-all"
+          >
+            <SocialTwitter className="w-4 h-4" />
+          </a>
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-purple transition-all"
+          >
+            <SocialLinkedin className="w-4 h-4" />
+          </a>
+          <a
+            href="https://github.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-orange transition-all"
+          >
+            <SocialGithub className="w-4 h-4" />
+          </a>
+        </div>
       </div>
     </header>
   );
@@ -361,6 +403,9 @@ export function SiteExperience() {
           {/* 02. Problem Statements & Tracks */}
           <Tracks onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           
+          {/* Prize Pool Breakdown */}
+          <PrizePoolSection />
+
           {/* Judging Criteria */}
           <SectionTitle>Judging Criteria</SectionTitle>
           <Values />
