@@ -16,11 +16,14 @@ type EventFlowCard = {
 
 export type TrackType = "software" | "hardware";
 
-type TrackCard = {
+export type TrackCard = {
+  id: string;
   title: string;
-  prompt: string;
+  category: TrackType;
   color: string;
-  type: TrackType;
+  description: string;
+  objectives: string[];
+  tags: string[];
 };
 
 type FaqItem = {
@@ -115,15 +118,87 @@ export const projectSubmissions = [
 ];
 
 export const trackCards: TrackCard[] = [
-  // Software (Embedded Systems / IoT) Tracks
-  { title: "Embedded Systems", prompt: "Blend of embedded computing, connectivity, and software", color: "bg-blue", type: "software" },
-  { title: "IoT Multidisciplinary", prompt: "Connected devices, custom casing, and systems-level logic", color: "bg-yellow", type: "software" },
-  { title: "Connectivity Networks", prompt: "Secure communications, edge nodes, and network protocols", color: "bg-purple", type: "software" },
-  
-  // Hardware Tracks
-  { title: "Robotics & Devices", prompt: "Robotics, physical form factors, and device-based solutions", color: "bg-green", type: "hardware" },
-  { title: "Hardware Prototyping", prompt: "Physical casings, sensing units, casters, and casing system", color: "bg-red", type: "hardware" },
-  { title: "Automation Rigs", prompt: "Connected systems, physical actuators, and automation circuits", color: "bg-orange", type: "hardware" }
+  // ── SOFTWARE CATEGORY ──
+  {
+    id: "soft-1",
+    title: "AI & Intelligent Software Systems",
+    category: "software",
+    color: "bg-blue text-white",
+    description: "Build intelligent web platforms and automated AI workflows that leverage generative models, agentic pipelines, or smart predictive engines to solve complex real-world challenges.",
+    objectives: [
+      "Develop an end-to-end intelligent workflow using modern LLMs or custom ML models.",
+      "Implement real-time user interaction with low-latency dynamic response loops.",
+      "Deploy a responsive, production-ready web application with persistent database storage."
+    ],
+    tags: ["Next.js", "Python", "Gemini API", "PostgreSQL", "TailwindCSS"]
+  },
+  {
+    id: "soft-2",
+    title: "Open Software Innovation & FinTech",
+    category: "software",
+    color: "bg-purple text-white",
+    description: "Architect developer productivity tools, open-source software infrastructure, or digital finance platforms that streamline modern workflows and secure transactions.",
+    objectives: [
+      "Build high-throughput, secure API endpoints with rate-limiting and validation.",
+      "Design an intuitive UI/UX with interactive real-time data visualization.",
+      "Ensure data privacy, authentication, and cross-platform compatibility."
+    ],
+    tags: ["TypeScript", "Node.js", "GraphQL", "Zod", "Cloudflare Workers"]
+  },
+  {
+    id: "soft-3",
+    title: "Smart Governance & Cyber Security Telemetry",
+    category: "software",
+    color: "bg-orange text-white",
+    description: "Engineer resilient software platforms, live threat monitoring dashboards, or public utility management hubs aimed at enhancing digital safety and civic infrastructure.",
+    objectives: [
+      "Ingest live data streams and flag anomalous behavioral patterns in real time.",
+      "Implement strict role-based access control (RBAC) and data encryption.",
+      "Deliver a real-time command center interface with geo-mapping overlays."
+    ],
+    tags: ["React", "Go", "WebSockets", "Docker", "Security Telemetry"]
+  },
+
+  // ── HARDWARE CATEGORY ──
+  {
+    id: "hard-1",
+    title: "Embedded Systems & Smart IoT",
+    category: "hardware",
+    color: "bg-green text-ink",
+    description: "Prototype connected microcontroller hardware integrating physical sensors, wireless modules, and edge telemetry pipelines for remote monitoring and control.",
+    objectives: [
+      "Interface physical sensors (thermal, optical, motion) with microcontrollers.",
+      "Transmit telemetry data via MQTT, Wi-Fi, or LoRa to a cloud web dashboard.",
+      "Optimize circuit power draw and firmware execution for continuous field operation."
+    ],
+    tags: ["ESP32 / Arduino", "Embedded C++", "MQTT", "Sensors", "IoT Telemetry"]
+  },
+  {
+    id: "hard-2",
+    title: "Robotics & Physical Automation",
+    category: "hardware",
+    color: "bg-yellow text-ink",
+    description: "Construct autonomous robotic rigs, motorized actuation systems, or physical mechanisms engineered to execute real-world tasks and mechanical maneuvers.",
+    objectives: [
+      "Program precise motor control loops and sensory feedback algorithms.",
+      "Fabricate a physical chassis/enclosure using CAD modelling or 3D printing.",
+      "Implement hardware safety fail-safes and remote manual override controls."
+    ],
+    tags: ["Raspberry Pi", "ROS / Python", "Actuators & Servos", "3D Prototyping"]
+  },
+  {
+    id: "hard-3",
+    title: "Healthcare & Assistive Hardware Devices",
+    category: "hardware",
+    color: "bg-red text-white",
+    description: "Design physical health monitoring gear, wearable diagnostic trackers, or assistive hardware tools engineered to improve patient care and physical mobility.",
+    objectives: [
+      "Capture biophysical signals accurately (pulse, motion, ECG, temperature).",
+      "Display real-time diagnostic readings on onboard OLED screens and mobile apps.",
+      "Integrate emergency alert triggers and fail-safe audio-visual indicators."
+    ],
+    tags: ["Biometric Sensors", "STM32", "Bluetooth LE", "CAD Enclosure"]
+  }
 ];
 
 export const values = [
