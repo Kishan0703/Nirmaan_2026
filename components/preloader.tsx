@@ -474,22 +474,6 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
           />
         </motion.div>
 
-        {/* Console output block */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.4 }}
-          className="w-full bg-ink/[0.04] backdrop-blur-sm border border-ink/[0.08] rounded-[14px] p-3.5 font-mono text-[10px] leading-[1.5] text-ink/60 overflow-hidden"
-          style={{ minHeight: 72 }}
-        >
-          {consoleLines.slice(Math.max(0, lineIdx - 2), lineIdx).map((line, i) => (
-            <span key={`history-${lineIdx}-${i}`} className="block text-ink/30">
-              {line}
-            </span>
-          ))}
-          <ConsoleBlock lineIndex={lineIdx} />
-        </motion.div>
-
         <p className="text-[9px] font-display uppercase tracking-[0.25em] font-black text-ink/35 text-center mt-1">
           © 2026 NIRMAAN // STAGE ZERO
         </p>

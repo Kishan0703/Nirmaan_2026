@@ -229,14 +229,14 @@ export function TeamSection() {
         {/* Main Cuboid File Box Layout */}
         <div className="grid gap-gap lg:grid-cols-[360px_1fr] w-full">
           
-          {/* LEFT SIDE: Organizer Box (DESKTOP ONLY - Hidden on Mobile) */}
-          <div className="hidden lg:flex relative flex-col justify-between p-5 bg-ink border-2 border-white/20 rounded-brand shadow-xl clay-card min-h-[480px]">
+          {/* LEFT SIDE: Organizer Box (DESKTOP ONLY - Vibrant Gradient Container) */}
+          <div className="hidden lg:flex relative flex-col justify-between p-5 bg-gradient-to-br from-[#3b0764] via-[#7e22ce] to-[#c026d3] border-2 border-white/40 rounded-brand shadow-2xl clay-card min-h-[480px]">
             
             {/* Header Label Plate */}
             <div className="relative z-20 mb-4">
-              <div className="flex items-center justify-between border-b border-white/15 pb-3">
+              <div className="flex items-center justify-between border-b border-white/20 pb-3">
                 <div className="flex items-center gap-2">
-                  <Folder size={18} className="text-yellow" />
+                  <Folder size={18} className="text-yellow animate-pulse" />
                   <span className="font-display text-xs uppercase tracking-wider font-black text-white">
                     TEAM DIRECTORY
                   </span>
@@ -271,8 +271,8 @@ export function TeamSection() {
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
                       className={`w-full relative flex items-center justify-between p-3.5 rounded-[16px] text-left transition-all border-2 ${
                         isActive
-                          ? `${dept.tabColor} border-white shadow-lg z-30 ring-2 ring-white/50`
-                          : "bg-white/10 border-white/15 text-white hover:bg-white/20 z-10"
+                          ? `${dept.tabColor} border-white shadow-xl z-30 ring-2 ring-white/60`
+                          : "bg-white/15 backdrop-blur-md border-white/30 text-white hover:bg-white/25 z-10 font-black shadow-sm"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -283,7 +283,7 @@ export function TeamSection() {
                         </span>
                       </div>
 
-                      <ChevronRight size={18} className={`transition-transform ${isActive ? "translate-x-1 rotate-90" : "opacity-60"}`} />
+                      <ChevronRight size={18} className={`transition-transform ${isActive ? "translate-x-1 rotate-90" : "opacity-75"}`} />
                     </motion.button>
                   </motion.div>
                 );
@@ -291,7 +291,7 @@ export function TeamSection() {
             </div>
 
             {/* Bottom Bar Details */}
-            <div className="relative z-20 pt-4 border-t border-white/15 flex items-center justify-between text-[11px] font-display uppercase tracking-widest text-gray-400 font-black">
+            <div className="relative z-20 pt-4 border-t border-white/20 flex items-center justify-between text-[11px] font-display uppercase tracking-widest text-white/90 font-black">
               <span>BMSIT ORGANIZERS</span>
               <span>2026</span>
             </div>
@@ -300,8 +300,8 @@ export function TeamSection() {
           {/* RIGHT SIDE: Opened File Sheet */}
           <div className="relative w-full h-auto">
             
-            {/* MOBILE ONLY: Embedded Horizontal Department Bar */}
-            <div className="lg:hidden mb-3 bg-ink p-3 rounded-[18px] border-2 border-white/20 shadow-lg flex flex-col gap-2 w-full">
+            {/* MOBILE ONLY: Embedded Vibrant Gradient Horizontal Department Bar */}
+            <div className="lg:hidden mb-3 bg-gradient-to-r from-[#3b0764] via-[#7e22ce] to-[#c026d3] p-3 rounded-[18px] border-2 border-white/40 shadow-xl flex flex-col gap-2 w-full">
               <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-1.5">
                   <Folder size={14} className="text-yellow" />
@@ -326,7 +326,7 @@ export function TeamSection() {
                       className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-display text-[11px] uppercase font-black transition-all border ${
                         isActive
                           ? `${dept.tabColor} border-white shadow-md ring-2 ring-white/40`
-                          : "bg-white/10 border-white/15 text-white hover:bg-white/20"
+                          : "bg-white/20 border-white/30 text-white hover:bg-white/30"
                       }`}
                     >
                       <span className={`h-2 w-2 rounded-full ${dept.tabColor.split(" ")[0]} border border-white/40 shrink-0`} />

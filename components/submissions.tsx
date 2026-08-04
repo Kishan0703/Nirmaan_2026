@@ -1,44 +1,44 @@
 "use client";
 
 import Image from "next/image";
-import { Trophy } from "lucide-react";
-import { projectSubmissions } from "@/lib/data";
+import { Trophy, Clock, Sparkles } from "lucide-react";
 
 export function SubmissionBoard() {
   return (
     <section className="my-gap grid gap-gap lg:grid-cols-[1.05fr_.95fr]" data-reveal>
-      <div className="rounded-brand p-4 sm:p-box bg-white/80 backdrop-blur-md clay-card text-ink">
-        <h2 className="font-display text-2xl sm:text-section uppercase tracking-tight text-ink font-black leading-tight">
-          Active Room Leaderboard
-        </h2>
-        <p className="mt-2 sm:mt-4 max-w-[680px] text-xs sm:text-body-xl text-ink/80 font-medium">
-          Check live submissions. Live build scores are graded dynamically by mentors based on core design metrics.
-        </p>
-        
-        <div className="mt-5 sm:mt-8 overflow-hidden rounded-[18px] border-2 border-white/45 bg-paper/50">
-          {projectSubmissions.map((project, idx) => (
-            <div
-              key={project.team}
-              className="grid grid-cols-[auto_1fr_auto] sm:grid-cols-[40px_1fr_140px_120px_60px] gap-2 sm:gap-4 items-center border-b border-white/20 bg-white/25 p-3 sm:p-4 last:border-b-0 text-ink font-aeonik text-xs sm:text-sm"
-            >
-              <span className="opacity-60 font-display text-xs font-black">#{idx + 1}</span>
-              <div className="min-w-0">
-                <strong className="uppercase block font-bold truncate">{project.team}</strong>
-                <span className="opacity-75 text-[10px] sm:text-xs block sm:inline truncate">{project.track}</span>
-              </div>
-              <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1">
-                <span className="text-[9px] sm:text-[10px] uppercase bg-white border border-white/45 px-2 py-0.5 rounded text-center font-bold">
-                  {project.status}
-                </span>
-                <span className="font-display text-base sm:text-[18px] text-right text-orange font-black">
-                  {project.score}
-                </span>
-              </div>
+      <div className="rounded-brand p-4 sm:p-box bg-white/80 backdrop-blur-md clay-card text-ink flex flex-col justify-between">
+        <div>
+          <h2 className="font-display text-2xl sm:text-section uppercase tracking-tight text-ink font-black leading-tight">
+            Active Room Leaderboard
+          </h2>
+          <p className="mt-2 max-w-[680px] text-xs sm:text-body-xl text-ink/80 font-semibold">
+            Live build scores and room rankings are dynamically updated during the 24-hour Grand Finale.
+          </p>
+
+          {/* Arcade "Coming Soon After Round 1" Banner */}
+          <div className="mt-5 sm:mt-8 p-6 sm:p-8 rounded-[24px] border-2 border-white/60 bg-gradient-to-br from-paper via-white to-yellow/15 clay-card text-center flex flex-col items-center justify-center relative overflow-hidden shadow-inner">
+            {/* Pulsing Clock Badge */}
+            <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-[22px] bg-purple text-white border-2 border-white flex items-center justify-center shadow-xl mb-4 transform -rotate-3">
+              <Clock size={36} className="text-yellow animate-spin" style={{ animationDuration: "8s" }} />
             </div>
-          ))}
+
+            <div className="inline-flex items-center gap-1.5 bg-ink text-yellow text-[10px] sm:text-xs font-display uppercase font-black px-3.5 py-1.5 rounded-full shadow-md mb-3">
+              <Sparkles size={13} />
+              <span>ROUND 1 IN PROGRESS</span>
+            </div>
+
+            <h3 className="font-display text-2xl sm:text-3xl uppercase font-black text-ink leading-tight tracking-tight">
+              Coming Soon After Round 1
+            </h3>
+
+            <p className="mt-2 max-w-md text-xs sm:text-sm text-ink/80 font-bold leading-relaxed">
+              Grand Finale 24-hour room scoreboards and mentor grading rubrics will unlock immediately once Round 1 online PPT evaluations are completed.
+            </p>
+          </div>
         </div>
       </div>
       
+      {/* Right Side Image Card */}
       <div className="relative min-h-[340px] sm:min-h-[520px] overflow-hidden rounded-brand border-2 border-white/20 shadow-soft">
         <Image
           src="/assets/images/nirmaan-demo-day.png"
@@ -53,7 +53,7 @@ export function SubmissionBoard() {
             <Trophy size={18} className="text-yellow shrink-0" /> Finalist Showcase
           </p>
           <p className="mt-1.5 text-xs sm:text-sm text-gray-800 font-bold leading-normal">
-            Public arpeggio showroom maps top projects for loot deployment post-hackathon.
+            Shortlisted teams from Round 1 will present live prototypes on the Bangalore Grand Finale stage.
           </p>
         </div>
       </div>
