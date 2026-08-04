@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { CSSProperties } from "react";
 import { ArrowUpRight } from "@/components/icons";
 import { InteractiveTiltCard } from "./helpers";
@@ -12,19 +13,18 @@ export function Hero({ onBook }: { onBook?: () => void }) {
 
   return (
     <section id="top" className="relative grid min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft lg:min-h-[calc(100dvh-50px)] bg-paper">
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 h-full w-full object-cover opacity-70 filter saturate-100 contrast-110"
-      >
-        <source src="/Video-43508.mp4" type="video/mp4" />
-      </video>
+      {/* Background Hero Image */}
+      <Image
+        src="/assets/images/nirmaan-hero.png"
+        alt="Hackathon teams building prototypes in a design studio"
+        fill
+        priority
+        className="object-cover opacity-75 filter saturate-110 contrast-110"
+        sizes="(min-width: 1024px) 88vw, 100vw"
+      />
 
       <div className="clay-grid absolute inset-0 mix-blend-multiply opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent" />
       
       <div className="relative z-10 grid min-h-[calc(100dvh-50px)] content-between gap-8 px-6 py-8 text-white lg:px-10 lg:py-10">
         
