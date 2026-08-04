@@ -49,22 +49,22 @@ export function SponsorWall() {
 
   return (
     <section id="sponsors" className="my-gap" data-reveal>
-      <div className="rounded-brand bg-ink p-box clay-card overflow-hidden">
+      <div className="rounded-brand bg-green p-box clay-card overflow-hidden text-ink">
         
         {/* Header */}
-        <div className="flex flex-wrap items-end justify-between gap-5 border-b border-white/10 pb-6 mb-8">
-          <h2 className="font-display text-section uppercase text-white font-black">Event Sponsors</h2>
-          <p className="max-w-[480px] text-body-xl font-bold text-white/70">
+        <div className="flex flex-wrap items-end justify-between gap-5 border-b border-ink/15 pb-6 mb-8">
+          <h2 className="font-display text-section uppercase text-ink font-black">Event Sponsors</h2>
+          <p className="max-w-[480px] text-body-xl font-bold text-ink/90">
             Sponsors shape the build floor. Challenge prompts, API briefs, and developer recruitment slots.
           </p>
         </div>
 
         {/* Powered by Unstop — compact hero */}
-        <div className="flex items-center gap-4 mb-8 bg-white/[0.06] border border-white/10 rounded-[16px] px-5 py-4 w-fit">
-          <span className="text-[9px] font-display uppercase tracking-[0.2em] font-black text-white/40">
+        <div className="flex items-center gap-4 mb-8 bg-paper border-2 border-ink/15 rounded-[18px] px-5 py-4 w-fit shadow-md clay-card">
+          <span className="text-[10px] font-display uppercase tracking-[0.2em] font-black text-ink/60">
             Powered by
           </span>
-          <div className="relative h-9 w-9 rounded-full overflow-hidden shadow-md">
+          <div className="relative h-9 w-9 rounded-full overflow-hidden shadow-md bg-white p-0.5 border border-ink/10">
             <Image
               src="/assets/images/unstop-logo.png"
               alt="Unstop"
@@ -72,7 +72,7 @@ export function SponsorWall() {
               className="object-cover"
             />
           </div>
-          <span className="font-display text-[16px] uppercase font-black text-white tracking-tight">
+          <span className="font-display text-[18px] uppercase font-black text-ink tracking-tight">
             Unstop
           </span>
         </div>

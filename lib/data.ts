@@ -34,7 +34,7 @@ export const menuItems: MenuItem[] = [
   { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange text-white" },
   { index: "04", label: "Bug Game", href: "#game", color: "bg-red text-white", external: true },
   { index: "05", label: "Location", href: "#location", color: "bg-green text-ink" },
-  { index: "06", label: "FAQ & Team", href: "#faq", color: "bg-purple text-white", external: true }
+  { index: "06", label: "FAQ & Team", href: "#faq", color: "bg-green-light text-ink", external: true }
 ];
 
 export const eventFlowCards: EventFlowCard[] = [
@@ -156,10 +156,14 @@ export const announcements = [
 ];
 
 export const galleryImages = [
-  { src: "/assets/images/nirmaan-hero.png", alt: "Active building floor", caption: "Team brainstorming session" },
-  { src: "/assets/images/nirmaan-mentors.png", alt: "Mentor review sessions", caption: "Live engineering checkpoints" },
-  { src: "/assets/images/nirmaan-demo-day.png", alt: "Final pitching stage", caption: "Shortlist project demos" },
-  { src: "/assets/images/nirmaan-hero.png", alt: "Showcase winner ceremony", caption: "Loot award distribution" }
+  { id: 1, src: "/assets/images/nirmaan-hero.png", alt: "Active building floor", category: "Build Floor" },
+  { id: 2, src: "/assets/images/nirmaan-mentors.png", alt: "Mentor review sessions", category: "Mentorship" },
+  { id: 3, src: "/assets/images/nirmaan-demo-day.png", alt: "Final pitching stage", category: "Demo Day" },
+  { id: 4, src: "/assets/images/nirmaan-hero.png", alt: "Showcase winner ceremony", category: "Awards" },
+  { id: 5, src: "/assets/images/nirmaan-mentors.png", alt: "Hardware prototyping desk", category: "Hardware Track" },
+  { id: 6, src: "/assets/images/nirmaan-demo-day.png", alt: "Keynote presentation stage", category: "Keynote" },
+  { id: 7, src: "/assets/images/nirmaan-hero.png", alt: "Midnight coding jam", category: "Build Floor" },
+  { id: 8, src: "/assets/images/nirmaan-mentors.png", alt: "Team strategy whiteboarding", category: "Mentorship" },
 ];
 
 export const faqs: FaqItem[] = [

@@ -32,33 +32,33 @@ import { Preloader } from "./preloader";
 const MARQUEE_ONE_ITEMS = ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"];
 const MARQUEE_TWO_ITEMS = ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"];
 
-// Side Rail Navigation (Matching reference style)
+// Side Rail Navigation (Expanding tabs to fill full height without empty whitespace)
 function Rail({ onBook }: { onBook: () => void }) {
   return (
-    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[200px] flex-col px-[10px] py-[12px] lg:flex justify-between bg-paper/20 backdrop-blur-md overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[200px] xl:w-[215px] flex-col px-[10px] py-[12px] lg:flex justify-between bg-paper/20 backdrop-blur-md overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       
       {/* Top Header Section with Logo Block */}
-      <div className="flex flex-col items-start gap-1 pb-1 px-1">
+      <div className="flex flex-col items-start gap-1 pb-1 px-1 shrink-0">
         <Logo />
       </div>
 
-      {/* Main Navigation Stack (Compact Height) */}
-      <nav aria-label="Main navigation" className="flex flex-col gap-[6px] my-auto w-full">
+      {/* Main Navigation Stack (Fully Expanding Tabs) */}
+      <nav aria-label="Main navigation" className="flex-1 flex flex-col gap-2 my-2 w-full justify-between">
         {menuItems.map((item) => (
           <a
             key={item.index}
             href={item.href}
-            className={`${item.color} group clay-card relative flex h-[58px] w-full shrink-0 flex-col justify-between rounded-[12px] p-[10px] transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper`}
+            className={`${item.color} group clay-card relative flex flex-1 min-h-[64px] xl:min-h-[70px] w-full flex-col justify-between rounded-[14px] p-[11px] xl:p-3.5 transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper`}
           >
             <div className="flex items-center justify-between w-full">
-              <span className="font-aeonik text-[11px] font-normal opacity-75 leading-none">
+              <span className="font-aeonik text-[11px] xl:text-[12px] font-normal opacity-75 leading-none">
                 {item.index}
               </span>
               {item.external && (
-                <ArrowUpRight className="h-[12px] w-[12px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight className="h-[13px] w-[13px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               )}
             </div>
-            <span className="font-aeonik text-[13px] font-bold leading-tight text-left">
+            <span className="font-aeonik text-sm xl:text-[15px] font-bold leading-snug text-left">
               {item.label}
             </span>
           </a>
@@ -68,22 +68,22 @@ function Rail({ onBook }: { onBook: () => void }) {
         <button
           type="button"
           onClick={onBook}
-          className="group clay-card relative flex h-[58px] w-full shrink-0 flex-col justify-between rounded-[12px] bg-purple p-[10px] text-white transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper text-left"
+          className="group clay-card relative flex flex-1 min-h-[64px] xl:min-h-[70px] w-full flex-col justify-between rounded-[14px] bg-purple p-[11px] xl:p-3.5 text-white transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper text-left"
         >
           <div className="flex items-center justify-between w-full">
-            <span className="font-aeonik text-[11px] font-normal opacity-75 leading-none">
+            <span className="font-aeonik text-[11px] xl:text-[12px] font-normal opacity-75 leading-none">
               07
             </span>
-            <ArrowUpRight className="h-[12px] w-[12px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="h-[13px] w-[13px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
-          <span className="font-aeonik text-[13px] font-bold leading-tight">
+          <span className="font-aeonik text-sm xl:text-[15px] font-bold leading-snug">
             Join Nirmaan
           </span>
         </button>
       </nav>
 
       {/* Bottom Legal / Year Box & Social Icons */}
-      <div className="flex flex-col gap-2 pt-2 border-t border-ink/10">
+      <div className="flex flex-col gap-2 pt-2 border-t border-ink/10 shrink-0">
         <a
           href="#top"
           className="group clay-card flex w-full items-center justify-center rounded-[12px] bg-paper py-1.5 transition-all hover:scale-[1.02]"
@@ -397,7 +397,7 @@ export function SiteExperience() {
       <Rail onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       
-      <main className="relative ml-0 overflow-x-clip px-2.5 sm:px-0 pt-[68px] lg:ml-[200px] lg:px-0 lg:pr-5 lg:pt-[30px]">
+      <main className="relative ml-0 overflow-x-clip px-2.5 sm:px-0 pt-[68px] lg:ml-[200px] xl:ml-[215px] lg:px-0 lg:pr-5 lg:pt-[30px]">
         <article className="home">
           {/* Hero & Countdown */}
           <Hero onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
