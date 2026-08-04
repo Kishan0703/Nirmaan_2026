@@ -12,7 +12,7 @@ export function Tracks({ onBook }: { onBook: () => void }) {
       <div className="flex flex-col rounded-brand p-box bg-paper clay-card">
         <h2 className="font-display text-section uppercase tracking-tight text-ink font-black">Problem Statements & Tracks</h2>
         <p className="mt-4 max-w-[800px] text-body-xl font-semibold text-ink/80 leading-snug">
-          Select your challenge track. Prompts are divided into Embedded Systems / IoT (Multidisciplinary) and Hardware-Based Innovation fields, loaded with custom devkits and industry mentors.
+          Select your challenge track. Prompts are split into Software Tracks (AI, Web Apps, Cloud & Cyber Tech) and Hardware Tracks (Embedded Systems, IoT, Robotics & Health Devices), supported by custom devkits and industry mentors.
         </p>
 
         {/* Separated Columns */}
