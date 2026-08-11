@@ -11,13 +11,7 @@ export type LeaderboardEntry = {
 const DB_DIR = path.join(process.cwd(), "data");
 const DB_FILE = path.join(DB_DIR, "leaderboard.json");
 
-const initialSeed: LeaderboardEntry[] = [
-  { id: "seed_1", name: "BugDestroyer_99", score: 280, date: "2026-08-01" },
-  { id: "seed_2", name: "NullPointerSam", score: 240, date: "2026-08-02" },
-  { id: "seed_3", name: "SyntaxSlayer", score: 210, date: "2026-08-02" },
-  { id: "seed_4", name: "DevOpsDave", score: 180, date: "2026-08-03" },
-  { id: "seed_5", name: "ReactRanger", score: 150, date: "2026-08-03" },
-];
+const initialSeed: LeaderboardEntry[] = [];
 
 function ensureDbFile(): void {
   try {

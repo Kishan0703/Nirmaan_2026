@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertTriangle } from "lucide-react";
 import { trackCards, TrackType } from "@/lib/data";
 
 const getTracksByType = (type: TrackType) => trackCards.filter((track) => track.type === type);
@@ -12,7 +13,7 @@ export function Tracks({ onBook }: { onBook: () => void }) {
       <div className="flex flex-col rounded-brand p-box bg-paper clay-card">
         <h2 className="font-display text-section uppercase tracking-tight text-ink font-black">Problem Statements & Tracks</h2>
         <p className="mt-4 max-w-[800px] text-body-xl font-semibold text-ink/80 leading-snug">
-          Select your challenge track. Prompts are split into Software Tracks (AI, Web Apps, Cloud & Cyber Tech) and Hardware Tracks (Embedded Systems, IoT, Robotics & Health Devices), supported by custom devkits and industry mentors.
+          Select your challenge track. Prompts are split into Software Tracks (AI, Web Apps, Cloud & Cyber Tech) and Hardware Tracks (Embedded Systems, IoT, Robotics & Health Devices), supported by technical domain experts and industry mentors.
         </p>
 
         {/* Separated Columns */}
@@ -33,6 +34,16 @@ export function Tracks({ onBook }: { onBook: () => void }) {
           {/* Hardware Column */}
           <div className="flex flex-col gap-4">
             <h3 className="font-display text-card uppercase text-green font-black border-b border-ink/10 pb-2">Hardware Tracks</h3>
+            
+            {/* Hardware Note Alert */}
+            <div className="rounded-[16px] bg-red/10 border-2 border-red/40 p-3.5 flex items-start gap-2.5 text-ink shadow-xs">
+              <AlertTriangle size={18} className="text-red shrink-0 mt-0.5" />
+              <div className="text-xs font-bold leading-relaxed">
+                <span className="font-black uppercase text-red block mb-0.5">Important Notice for Hardware Teams:</span>
+                No hardware components, microcontrollers, sensors, or dev kits will be provided on-site. Participating teams in Hardware tracks must bring all their own hardware components and tools.
+              </div>
+            </div>
+
             <div className="grid gap-3">
               {hardwareTracks.map((track) => (
                 <div key={track.title} className="rounded-[20px] p-5 clay-card bg-paper shadow-sm border border-white/40">
