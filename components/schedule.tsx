@@ -55,12 +55,15 @@ export function ScheduleBoard() {
                   {item.time}
                 </span>
                 <span className="sm:hidden font-display text-[9px] uppercase font-black text-ink/70 tracking-wider">
-                  SCHEDULE
+                  {item.day}
                 </span>
               </div>
 
               {/* Title & Description */}
               <div className="self-center min-w-0">
+                <div className="hidden sm:inline-block mb-1 px-2 py-0.5 rounded-[6px] bg-ink/10 font-display text-[10px] uppercase font-black text-ink/70">
+                  {item.day}
+                </div>
                 <h3 className="font-display text-sm sm:text-[18px] uppercase leading-snug text-ink font-black break-words">
                   {item.title}
                 </h3>
