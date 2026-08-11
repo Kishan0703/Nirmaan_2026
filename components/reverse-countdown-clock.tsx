@@ -59,7 +59,7 @@ function TypingText({ words, align = "left" }: { words: string[]; align?: "left"
   }, [deleting, visibleChars, word.length, words.length]);
 
   return (
-    <div className={`font-display text-[clamp(30px,3.5vw,64px)] uppercase leading-none text-ink ${align === "right" ? "text-right" : "text-left"}`}>
+    <div className={`font-display text-2xl sm:text-3xl lg:text-[clamp(30px,3.5vw,64px)] uppercase leading-none text-ink tracking-tight text-center ${align === "right" ? "lg:text-right" : "lg:text-left"}`}>
       <span>{word.slice(0, visibleChars)}</span>
       <span className="typing-caret">|</span>
     </div>
@@ -184,7 +184,7 @@ export function ReverseCountdownClock() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-          className="order-2 min-h-[88px] lg:order-1"
+          className="order-2 lg:order-1 flex items-center justify-center lg:justify-start min-h-[44px] lg:min-h-[88px] w-full px-2 overflow-hidden"
         >
           <TypingText words={typedLines.left} />
         </motion.div>
@@ -331,7 +331,7 @@ export function ReverseCountdownClock() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-          className="order-3 min-h-[88px]"
+          className="order-3 flex items-center justify-center lg:justify-end min-h-[44px] lg:min-h-[88px] w-full px-2 overflow-hidden"
         >
           <TypingText words={typedLines.right} align="right" />
         </motion.div>
