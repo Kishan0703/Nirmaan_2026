@@ -90,14 +90,14 @@ export const liveMetrics = [
 ];
 
 export const scheduleItems = [
-  { time: "09:00", title: "Check-in opens", detail: "QR desk, badge pickup, team zones unlock", color: "bg-yellow" },
-  { time: "10:30", title: "Opening brief", detail: "Rules, tracks, sponsor prompts, judging rubric", color: "bg-blue text-white" },
-  { time: "13:00", title: "Team formation lock", detail: "Solo builders matched, team pages generated", color: "bg-green-light" },
-  { time: "18:00", title: "Mentor circuit", detail: "Design, AI, pitch, hardware, and business rooms", color: "bg-orange" },
-  { time: "23:30", title: "Checkpoint 01", detail: "Problem, prototype plan, risk notes, next actions", color: "bg-red text-white" },
-  { time: "09:30", title: "Submission freeze", detail: "Repos, decks, demo links, and project gallery", color: "bg-purple" },
-  { time: "12:00", title: "Judging round", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
-  { time: "16:00", title: "Demo day", detail: "Final pitches, winners, certificates, archive", color: "bg-green text-white" }
+  { day: "Day 1 - Sept 18", time: "09:00", title: "Check-in opens", detail: "QR desk, badge pickup, team zones unlock", color: "bg-yellow" },
+  { day: "Day 1 - Sept 18", time: "10:30", title: "Opening brief", detail: "Rules, tracks, sponsor prompts, judging rubric", color: "bg-blue text-white" },
+  { day: "Day 1 - Sept 18", time: "13:00", title: "Team formation lock", detail: "Solo builders matched, team pages generated", color: "bg-green-light" },
+  { day: "Day 1 - Sept 18", time: "18:00", title: "Mentor circuit", detail: "Design, AI, pitch, hardware, and business rooms", color: "bg-orange" },
+  { day: "Day 1 - Sept 18", time: "23:30", title: "Checkpoint 01", detail: "Problem, prototype plan, risk notes, next actions", color: "bg-red text-white" },
+  { day: "Day 2 - Sept 19", time: "09:30", title: "Submission freeze", detail: "Repos, decks, demo links, and project gallery", color: "bg-purple" },
+  { day: "Day 2 - Sept 19", time: "12:00", title: "Judging round", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
+  { day: "Day 2 - Sept 19", time: "16:00", title: "Demo day", detail: "Final pitches, winners, certificates, archive", color: "bg-green text-white" }
 ];
 
 export const sponsorTiers = [
@@ -115,15 +115,15 @@ export const projectSubmissions = [
 ];
 
 export const trackCards: TrackCard[] = [
-  // Software (Embedded Systems / IoT) Tracks
-  { title: "Embedded Systems", prompt: "Blend of embedded computing, connectivity, and software", color: "bg-blue", type: "software" },
-  { title: "IoT Multidisciplinary", prompt: "Connected devices, custom casing, and systems-level logic", color: "bg-yellow", type: "software" },
-  { title: "Connectivity Networks", prompt: "Secure communications, edge nodes, and network protocols", color: "bg-purple", type: "software" },
+  // ── SOFTWARE TRACKS ──
+  { title: "AI & Intelligent Systems", prompt: "Generative AI, LLM agentic workflows, predictive engines, and intelligent web applications", color: "bg-blue", type: "software" },
+  { title: "Web & App Innovation", prompt: "High-performance fullstack web apps, developer tools, FinTech, and cloud platforms", color: "bg-purple", type: "software" },
+  { title: "Cyber Security & Open Tech", prompt: "Threat telemetry dashboards, secure network protocols, civic software, and open innovation", color: "bg-yellow", type: "software" },
   
-  // Hardware Tracks
-  { title: "Robotics & Devices", prompt: "Robotics, physical form factors, and device-based solutions", color: "bg-green", type: "hardware" },
-  { title: "Hardware Prototyping", prompt: "Physical casings, sensing units, casters, and casing system", color: "bg-red", type: "hardware" },
-  { title: "Automation Rigs", prompt: "Connected systems, physical actuators, and automation circuits", color: "bg-orange", type: "hardware" }
+  // ── HARDWARE TRACKS ──
+  { title: "Embedded Systems & IoT", prompt: "Microcontroller logic (ESP32/STM32), wireless sensor nodes, edge telemetry, and smart IoT", color: "bg-green", type: "hardware" },
+  { title: "Robotics & Automation", prompt: "Autonomous robotic rigs, motor actuation setups, ROS control loops, and physical mechatronics", color: "bg-red", type: "hardware" },
+  { title: "Hardware Prototyping & Health", prompt: "Biometric sensor hardware, wearable health devices, CAD enclosures, and circuit prototypes", color: "bg-orange", type: "hardware" }
 ];
 
 export const values = [
