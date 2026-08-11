@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { FormEvent, MutableRefObject } from "react";
-import { ArrowUpRight, CloseIcon, DownArrows, SocialInstagram, SocialTwitter, SocialLinkedin, SocialGithub } from "@/components/icons";
+import { ArrowUpRight, CloseIcon, DownArrows, SocialInstagram, SocialTwitter } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { menuItems } from "@/lib/data";
 import { Sparkles } from "lucide-react";
@@ -92,7 +92,7 @@ function Rail({ onBook }: { onBook: () => void }) {
         </a>
 
         {/* Social Media Icons Row */}
-        <div className="flex items-center justify-between px-1">
+        <div className="flex items-center justify-center gap-3 px-1">
           <a
             href="https://www.instagram.com/codingclub_bmsit/"
             target="_blank"
@@ -110,24 +110,6 @@ function Rail({ onBook }: { onBook: () => void }) {
             className="flex h-8 w-8 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue hover:scale-110 transition-all shadow-sm"
           >
             <SocialTwitter className="w-3.5 h-3.5" />
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="flex h-8 w-8 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-purple hover:scale-110 transition-all shadow-sm"
-          >
-            <SocialLinkedin className="w-3.5 h-3.5" />
-          </a>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="flex h-8 w-8 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-orange hover:scale-110 transition-all shadow-sm"
-          >
-            <SocialGithub className="w-3.5 h-3.5" />
           </a>
         </div>
       </div>
@@ -178,7 +160,7 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
         ))}
 
         {/* Mobile Social Bar */}
-        <div className="flex items-center justify-around pt-3 border-t border-ink/10">
+        <div className="flex items-center justify-center gap-4 pt-3 border-t border-ink/10">
           <a
             href="https://www.instagram.com/codingclub_bmsit/"
             target="_blank"
@@ -196,24 +178,6 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
             className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue transition-all"
           >
             <SocialTwitter className="w-4 h-4" />
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-purple transition-all"
-          >
-            <SocialLinkedin className="w-4 h-4" />
-          </a>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-orange transition-all"
-          >
-            <SocialGithub className="w-4 h-4" />
           </a>
         </div>
       </div>

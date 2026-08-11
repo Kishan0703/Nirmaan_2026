@@ -11,9 +11,11 @@ type Member = {
   tag: string;
   avatar: string;
   initials: string;
+  description?: string;
   github?: string;
   linkedin?: string;
   twitter?: string;
+  website?: string;
 };
 
 type Department = {
@@ -39,11 +41,10 @@ const DEPARTMENTS: Department[] = [
     textColor: "text-red",
     description: "The core leadership and overall organizers steering Nirmaan 2026.",
     members: [
-      { name: "Anmol Narayan", role: "President (Coding Club)", tag: "President", initials: "AN", avatar: "https://lh3.googleusercontent.com/d/13sVKpdiAgg2vJ4Z5vZbLR-z3WwQx2KU_", linkedin: "https://www.linkedin.com/in/anmol-narayan-8133a532a", github: "https://github.com/anmolnarayan" },
-      { name: "Dheeksha N", role: "Vice President (Coding Club)", tag: "Vice President", initials: "DN", avatar: "https://lh3.googleusercontent.com/d/10DKueLQJbU-9gpz-rwP7WCfSeCrW2lzF", linkedin: "https://www.linkedin.com/in/dheekshanaveen/", github: "https://github.com/dheekshanaveen" },
-      { name: "Arnav Paniya", role: "Overall Lead & Organizer", tag: "Architecture", initials: "AP", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80", github: "https://github.com/arnavpaniya" },
-      { name: "Kishan Kumar", role: "Co-Lead & Operations", tag: "Strategy", initials: "KK", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80", github: "https://github.com/Kishan0703" },
-      { name: "Shashikiran B S", role: "Core Tech Lead (Coding Club)", tag: "Core Tech", initials: "SB", avatar: "https://lh3.googleusercontent.com/d/1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
+      { name: "Anmol Narayan", role: "President (Coding Club)", tag: "President", initials: "AN", avatar: "https://drive.google.com/thumbnail?id=13sVKpdiAgg2vJ4Z5vZbLR-z3WwQx2KU_&sz=w500", linkedin: "https://www.linkedin.com/in/anmol-narayan-8133a532a", github: "https://github.com/anmolnarayan" },
+      { name: "Dheeksha N", role: "Vice President (Coding Club)", tag: "Vice President", initials: "DN", avatar: "https://drive.google.com/thumbnail?id=10DKueLQJbU-9gpz-rwP7WCfSeCrW2lzF&sz=w500", linkedin: "https://www.linkedin.com/in/dheekshanaveen/", github: "https://github.com/dheekshanaveen" },
+      { name: "Kishan M", role: "Co-Lead & Operations", tag: "Strategy", initials: "KM", avatar: "/assets/images/team/kishan.jpg", github: "https://github.com/Kishan0703" },
+      { name: "Shashikiran B S", role: "Core Tech Lead (Coding Club)", tag: "Core Tech", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG&sz=w500", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
     ],
   },
   {
@@ -57,8 +58,9 @@ const DEPARTMENTS: Department[] = [
     description: "Engineering the digital platform, hackathon portals, and judge scoreboards.",
     members: [
       { name: "Gaurav Nayak K", role: "Head - App Dev (Alterino)", tag: "Head (App Dev)", initials: "GN", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80", linkedin: "https://www.linkedin.com/in/gauravnayakk", github: "https://gauravnayakk.netlify.app" },
-      { name: "Swapnil Biswas", role: "Technical Associate (Coding Club)", tag: "Fullstack & AI", initials: "SB", avatar: "https://lh3.googleusercontent.com/d/1spnFPtFL7rHNHZ3xwfuJ0iutzmRNhXrs", linkedin: "https://www.linkedin.com/in/swapnil-biswas-b33b35399/", github: "https://github.com/Swapnil-Biswas" },
-      { name: "Shashikiran B S", role: "Technical Core (Coding Club)", tag: "Fullstack", initials: "SB", avatar: "https://lh3.googleusercontent.com/d/1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
+      { name: "Arnav Paniya", role: "Technical Associate (Alterino)", tag: "VLSI & AI", initials: "AP", avatar: "/assets/images/team/arnav.jpg", description: "VLSI & AI Enthusiast | Freelancer", website: "https://arnavpaniya.netlify.app/", linkedin: "https://www.linkedin.com/in/arnav-paniya/", github: "https://github.com/arnavpaniya" },
+      { name: "Swapnil Biswas", role: "Technical Associate (Coding Club)", tag: "Fullstack & AI", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1spnFPtFL7rHNHZ3xwfuJ0iutzmRNhXrs&sz=w500", linkedin: "https://www.linkedin.com/in/swapnil-biswas-b33b35399/", github: "https://github.com/Swapnil-Biswas" },
+      { name: "Shashikiran B S", role: "Technical Core (Coding Club)", tag: "Fullstack", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG&sz=w500", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
     ],
   },
   {
@@ -71,8 +73,8 @@ const DEPARTMENTS: Department[] = [
     textColor: "text-purple",
     description: "Crafting visual identities, 3D web experiences, and brand aesthetics.",
     members: [
-      { name: "Sakshi Sanjeev Jadhav", role: "Design Associate (Coding Club)", tag: "UI / UX", initials: "SJ", avatar: "https://lh3.googleusercontent.com/d/1VD209VQN0hT7epOoijKUDFsJ5oBRPSym", linkedin: "https://www.linkedin.com/in/sakshi-jadhav-aa5328387", github: "https://github.com/sakshisjadhav2708" },
-      { name: "Archisha Gupta", role: "Design Associate (Coding Club)", tag: "Visual Design", initials: "AG", avatar: "https://lh3.googleusercontent.com/d/13A3ElGHqh4YKwWy27DPaKGJ2Jh0RhuWV", linkedin: "https://www.linkedin.com/in/archisha-gupta-4a6266385/", github: "https://github.com/Archish2007Gupta" },
+      { name: "Sakshi Sanjeev Jadhav", role: "Design Associate (Coding Club)", tag: "UI / UX", initials: "SJ", avatar: "https://drive.google.com/thumbnail?id=1VD209VQN0hT7epOoijKUDFsJ5oBRPSym&sz=w500", linkedin: "https://www.linkedin.com/in/sakshi-jadhav-aa5328387", github: "https://github.com/sakshisjadhav2708" },
+      { name: "Archisha Gupta", role: "Design Associate (Coding Club)", tag: "Visual Design", initials: "AG", avatar: "https://drive.google.com/thumbnail?id=13A3ElGHqh4YKwWy27DPaKGJ2Jh0RhuWV&sz=w500", linkedin: "https://www.linkedin.com/in/archisha-gupta-4a6266385/", github: "https://github.com/Archish2007Gupta" },
       { name: "Madhusudhan C N", role: "Design & Marketing Associate (Alterino)", tag: "Brand Design", initials: "MC", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80", linkedin: "https://www.linkedin.com/in/madhusudhan-c-n-a985a3337", github: "https://github.com/MadhusudhanCN" },
       { name: "Lakshaya Garg", role: "Design Associate (Coding Club)", tag: "UI Assets", initials: "LG", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" },
     ],
@@ -88,8 +90,8 @@ const DEPARTMENTS: Department[] = [
     description: "Managing campus logistics, hackathon stages, mentor rooms, and judge flow.",
     members: [
       { name: "Alok Verma", role: "Event & Ops Head (Coding Club)", tag: "Ops Head", initials: "AV", avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&auto=format&fit=crop&q=80" },
-      { name: "Rithika Shetty", role: "Event & Ops Associate (Coding Club)", tag: "Event Ops", initials: "RS", avatar: "https://lh3.googleusercontent.com/d/117vOViNG9gtX3CD4upfnxaSGpsu6rpTs", linkedin: "https://www.linkedin.com/in/rithika-shetty624", github: "https://github.com/RithikaShetty2025" },
-      { name: "Likitha S", role: "Event & Ops Associate (Coding Club)", tag: "Logistics", initials: "LS", avatar: "https://lh3.googleusercontent.com/d/1FgHj_iJ3LimFLeLPPM4AymOWfY7OeZZ4", linkedin: "https://www.linkedin.com/in/likitha-siddabasappa-421774359/", github: "https://github.com/likithha500" },
+      { name: "Rithika Shetty", role: "Event & Ops Associate (Coding Club)", tag: "Event Ops", initials: "RS", avatar: "https://drive.google.com/thumbnail?id=117vOViNG9gtX3CD4upfnxaSGpsu6rpTs&sz=w500", linkedin: "https://www.linkedin.com/in/rithika-shetty624", github: "https://github.com/RithikaShetty2025" },
+      { name: "Likitha S", role: "Event & Ops Associate (Coding Club)", tag: "Logistics", initials: "LS", avatar: "https://drive.google.com/thumbnail?id=1FgHj_iJ3LimFLeLPPM4AymOWfY7OeZZ4&sz=w500", linkedin: "https://www.linkedin.com/in/likitha-siddabasappa-421774359/", github: "https://github.com/likithha500" },
     ],
   },
   {
@@ -102,8 +104,8 @@ const DEPARTMENTS: Department[] = [
     textColor: "text-green",
     description: "Driving campaign hype, social content, hacker stories, and live updates.",
     members: [
-      { name: "Sai Amrutha AS", role: "Marketing Associate (Coding Club)", tag: "Campaigns", initials: "SA", avatar: "https://lh3.googleusercontent.com/d/1wICOPf4tsrI3yE_JIxDzte3FoHbejSIn", linkedin: "https://www.linkedin.com/in/sai-amrutha-a-s-443671307/", github: "https://github.com/saiamruthaas-as" },
-      { name: "Sneha Mudgal", role: "Marketing Associate (Coding Club)", tag: "Outreach", initials: "SM", avatar: "https://lh3.googleusercontent.com/d/1XuIV2l_cy-DWdLr9CBYGK8FDme0QfJDa", linkedin: "https://www.linkedin.com/in/sneha-mudgal0806/", github: "https://github.com/Sneham-06" },
+      { name: "Sai Amrutha AS", role: "Marketing Associate (Coding Club)", tag: "Campaigns", initials: "SA", avatar: "https://drive.google.com/thumbnail?id=1wICOPf4tsrI3yE_JIxDzte3FoHbejSIn&sz=w500", linkedin: "https://www.linkedin.com/in/sai-amrutha-a-s-443671307/", github: "https://github.com/saiamruthaas-as" },
+      { name: "Sneha Mudgal", role: "Marketing Associate (Coding Club)", tag: "Outreach", initials: "SM", avatar: "https://drive.google.com/thumbnail?id=1XuIV2l_cy-DWdLr9CBYGK8FDme0QfJDa&sz=w500", linkedin: "https://www.linkedin.com/in/sneha-mudgal0806/", github: "https://github.com/Sneham-06" },
       { name: "Madhusudhan C N", role: "Marketing & Design Associate (Alterino)", tag: "Media", initials: "MC", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80", linkedin: "https://www.linkedin.com/in/madhusudhan-c-n-a985a3337", github: "https://github.com/MadhusudhanCN" },
     ],
   },
@@ -357,7 +359,7 @@ export function TeamSection() {
                   <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 relative z-10 w-full">
                     {activeDept.members.map((member, index) => (
                       <motion.div
-                        key={member.name}
+                        key={`${member.name}-${member.role}`}
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.08 + 0.1 }}
@@ -378,8 +380,14 @@ export function TeamSection() {
                               {member.role}
                             </p>
 
+                            {member.description && (
+                              <p className="text-[9px] sm:text-[10px] font-semibold text-ink/80 mt-1 leading-snug break-words">
+                                {member.description}
+                              </p>
+                            )}
+
                             {/* Skill Tag Pill */}
-                            <span className="mt-1 inline-block rounded-full bg-ink text-yellow px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black tracking-wider shadow-sm truncate max-w-full">
+                            <span className="mt-1.5 inline-block rounded-full bg-ink text-yellow px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black tracking-wider shadow-sm truncate max-w-full">
                               {member.tag}
                             </span>
                           </div>
@@ -388,6 +396,16 @@ export function TeamSection() {
                         {/* Social Buttons Bottom Bar */}
                         <div className="mt-2.5 pt-2 border-t border-ink/10 flex items-center justify-end">
                           <div className="flex flex-wrap items-center gap-1">
+                            {member.website && (
+                              <a
+                                href={member.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-purple transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
+                              >
+                                Website <ArrowUpRight size={9} />
+                              </a>
+                            )}
                             {member.github && (
                               <a
                                 href={member.github}

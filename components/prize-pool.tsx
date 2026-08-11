@@ -34,8 +34,8 @@ const PRIZES = [
   {
     rank: "1st",
     place: "CHAMPIONS",
-    amount: "₹50,000",
-    rawAmount: 50000,
+    amount: "₹40,000",
+    rawAmount: 40000,
     color: "bg-yellow text-ink",
     borderColor: "border-yellow",
     shadowColor: "shadow-yellow/30",
@@ -44,7 +44,7 @@ const PRIZES = [
     badge: "GRAND PRIZE",
     icon: Trophy,
     perks: [
-      "₹50,000 Cash Prize",
+      "₹40,000 Cash Prize",
       "Nirmaan 2026 Winner Trophy",
       "VIP Sponsor Incubation & Mentorship",
       "Exclusive Winner Swag Box & Badges",
@@ -54,8 +54,8 @@ const PRIZES = [
   {
     rank: "3rd",
     place: "2nd RUNNER UP",
-    amount: "₹20,000",
-    rawAmount: 20000,
+    amount: "₹15,000",
+    rawAmount: 15000,
     color: "bg-orange text-white",
     borderColor: "border-orange",
     shadowColor: "shadow-orange/20",
@@ -63,10 +63,41 @@ const PRIZES = [
     order: "order-3 lg:order-3",
     icon: Award,
     perks: [
-      "₹20,000 Cash Prize",
+      "₹15,000 Cash Prize",
       "Official 2nd Runner-Up Plaque",
       "Nirmaan Swag Goodies",
       "Certificate of Merit",
+    ],
+  },
+];
+
+const TRACK_SPECIAL_PRIZES = [
+  {
+    track: "Software Track",
+    title: "Best Open Innovation",
+    amount: "₹7,500",
+    rawAmount: 7500,
+    badge: "SPECIAL TRACK AWARD",
+    color: "bg-purple text-white",
+    icon: Sparkles,
+    desc: "Awarded to the most creative open innovation project built in the Software Track (AI, Web Apps & Open Tech).",
+    perks: [
+      "₹7,500 Cash Prize",
+      "Official Certificate of Excellence",
+    ],
+  },
+  {
+    track: "Hardware Track",
+    title: "Best Open Innovation",
+    amount: "₹7,500",
+    rawAmount: 7500,
+    badge: "SPECIAL TRACK AWARD",
+    color: "bg-green text-ink",
+    icon: Zap,
+    desc: "Awarded to the most inventive open innovation project built in the Hardware Track (Embedded Systems & IoT).",
+    perks: [
+      "₹7,500 Cash Prize",
+      "Official Certificate of Excellence",
     ],
   },
 ];
@@ -217,6 +248,71 @@ export function PrizePoolSection() {
               </motion.div>
             );
           })}
+        </div>
+
+        {/* ── Open Innovation Track Prizes Section ── */}
+        <div className="mb-10 pt-8 border-t border-ink/10">
+          <div className="flex items-center gap-2 mb-4">
+            <Sparkles size={18} className="text-yellow" />
+            <h3 className="font-display text-lg uppercase font-black text-ink">
+              Open Innovation Track Prizes (Both Tracks)
+            </h3>
+          </div>
+
+          <div className="grid gap-gap md:grid-cols-2">
+            {TRACK_SPECIAL_PRIZES.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.track}
+                  className={`clay-card rounded-brand p-5 sm:p-6 border-2 border-white/40 ${item.color} shadow-lg flex flex-col justify-between`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="font-display text-[10px] sm:text-xs uppercase tracking-wider font-black px-2.5 py-1 rounded-full bg-black/15 border border-white/20">
+                        {item.track}
+                      </span>
+                      <span className="font-display text-[9px] uppercase font-black px-2.5 py-1 rounded-full bg-yellow text-ink shadow-sm">
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3 my-2">
+                      <div className="p-2 rounded-xl bg-black/15 shrink-0">
+                        <Icon size={24} />
+                      </div>
+                      <div>
+                        <h4 className="font-display text-base sm:text-lg uppercase font-black leading-tight">
+                          {item.title}
+                        </h4>
+                        <span className="font-display text-2xl sm:text-3xl font-black block mt-0.5">
+                          {item.amount}
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-xs font-semibold leading-relaxed mt-2 opacity-90">
+                      {item.desc}
+                    </p>
+
+                    <ul className="space-y-1.5 mt-4 pt-3 border-t border-white/20">
+                      {item.perks.map((perk) => (
+                        <li key={perk} className="flex items-center gap-2 text-xs font-bold">
+                          <CheckCircle2 size={13} className="shrink-0 text-emerald-400" />
+                          <span>{perk}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-white/20 text-[9px] font-display uppercase tracking-widest font-black opacity-80 flex justify-between">
+                    <span>{item.track.toUpperCase()} SPECIAL</span>
+                    <span>{item.amount} CASH</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Extra Perks Grid */}
