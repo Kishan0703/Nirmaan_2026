@@ -403,7 +403,7 @@ export function SiteExperience() {
           <TeamSection />
           
           {/* Community Join CTA */}
-          <Community onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
+          <Community />
           
           {/* Footer */}
           <Footer />

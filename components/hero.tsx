@@ -6,13 +6,15 @@ import { ArrowUpRight } from "@/components/icons";
 import { InteractiveTiltCard } from "./helpers";
 import { REGISTRATION_URL } from "@/lib/config";
 import { liveMetrics } from "@/lib/data";
+import { TypewriterEffect } from "./typewriter-effect";
+import { WaterRippleCanvas } from "./water-ripple-canvas";
 
 export function Hero({ onBook }: { onBook?: () => void }) {
   const registerCtaClassName =
     "clay-card rounded-pill bg-yellow text-ink px-[30px] py-[15px] text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30 flex items-center gap-2 shadow-xl";
 
   return (
-    <section id="top" className="relative grid min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft lg:min-h-[calc(100dvh-50px)] bg-paper">
+    <section id="top" className="relative grid min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft lg:min-h-[calc(100dvh-50px)] bg-paper group">
       {/* Background Hero Image */}
       <Image
         src="/assets/images/nirmaan-hero.png"
@@ -23,13 +25,22 @@ export function Hero({ onBook }: { onBook?: () => void }) {
         sizes="(min-width: 1024px) 88vw, 100vw"
       />
 
-      <div className="clay-grid absolute inset-0 mix-blend-multiply opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent" />
+      {/* Interactive Water Ripple Canvas Layer */}
+      <WaterRippleCanvas />
+
+      <div className="clay-grid absolute inset-0 mix-blend-multiply opacity-40 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent pointer-events-none" />
       
       <div className="relative z-10 grid min-h-[calc(100dvh-50px)] content-between gap-8 px-6 py-8 text-white lg:px-10 lg:py-10">
         
         {/* Top bar details */}
-        <div className="flex flex-wrap items-start justify-end gap-5">
+        <div className="flex flex-wrap items-start justify-between gap-5">
+          {/* Dynamic Typewriter Badge Banner */}
+          <div className="clay-card p-3 sm:p-4 bg-ink/75 backdrop-blur-md rounded-full border-2 border-white/30 shadow-xl flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-green animate-pulse" />
+            <TypewriterEffect className="text-xs sm:text-sm" />
+          </div>
+
           {/* Interactive 3D Live score panel (Claymorphic) */}
           <InteractiveTiltCard className="w-full max-w-[390px]">
             <div className="clay-card p-5 text-ink bg-paper/90 backdrop-blur-md rounded-[24px] border-2 border-white/60 shadow-2xl">

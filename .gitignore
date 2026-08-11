@@ -2,7 +2,11 @@
 node_modules
 out
 *.log
+.env
+.env*
 .env*.local
+/data/
+data/*
 index.html
 /docs/NIRMAAN_HOSTING_SITE_DESIGN.md
 .DS_Store
