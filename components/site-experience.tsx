@@ -6,6 +6,7 @@ import { ArrowUpRight, CloseIcon, DownArrows, SocialInstagram, SocialTwitter } f
 import { Logo } from "@/components/logo";
 import { menuItems } from "@/lib/data";
 import { Sparkles } from "lucide-react";
+import { REGISTRATION_URL } from "@/lib/config";
 
 // Section imports
 import { Hero } from "./hero";
@@ -65,9 +66,10 @@ function Rail({ onBook }: { onBook: () => void }) {
         ))}
 
         {/* Join Nirmaan Action Box */}
-        <button
-          type="button"
-          onClick={onBook}
+        <a
+          href={REGISTRATION_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="group clay-card relative flex flex-1 min-h-[64px] xl:min-h-[70px] w-full flex-col justify-between rounded-[14px] bg-purple p-[11px] xl:p-3.5 text-white transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper text-left"
         >
           <div className="flex items-center justify-between w-full">
@@ -79,7 +81,7 @@ function Rail({ onBook }: { onBook: () => void }) {
           <span className="font-aeonik text-sm xl:text-[15px] font-bold leading-snug">
             Join Nirmaan
           </span>
-        </button>
+        </a>
       </nav>
 
       {/* Bottom Legal / Year Box & Social Icons */}
@@ -119,22 +121,18 @@ function Rail({ onBook }: { onBook: () => void }) {
 
 // Mobile Header (Claymorphic)
 function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (value: boolean) => void; onBook: () => void }) {
-  const handleBook = () => {
-    setOpen(false);
-    onBook();
-  };
-
   return (
     <header className="fixed left-0 top-0 z-40 flex w-full items-center justify-between bg-paper/90 backdrop-blur-md border-b border-ink/10 px-4 sm:px-5 py-2.5 sm:py-3 lg:hidden shadow-sm h-[64px]">
       <Logo />
       <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={handleBook}
+        <a
+          href={REGISTRATION_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="clay-card rounded-pill bg-purple px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-display uppercase text-white font-black active:scale-95 transition-transform"
         >
           Join Nirmaan
-        </button>
+        </a>
         <button
           type="button"
           aria-expanded={open}
@@ -262,7 +260,7 @@ function ParticipationModal({
           <CloseIcon />
         </button>
 
-        <div className="mb-6 flex items-center gap-3">
+        <div className="mb-4 flex items-center gap-3">
           <div className="rounded-full bg-yellow p-3 text-ink clay-card">
             <Sparkles size={24} />
           </div>
@@ -270,8 +268,23 @@ function ParticipationModal({
             <h2 id="modal-title" className="font-display text-2xl uppercase tracking-tight text-ink font-black">
               JOIN NIRMAAN 2026
             </h2>
-            <p className="text-xs font-bold text-gray-700">Enter your details to register as a builder or mentor.</p>
+            <p className="text-xs font-bold text-gray-700">Official registrations are open on MastryHub.</p>
           </div>
+        </div>
+
+        <div className="mb-5 rounded-[18px] bg-purple/10 border-2 border-purple/30 p-3.5 text-ink flex items-center justify-between gap-3 shadow-xs">
+          <div>
+            <p className="text-xs font-black uppercase text-purple">Official Event Portal</p>
+            <p className="text-[11px] font-bold text-ink/80">Registrations are hosted on MastryHub</p>
+          </div>
+          <a
+            href={REGISTRATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-purple text-white px-4 py-2 font-display text-xs uppercase font-black hover:bg-purple-light shrink-0 flex items-center gap-1 shadow-sm"
+          >
+            MastryHub <ArrowUpRight className="w-3 h-3" />
+          </a>
         </div>
 
         {submitted ? (

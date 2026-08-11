@@ -81,7 +81,7 @@ export function Hero({ onBook }: { onBook?: () => void }) {
                 rel="noopener noreferrer"
                 className={registerCtaClassName}
               >
-                <span>Register on Unstop</span>
+                <span>Register on MastryHub</span>
                 <ArrowUpRight className="h-[18px] w-[18px]" />
               </a>
             ) : (
@@ -90,7 +90,7 @@ export function Hero({ onBook }: { onBook?: () => void }) {
                 onClick={onBook}
                 className={registerCtaClassName}
               >
-                <span>Register on Unstop</span>
+                <span>Register on MastryHub</span>
                 <ArrowUpRight className="h-[18px] w-[18px]" />
               </button>
             )}

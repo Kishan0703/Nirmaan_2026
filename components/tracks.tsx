@@ -2,12 +2,13 @@
 
 import { AlertTriangle } from "lucide-react";
 import { trackCards, TrackType } from "@/lib/data";
+import { REGISTRATION_URL } from "@/lib/config";
 
 const getTracksByType = (type: TrackType) => trackCards.filter((track) => track.type === type);
 const softwareTracks = getTracksByType("software");
 const hardwareTracks = getTracksByType("hardware");
 
-export function Tracks({ onBook }: { onBook: () => void }) {
+export function Tracks({ onBook }: { onBook?: () => void }) {
   return (
     <section id="tracks" className="my-gap grid gap-gap" data-reveal>
       <div className="flex flex-col rounded-brand p-box bg-paper clay-card">
@@ -57,12 +58,14 @@ export function Tracks({ onBook }: { onBook: () => void }) {
         </div>
 
         <div className="mt-8">
-          <button
-            onClick={onBook}
-            className="clay-card rounded-pill bg-purple px-6 py-4 text-sm font-display uppercase font-black text-white hover:bg-purple-light"
+          <a
+            href={REGISTRATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="clay-card inline-block rounded-pill bg-purple px-6 py-4 text-sm font-display uppercase font-black text-white hover:bg-purple-light"
           >
             Register for a Track
-          </button>
+          </a>
         </div>
       </div>
     </section>
