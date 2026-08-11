@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Medal, User, Edit2, Check, RefreshCw } from "lucide-react";
+import { Trophy, Medal, User, Edit2, Check, RefreshCw, Eye, EyeOff, Database } from "lucide-react";
 
 const GAME_DURATION_SECONDS = 30;
 const HIGH_SCORE_STORAGE_KEY = "nirmaan_high_score";
@@ -41,10 +41,11 @@ export function BugSquasherGame() {
   const [tempNameInput, setTempNameInput] = useState("");
   const [showNameModal, setShowNameModal] = useState(false);
 
-  // Leaderboard state
+  // Leaderboard state & database visibility
   const [leaderboard, setLeaderboard] = useState<LeaderboardItem[]>([]);
   const [isLoadingLeaderboard, setIsLoadingLeaderboard] = useState(true);
   const [lastSubmittedRank, setLastSubmittedRank] = useState<number | null>(null);
+  const [showLeaderboard, setShowLeaderboard] = useState(true);
 
   const clearBugTimeouts = useCallback(() => {
     bugTimeoutsRef.current.forEach(clearTimeout);
@@ -342,43 +343,67 @@ export function BugSquasherGame() {
                   <Medal size={16} className="text-yellow" />
                   <span className="font-display text-xs uppercase font-black text-white">Global Leaderboard</span>
                 </div>
-                <button
-                  onClick={fetchLeaderboard}
-                  className="text-gray-400 hover:text-white transition-colors"
-                  title="Refresh Leaderboard"
-                >
-                  <RefreshCw size={12} className={isLoadingLeaderboard ? "animate-spin" : ""} />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowLeaderboard((prev) => !prev)}
+                    className="text-gray-400 hover:text-white transition-colors flex items-center gap-1 text-[10px] font-bold"
+                    title={showLeaderboard ? "Hide Database Leaderboard" : "Show Database Leaderboard"}
+                  >
+                    {showLeaderboard ? <EyeOff size={13} /> : <Eye size={13} />}
+                    <span>{showLeaderboard ? "Hide" : "Show"}</span>
+                  </button>
+                  <button
+                    onClick={fetchLeaderboard}
+                    className="text-gray-400 hover:text-white transition-colors"
+                    title="Refresh Leaderboard"
+                  >
+                    <RefreshCw size={12} className={isLoadingLeaderboard ? "animate-spin" : ""} />
+                  </button>
+                </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 scrollbar-thin">
-                {isLoadingLeaderboard && (
-                  <div className="text-center py-8 text-xs text-gray-400 font-medium">Loading rankings...</div>
-                )}
+              {showLeaderboard ? (
+                <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 scrollbar-thin">
+                  {isLoadingLeaderboard && (
+                    <div className="text-center py-8 text-xs text-gray-400 font-medium">Fetching database records...</div>
+                  )}
 
-                {!isLoadingLeaderboard && leaderboard.length === 0 && (
-                  <div className="text-center py-8 text-xs text-gray-400 font-medium">No scores yet. Be the first!</div>
-                )}
+                  {!isLoadingLeaderboard && leaderboard.length === 0 && (
+                    <div className="text-center py-8 text-xs text-gray-400 font-medium">No scores stored yet. Be the first!</div>
+                  )}
 
-                {!isLoadingLeaderboard &&
-                  leaderboard.map((item, idx) => {
-                    const isCurrentPlayer = item.id === playerId;
-                    return (
-                      <div
-                        key={item.id || idx}
-                        className={`flex items-center justify-between px-2.5 py-1.5 rounded-[10px] text-xs font-bold ${
-                          isCurrentPlayer ? "bg-yellow/20 text-yellow border border-yellow/30" : "bg-white/5 text-gray-200"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 truncate">
-                          <span className="font-display text-[10px] opacity-70 w-4">#{idx + 1}</span>
-                          <span className="truncate max-w-[110px]">{item.name}</span>
+                  {!isLoadingLeaderboard &&
+                    leaderboard.map((item, idx) => {
+                      const isCurrentPlayer = item.id === playerId;
+                      return (
+                        <div
+                          key={item.id || idx}
+                          className={`flex items-center justify-between px-2.5 py-1.5 rounded-[10px] text-xs font-bold ${
+                            isCurrentPlayer ? "bg-yellow/20 text-yellow border border-yellow/30" : "bg-white/5 text-gray-200"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 truncate">
+                            <span className="font-display text-[10px] opacity-70 w-4">#{idx + 1}</span>
+                            <span className="truncate max-w-[110px]">{item.name}</span>
+                          </div>
+                          <span className="font-display text-xs font-black text-yellow ml-2">{item.score}</span>
                         </div>
-                        <span className="font-display text-xs font-black text-yellow ml-2">{item.score}</span>
-                      </div>
-                    );
-                  })}
-              </div>
+                      );
+                    })}
+                </div>
+              ) : (
+                <div className="flex-1 flex flex-col items-center justify-center text-center p-4 text-gray-400 gap-2">
+                  <Database size={28} className="text-gray-500 opacity-60" />
+                  <p className="text-xs font-semibold text-gray-300">Leaderboard Database Hidden</p>
+                  <p className="text-[10px] text-gray-500 max-w-[180px]">Your scores are securely saved in the database in the background.</p>
+                  <button
+                    onClick={() => setShowLeaderboard(true)}
+                    className="mt-1 px-3 py-1 rounded-full bg-white/10 text-white hover:bg-white/20 text-[10px] font-bold uppercase transition-colors"
+                  >
+                    Unhide Leaderboard
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
