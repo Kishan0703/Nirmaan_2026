@@ -83,10 +83,10 @@ export const eventStats = [
 ];
 
 export const liveMetrics = [
-  ["Registrations", "312 / 420"],
-  ["Teams formed", "64"],
-  ["Submissions", "118 drafts"],
-  ["Judges assigned", "24"]
+  ["Registrations", "0 / 420"],
+  ["Teams formed", "0"],
+  ["Submissions", "0 drafts"],
+  ["Judges assigned", "0"]
 ];
 
 export const scheduleItems = [
