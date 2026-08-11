@@ -24,6 +24,23 @@ const TEAM_MEMBERS_DATABASE = [
   "likitha s", "likitha",
   "sai amrutha as", "sai amrutha", "amrutha",
   "sneha mudgal", "sneha",
+  "ayush y a", "ayush",
+  "saurabh kumar", "saurabh",
+  "darshan a b", "darshan",
+  "aradhya prakash", "aradhya",
+  "ahmed umar", "ahmed",
+  "sonika k", "sonika",
+  "mansi kalgudi", "mansi",
+  "kanishk upadhyay", "kanishk",
+  "ritik",
+  "harshit raj", "harshit",
+  "parth paliwal", "parth",
+  "ravindra a", "ravindra",
+  "vanshika biswal", "vanshika",
+  "namratha r bagade", "namratha",
+  "samrudhi m r", "samrudhi",
+  "ayush kumar",
+  "sisir raj", "sisir",
   "nirmaan organizers", "organizer", "admin", "lead", "mentor"
 ];
 
