@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight } from "@/components/icons";
+import { Folder, ChevronRight, ArrowUpRight } from "lucide-react";
 
 type Member = {
   name: string;
@@ -173,44 +173,120 @@ function MemberAvatar({ member }: { member: Member }) {
 }
 
 export function TeamSection() {
-  const [activeTab, setActiveTab] = useState("core");
-  const activeDept = DEPARTMENTS.find((d) => d.id === activeTab) || DEPARTMENTS[0];
+  const [activeDeptId, setActiveDeptId] = useState("core");
+  const activeDept = DEPARTMENTS.find((d) => d.id === activeDeptId) || DEPARTMENTS[0];
 
   return (
-    <section id="team" className="my-gap relative" data-reveal>
-      <div className="rounded-brand bg-red p-box clay-card text-white shadow-soft relative overflow-hidden">
-        {/* Decorative Background Accents */}
-        <div className="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-black/10 rounded-full blur-3xl pointer-events-none" />
+    <section id="team" className="my-gap space-y-gap w-full max-w-full overflow-hidden" data-reveal>
+      {/* ── Interactive Department Filing Cabinet Section ── */}
+      <div className="w-full max-w-full">
+        {/* Header Section */}
+        <div className="mb-4 sm:mb-6">
+          <span className="font-display text-xs uppercase tracking-widest text-ink/60 font-black">
+            ROSTER &amp; CREW
+          </span>
+          <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl uppercase font-black text-ink tracking-tight">
+            Organizing Team
+          </h2>
+        </div>
 
-        <div className="relative z-10">
-          {/* Header Row */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 sm:mb-8">
-            <div>
-              <span className="rounded-pill bg-white/20 px-3.5 py-1 text-white font-display text-[10px] sm:text-xs uppercase font-black tracking-wider inline-block mb-2 border border-white/30 backdrop-blur-md">
-                ROSTER &amp; CREW
-              </span>
-              <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl uppercase text-white font-black leading-tight tracking-tight">
-                Organizing Team
-              </h2>
+        {/* Main Cuboid File Box Layout with Left 6x1 Column Navigation */}
+        <div className="grid gap-gap lg:grid-cols-[360px_1fr] w-full min-w-0">
+          
+          {/* LEFT SIDE: 6x1 Column Roster Navigation Container (DESKTOP ONLY) */}
+          <div className="hidden lg:flex relative flex-col justify-between p-5 bg-gradient-to-br from-[#3b0764] via-[#7e22ce] to-[#c026d3] border-2 border-white/40 rounded-brand shadow-2xl clay-card min-h-[480px]">
+            
+            {/* Header Label Plate */}
+            <div className="relative z-20 mb-4">
+              <div className="flex items-center justify-between border-b border-white/20 pb-3">
+                <div className="flex items-center gap-2">
+                  <Folder size={18} className="text-yellow animate-pulse" />
+                  <span className="font-display text-xs uppercase tracking-wider font-black text-white">
+                    TEAM DIRECTORY
+                  </span>
+                </div>
+                <span className="text-[10px] font-black text-white/80 bg-white/20 px-2 py-0.5 rounded-full">
+                  6 DEPARTMENTS
+                </span>
+              </div>
             </div>
-            <p className="text-xs sm:text-sm text-white/90 font-semibold max-w-md leading-relaxed">
-              Meet the architects, engineers, designers, marketing strategists, and volunteer leads building Nirmaan 2026.
-            </p>
+
+            {/* Vertical 6x1 Folder File Stack */}
+            <div className="space-y-3 relative z-10 my-1">
+              {DEPARTMENTS.map((dept) => {
+                const isActive = dept.id === activeDeptId;
+
+                return (
+                  <motion.div key={dept.id} className="relative" initial={false}>
+                    <motion.button
+                      type="button"
+                      onClick={() => setActiveDeptId(dept.id)}
+                      animate={{
+                        y: isActive ? -6 : 0,
+                        x: isActive ? 12 : 0,
+                        scale: isActive ? 1.02 : 1,
+                      }}
+                      whileHover={{
+                        y: isActive ? -6 : -4,
+                        x: isActive ? 12 : 6,
+                        scale: 1.01,
+                      }}
+                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      className={`w-full relative flex items-center justify-between p-3.5 rounded-[16px] text-left transition-all border-2 ${
+                        isActive
+                          ? `${dept.tabColor} border-white shadow-xl z-30 ring-2 ring-white/60`
+                          : "bg-white/15 backdrop-blur-md border-white/30 text-white hover:bg-white/25 z-10 font-black shadow-sm"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className={`h-3 w-3 rounded-full ${dept.tabColor.split(" ")[0]} border border-white/40 shadow-sm shrink-0`} />
+
+                        <span className="block font-display text-sm uppercase font-black tracking-wide leading-none">
+                          {dept.name}
+                        </span>
+                      </div>
+
+                      <ChevronRight size={18} className={`transition-transform ${isActive ? "translate-x-1 rotate-90" : "opacity-75"}`} />
+                    </motion.button>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Cabinet Footer Note */}
+            <div className="mt-4 pt-3 border-t border-white/20 flex items-center justify-between text-[10px] font-black text-white/80 uppercase">
+              <span>NIRMAAN 2026 CREW</span>
+              <span>BMSIT</span>
+            </div>
           </div>
 
-          {/* Folder Dossier Tabs & Active Content */}
-          <div className="flex flex-col gap-3">
-            {/* Top Folder Tabs Bar */}
-            <div className="w-full overflow-x-auto pb-2 pt-1 scrollbar-none">
-              <div className="flex items-center gap-1.5 sm:gap-2 min-w-max">
+          {/* RIGHT SIDE: Opened File Sheet Container */}
+          <div className="relative w-full min-w-0">
+            
+            {/* MOBILE ONLY: Embedded Vibrant Gradient Horizontal Department Selector */}
+            <div className="lg:hidden mb-3 bg-gradient-to-r from-[#3b0764] via-[#7e22ce] to-[#c026d3] p-3 rounded-[18px] border-2 border-white/40 shadow-xl flex flex-col gap-2 w-full max-w-full overflow-hidden">
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-1.5">
+                  <Folder size={14} className="text-yellow" />
+                  <span className="font-display text-[11px] uppercase tracking-wider font-black text-white">
+                    SELECT DEPARTMENT
+                  </span>
+                </div>
+                <span className="text-[9px] font-black text-white/80 bg-white/20 px-2 py-0.5 rounded-full">
+                  6 DEPARTMENTS
+                </span>
+              </div>
+
+              {/* Horizontal Scroll Pill Selector with Touch Pan */}
+              <div className="flex overflow-x-auto flex-nowrap gap-2 py-1 px-1 touch-pan-x overscroll-x-contain select-none scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden w-full">
                 {DEPARTMENTS.map((dept) => {
-                  const isActive = activeTab === dept.id;
+                  const isActive = dept.id === activeDeptId;
                   return (
                     <button
                       key={dept.id}
-                      onClick={() => setActiveTab(dept.id)}
-                      className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full font-display text-[11px] uppercase font-black transition-all border ${
+                      type="button"
+                      onClick={() => setActiveDeptId(dept.id)}
+                      className={`shrink-0 min-w-max flex items-center gap-1.5 px-3.5 py-2 rounded-full font-display text-[11px] uppercase font-black transition-all border ${
                         isActive
                           ? `${dept.tabColor} border-white shadow-md ring-2 ring-white/50 scale-[1.02]`
                           : "bg-white/20 border-white/30 text-white hover:bg-white/30"
@@ -224,6 +300,7 @@ export function TeamSection() {
               </div>
             </div>
 
+            {/* Dossier Card Container */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeDept.id}
@@ -231,7 +308,7 @@ export function TeamSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ type: "spring", stiffness: 320, damping: 26 }}
-                className={`w-full max-w-full h-auto rounded-brand border-2 border-white/40 ${activeDept.folderBg} p-3.5 sm:p-box clay-card flex flex-col justify-between shadow-xl relative overflow-hidden`}
+                className={`w-full max-w-full h-auto rounded-brand border-2 border-white/40 ${activeDept.folderBg} p-3 sm:p-box clay-card flex flex-col justify-between shadow-xl relative overflow-hidden`}
               >
                 <div>
                   {/* Folder Top Header Sheet */}
