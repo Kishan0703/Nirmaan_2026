@@ -38,13 +38,13 @@ export function Community() {
         </div>
       </div>
 
-      {/* Right Box: Team Collage Photo (4 cols) */}
-      <div className="lg:col-span-4 relative aspect-[4/3] min-h-[320px] sm:min-h-[380px] overflow-hidden rounded-brand border-2 border-white/30 shadow-soft bg-paper">
+      {/* Right Box: Team Collage Photo (4 cols) - Full edge-to-edge cover */}
+      <div className="lg:col-span-4 relative aspect-[4/3] min-h-[320px] sm:min-h-[380px] overflow-hidden rounded-brand border-2 border-white/30 shadow-soft bg-[#f8f5ef]">
         <Image
           src="/assets/images/nirmaan-team-collage.jpg"
           alt="Nirmaan Organizing Team Collage"
           fill
-          className="object-cover object-top filter contrast-105"
+          className="object-cover object-center scale-[1.03] filter contrast-105"
           sizes="(min-width: 1024px) 33vw, 100vw"
         />
       </div>
