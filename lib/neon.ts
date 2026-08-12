@@ -153,12 +153,29 @@ export async function getNeonMessages(): Promise<LobbyMessage[] | null> {
 
   try {
     await initNeonTables();
-    const rows = await sql`
+    let rows = await sql`
       SELECT id, sender, type, text, time
       FROM lobby_messages
       ORDER BY created_at ASC, id ASC
       LIMIT 200;
     `;
+
+    if (rows.length === 0) {
+      const welcome: LobbyMessage = {
+        id: "msg-welcome",
+        sender: "Nirmaan Organizers",
+        type: "REPLY",
+        text: "Welcome to the NIRMAAN 2026 Community Lobby! Connect with fellow builders, ask questions to organizers, and collaborate live.",
+        time: "10:00 AM",
+      };
+      await saveNeonMessage(welcome);
+      rows = await sql`
+        SELECT id, sender, type, text, time
+        FROM lobby_messages
+        ORDER BY created_at ASC, id ASC
+        LIMIT 200;
+      `;
+    }
 
     return rows.map((r) => ({
       id: String(r.id),
