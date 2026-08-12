@@ -440,8 +440,8 @@ button {
 
 @media (max-width: 1023px) {
   :root {
-    --box-padding: 30px 25px;
-    --border-radius: 30px;
+    --box-padding: 20px 16px;
+    --border-radius: 24px;
   }
 
   [data-reveal] {

@@ -8,7 +8,7 @@ export function Footer() {
     <footer id="contact" className="mt-gap pb-5" data-reveal>
       {/* Grid workspace container matching units.gr layout */}
       <div
-        className="relative h-[320px] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft bg-[#f2eae1] clay-card"
+        className="relative h-[180px] sm:h-[240px] lg:h-[320px] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft bg-[#f2eae1] clay-card"
         style={{
           backgroundImage: "linear-gradient(to right, rgba(0,0,0,0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.15) 1px, transparent 1px)",
           backgroundSize: "36px 36px"

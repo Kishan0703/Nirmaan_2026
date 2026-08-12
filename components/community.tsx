@@ -10,7 +10,7 @@ export function Community() {
       <div className="grid gap-gap grid-cols-1 lg:grid-cols-12 items-stretch">
         
         {/* Card 1: Red Community Lobby Card (5 cols on laptop) */}
-        <div className="lg:col-span-5 flex flex-col justify-between rounded-brand bg-red p-6 sm:p-box clay-card text-white shadow-soft relative overflow-hidden min-h-[340px] sm:min-h-[380px]">
+        <div className="lg:col-span-5 flex flex-col justify-between rounded-brand bg-red p-6 sm:p-box clay-card text-white shadow-soft relative overflow-hidden min-h-[230px] sm:min-h-[380px]">
           <div className="flex items-center justify-between z-10">
             <span className="rounded-pill bg-white/20 backdrop-blur-md px-3.5 py-1 text-white font-display text-[10px] sm:text-xs uppercase font-black tracking-wider flex items-center gap-1.5 border border-white/30">
               Co-Op Hub
@@ -39,7 +39,7 @@ export function Community() {
         </div>
 
         {/* Card 2: Round 3 Team Photo (4 cols on laptop) - Equal Height */}
-        <div className="lg:col-span-4 relative min-h-[340px] sm:min-h-[380px] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-paper clay-card">
+        <div className="lg:col-span-4 relative min-h-[220px] sm:min-h-[380px] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-paper clay-card">
           <Image
             src="/assets/images/nirmaan-team-round3.jpg"
             alt="Nirmaan 2026 Organizing Team and Round-3 Participants"
@@ -51,7 +51,7 @@ export function Community() {
         </div>
 
         {/* Card 3: Organizing Team Collage Photo (3 cols on laptop) - Equal Height Edge-to-Edge */}
-        <div className="lg:col-span-3 relative min-h-[340px] sm:min-h-[380px] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-[#faf7f2] clay-card">
+        <div className="lg:col-span-3 relative min-h-[220px] sm:min-h-[380px] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-[#faf7f2] clay-card">
           <Image
             src="/assets/images/nirmaan-team-collage.jpg"
             alt="Nirmaan Organizing Team Collage"

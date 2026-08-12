@@ -244,7 +244,7 @@ export const faqs: FaqItem[] = [
   },
   {
     question: "Are there registration fees?",
-    answer: "No, registration for Nirmaan is completely free."
+    answer: "Round 1 (online PPT submission) is 100% free! If your team is shortlisted for the offline Grand Finale in Bangalore, a nominal registration fee of ₹800 per team will apply. This includes full catering (food & snacks), exclusive NIRMAAN swag kits & goodies, 24-hour venue access, and direct industry & mentor exposure that makes it completely worth it!"
   },
   {
     question: "What hardware tracks are available?",

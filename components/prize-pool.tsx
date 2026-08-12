@@ -21,7 +21,7 @@ const PRIZES = [
     color: "bg-blue text-white",
     borderColor: "border-blue",
     shadowColor: "shadow-blue/20",
-    height: "min-h-[340px] lg:h-[430px]",
+    height: "lg:h-[430px]",
     order: "order-2 lg:order-1",
     icon: Medal,
     perks: [
@@ -39,7 +39,7 @@ const PRIZES = [
     color: "bg-yellow text-ink",
     borderColor: "border-yellow",
     shadowColor: "shadow-yellow/30",
-    height: "min-h-[380px] lg:h-[490px]",
+    height: "lg:h-[490px]",
     order: "order-1 lg:order-2",
     badge: "GRAND PRIZE",
     icon: Trophy,
@@ -59,7 +59,7 @@ const PRIZES = [
     color: "bg-orange text-white",
     borderColor: "border-orange",
     shadowColor: "shadow-orange/20",
-    height: "min-h-[320px] lg:h-[410px]",
+    height: "lg:h-[410px]",
     order: "order-3 lg:order-3",
     icon: Award,
     perks: [
@@ -110,6 +110,17 @@ const EXTRA_PERKS = [
 
 export function PrizePoolSection() {
   const [cashBurst, setCashBurst] = useState<CashItem[]>([]);
+
+  const [expandedPrizes, setExpandedPrizes] = useState<Record<string, boolean>>({});
+  const [expandedSpecialPrizes, setExpandedSpecialPrizes] = useState<Record<string, boolean>>({});
+
+  const togglePrize = (rank: string) => {
+    setExpandedPrizes((prev) => ({ ...prev, [rank]: !prev[rank] }));
+  };
+
+  const toggleSpecialPrize = (track: string) => {
+    setExpandedSpecialPrizes((prev) => ({ ...prev, [track]: !prev[track] }));
+  };
 
   const triggerMakeItRain = () => {
     const icons = ["💸", "💵", "💰", "🪙", "₹500", "✨"];
@@ -170,13 +181,14 @@ export function PrizePoolSection() {
           {PRIZES.map((prize) => {
             const Icon = prize.icon;
             const isFirst = prize.rank === "1st";
+            const isExpanded = !!expandedPrizes[prize.rank];
 
             return (
               <motion.div
                 key={prize.rank}
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 350, damping: 22 }}
-                className={`${prize.order} ${prize.color} ${prize.height} clay-card rounded-brand p-6 border-2 border-white/40 flex flex-col justify-between relative overflow-hidden shadow-xl group`}
+                className={`${prize.order} ${prize.color} ${prize.height} clay-card rounded-brand p-5 sm:p-6 border-2 border-white/40 flex flex-col justify-between relative overflow-hidden shadow-xl group`}
               >
                 {/* Floating Background Cash Watermark */}
                 <div className="absolute right-2 top-10 text-8xl font-black opacity-10 pointer-events-none select-none font-display tracking-tighter">
@@ -188,21 +200,12 @@ export function PrizePoolSection() {
                   <div className="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-white/35 blur-2xl pointer-events-none group-hover:scale-125 transition-transform" />
                 )}
 
-                {/* Floating Money Badges */}
-                <motion.div
-                  animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute right-4 bottom-14 opacity-25 group-hover:opacity-60 transition-opacity pointer-events-none text-2xl font-black"
-                >
-                  {isFirst ? "💵 💸 🪙" : "💵"}
-                </motion.div>
-
                 <div>
                   {/* Top Badge Row */}
-                  <div className="flex items-center justify-between mb-4 relative z-10">
+                  <div className="flex items-center justify-between mb-3 lg:mb-4 relative z-10">
                     <div className="flex items-center gap-2">
-                      <div className="p-2.5 rounded-full bg-black/15 backdrop-blur-sm border border-white/20">
-                        <Icon size={22} className={isFirst ? "text-ink" : "text-white"} />
+                      <div className="p-2 sm:p-2.5 rounded-full bg-black/15 backdrop-blur-sm border border-white/20">
+                        <Icon size={20} className={isFirst ? "text-ink" : "text-white"} />
                       </div>
                       <span className="font-display text-xs uppercase tracking-wider font-black opacity-80">
                         {prize.place}
@@ -217,20 +220,30 @@ export function PrizePoolSection() {
                   </div>
 
                   {/* Cash Amount Hero Display with Money Icon */}
-                  <div className="my-4 relative z-10">
+                  <div className="my-3 lg:my-4 relative z-10">
                     <div className="flex items-baseline gap-2">
                       <span className="font-display text-3xl sm:text-4xl lg:text-5xl uppercase font-black tracking-tight leading-none block drop-shadow-sm">
                         {prize.amount}
                       </span>
                     </div>
-                    <span className="text-[11px] font-display uppercase tracking-widest font-black opacity-75 mt-1 flex items-center gap-1">
-                      <span>{prize.rank} PLACE CASH REWARD</span>
-                      <DollarSign size={12} className="inline opacity-80" />
-                    </span>
+                    <div className="flex items-center justify-between gap-2 mt-1">
+                      <span className="text-[10px] sm:text-[11px] font-display uppercase tracking-wider font-black opacity-75 flex items-center gap-1 min-w-0 truncate">
+                        <span className="truncate">{prize.rank} PLACE REWARD</span>
+                        <DollarSign size={12} className="inline opacity-80 shrink-0" />
+                      </span>
+                      {/* Mobile Perks Toggle Indicator */}
+                      <button
+                        type="button"
+                        onClick={() => togglePrize(prize.rank)}
+                        className="lg:hidden text-[10px] font-display uppercase font-black px-3 py-1 rounded-full bg-black/15 text-current border border-current/20 whitespace-nowrap shrink-0 shadow-xs"
+                      >
+                        {isExpanded ? "Hide Perks −" : "Perks +"}
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Perks Checklist */}
-                  <ul className="space-y-2 mt-6 border-t border-black/10 pt-4 relative z-10">
+                  {/* Perks Checklist: Collapsible on mobile (< lg), Always visible on desktop (lg+) */}
+                  <ul className={`${isExpanded ? "block" : "hidden lg:block"} space-y-2 mt-4 lg:mt-6 border-t border-black/10 pt-3 lg:pt-4 relative z-10 transition-all`}>
                     {prize.perks.map((perk) => (
                       <li key={perk} className="flex items-center gap-2 text-xs font-bold leading-tight">
                         <CheckCircle2 size={14} className="shrink-0 opacity-90 text-emerald-400" />
@@ -241,7 +254,7 @@ export function PrizePoolSection() {
                 </div>
 
                 {/* Bottom Card Footer */}
-                <div className="pt-4 border-t border-black/10 flex items-center justify-between text-[10px] font-display uppercase tracking-widest font-black opacity-70 relative z-10">
+                <div className="pt-3 lg:pt-4 mt-3 lg:mt-0 border-t border-black/10 flex items-center justify-between text-[10px] font-display uppercase tracking-widest font-black opacity-70 relative z-10">
                   <span>NIRMAAN 2026 CASH</span>
                   <span>{prize.rank} REWARD</span>
                 </div>
@@ -262,50 +275,68 @@ export function PrizePoolSection() {
           <div className="grid gap-gap md:grid-cols-2">
             {TRACK_SPECIAL_PRIZES.map((item) => {
               const Icon = item.icon;
+              const isSpecialExpanded = !!expandedSpecialPrizes[item.track];
+
               return (
                 <div
                   key={item.track}
-                  className={`clay-card rounded-brand p-5 sm:p-6 border-2 border-white/40 ${item.color} shadow-lg flex flex-col justify-between`}
+                  className={`clay-card rounded-brand p-4 sm:p-6 border-2 border-white/40 ${item.color} shadow-lg flex flex-col justify-between`}
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="font-display text-[10px] sm:text-xs uppercase tracking-wider font-black px-2.5 py-1 rounded-full bg-black/15 border border-white/20">
+                    {/* Top Badges Row */}
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="font-display text-[10px] sm:text-xs uppercase tracking-wider font-black px-2.5 py-1 rounded-full bg-black/15 border border-white/20 whitespace-nowrap shrink-0">
                         {item.track}
                       </span>
-                      <span className="font-display text-[9px] uppercase font-black px-2.5 py-1 rounded-full bg-yellow text-ink shadow-sm">
+                      <span className="font-display text-[9px] sm:text-[10px] uppercase font-black px-2.5 py-1 rounded-full bg-yellow text-ink shadow-sm whitespace-nowrap shrink-0">
                         {item.badge}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-3 my-2">
-                      <div className="p-2 rounded-xl bg-black/15 shrink-0">
-                        <Icon size={24} />
+                    {/* Title, Prize Money & Mobile Perks Button */}
+                    <div className="flex items-center justify-between gap-2 my-2">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-xl bg-black/15 shrink-0">
+                          <Icon size={24} />
+                        </div>
+                        <div>
+                          <h4 className="font-display text-base sm:text-lg uppercase font-black leading-tight">
+                            {item.title}
+                          </h4>
+                          <span className="font-display text-2xl sm:text-3xl font-black block mt-0.5">
+                            {item.amount}
+                          </span>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-display text-base sm:text-lg uppercase font-black leading-tight">
-                          {item.title}
-                        </h4>
-                        <span className="font-display text-2xl sm:text-3xl font-black block mt-0.5">
-                          {item.amount}
-                        </span>
-                      </div>
+
+                      {/* Mobile Perks Toggle Button — Same as Grand Prizes */}
+                      <button
+                        type="button"
+                        onClick={() => toggleSpecialPrize(item.track)}
+                        className="md:hidden text-[10px] font-display uppercase font-black px-3 py-1 rounded-full bg-black/15 text-current border border-current/20 whitespace-nowrap shrink-0 shadow-xs"
+                      >
+                        {isSpecialExpanded ? "Hide Perks −" : "Perks +"}
+                      </button>
                     </div>
 
-                    <p className="text-xs font-semibold leading-relaxed mt-2 opacity-90">
-                      {item.desc}
-                    </p>
+                    {/* Details & Perks: Collapsible on mobile (< md), Always visible on desktop (md+) */}
+                    <div className={`${isSpecialExpanded ? "block" : "hidden md:block"} transition-all`}>
+                      <p className="text-xs font-semibold leading-relaxed mt-2 opacity-90 border-t border-white/10 pt-2 md:border-none md:pt-0">
+                        {item.desc}
+                      </p>
 
-                    <ul className="space-y-1.5 mt-4 pt-3 border-t border-white/20">
-                      {item.perks.map((perk) => (
-                        <li key={perk} className="flex items-center gap-2 text-xs font-bold">
-                          <CheckCircle2 size={13} className="shrink-0 text-emerald-400" />
-                          <span>{perk}</span>
-                        </li>
-                      ))}
-                    </ul>
+                      <ul className="space-y-1.5 mt-3 sm:mt-4 pt-3 border-t border-white/20">
+                        {item.perks.map((perk) => (
+                          <li key={perk} className="flex items-center gap-2 text-xs font-bold">
+                            <CheckCircle2 size={13} className="shrink-0 text-emerald-400" />
+                            <span>{perk}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-white/20 text-[9px] font-display uppercase tracking-widest font-black opacity-80 flex justify-between">
+                  <div className="mt-3 sm:mt-4 pt-3 border-t border-white/20 text-[9px] font-display uppercase tracking-widest font-black opacity-80 flex justify-between">
                     <span>{item.track.toUpperCase()} SPECIAL</span>
                     <span>{item.amount} CASH</span>
                   </div>

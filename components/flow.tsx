@@ -129,7 +129,7 @@ export function EventFlow() {
       {/* ── MOBILE / TABLET LAYOUT (< 1024px): Clean Responsive Vertical & Swipeable Cards ── */}
       <div className="lg:hidden flex flex-col gap-5">
         {/* Mobile Header Card */}
-        <div className="rounded-brand bg-red-light p-5 sm:p-box clay-card text-white flex flex-col justify-between">
+        <div className="rounded-brand bg-red-light p-4 sm:p-box clay-card text-white flex flex-col justify-between">
           <div>
             <span className="font-display text-[10px] uppercase tracking-widest font-black text-yellow">
               NIRMAAN EVENT PIPELINE
@@ -144,11 +144,11 @@ export function EventFlow() {
         </div>
 
         {/* Mobile Horizontal Snap-Scroll Card List */}
-        <div className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex overflow-x-auto gap-3 sm:gap-4 pb-3 sm:pb-4 snap-x snap-mandatory scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {eventFlowCards.map((card, idx) => (
             <div
               key={card.title}
-              className="shrink-0 w-[280px] sm:w-[320px] snap-center flex flex-col gap-3"
+              className="shrink-0 w-[240px] sm:w-[320px] snap-center flex flex-col gap-2.5"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[18px] border-2 border-white/20 shadow-md">
                 <Image

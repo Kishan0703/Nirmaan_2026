@@ -322,7 +322,7 @@ export function BugSquasherGame() {
           <div className="lg:col-span-2 flex flex-col gap-3">
             <div
               ref={containerRef}
-              className="relative h-[250px] sm:h-[320px] w-full bg-ink/40 border border-white/10 rounded-[18px] overflow-hidden flex items-center justify-center cursor-crosshair shadow-inner"
+              className="relative h-[190px] sm:h-[320px] w-full bg-ink/40 border border-white/10 rounded-[18px] overflow-hidden flex items-center justify-center cursor-crosshair shadow-inner"
             >
               {!isPlaying && (
                 <div className="text-center z-10 flex flex-col items-center gap-2.5 p-4">
@@ -363,7 +363,7 @@ export function BugSquasherGame() {
 
           {/* Leaderboard Column */}
           <div className="lg:col-span-1 flex flex-col gap-3">
-            <div className="rounded-[18px] bg-ink/60 border border-white/15 p-3.5 sm:p-4 flex flex-col gap-3 h-[250px] sm:h-[320px]">
+            <div className="rounded-[18px] bg-ink/60 border border-white/15 p-3.5 sm:p-4 flex flex-col gap-3 h-[190px] sm:h-[320px]">
               <div className="flex items-center justify-between border-b border-white/10 pb-2">
                 <div className="flex items-center gap-1.5">
                   <Medal size={16} className="text-yellow" />
