@@ -8,10 +8,10 @@ export function Community() {
     <section className="my-gap grid gap-gap lg:grid-cols-[.78fr_1fr_.78fr]" data-reveal>
       <div className="relative min-h-[430px] overflow-hidden rounded-brand border-2 border-white/20 shadow-soft">
         <Image
-          src="/assets/images/nirmaan-mentors.png"
-          alt="Hackathon team discussing a prototype with mentors"
+          src="/assets/images/nirmaan-team-round3.jpg"
+          alt="Nirmaan 2026 Organizing Team and Round-3 Participants"
           fill
-          className="object-cover filter contrast-125 grayscale"
+          className="object-cover filter saturate-110 contrast-105"
           sizes="(min-width: 1024px) 25vw, 100vw"
         />
       </div>
