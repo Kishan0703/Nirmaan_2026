@@ -52,13 +52,13 @@ export function Community() {
             />
           </div>
 
-          {/* Card 2: Organizing Team Collage Photo */}
-          <div className="relative aspect-[4/3] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-[#f8f5ef] clay-card">
+          {/* Card 2: Organizing Team Collage Photo (100% uncropped faces) */}
+          <div className="relative aspect-[4/3] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-[#faf7f2] clay-card">
             <Image
               src="/assets/images/nirmaan-team-collage.jpg"
               alt="Nirmaan Organizing Team Collage"
               fill
-              className="object-cover object-center filter contrast-105 transition-transform duration-500 hover:scale-105"
+              className="object-contain object-center p-1 filter contrast-105 transition-transform duration-500 hover:scale-105"
               sizes="(min-width: 1024px) 35vw, 100vw"
             />
           </div>
