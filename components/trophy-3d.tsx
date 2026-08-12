@@ -17,8 +17,12 @@ export function Trophy3D() {
     // Scene, Camera, Renderer
     const scene = new THREE.Scene();
 
+    const isSmall = width < 600 || height < 250;
+    const cameraZ = isSmall ? 6.5 : 5.8;
+    const cameraY = isSmall ? 0.05 : 0.25;
+
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.25, 5.8);
+    camera.position.set(0, cameraY, cameraZ);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
@@ -314,6 +318,8 @@ export function Trophy3D() {
       const newW = container.clientWidth;
       const newH = container.clientHeight;
       if (newW > 0 && newH > 0) {
+        const small = newW < 600 || newH < 250;
+        camera.position.set(0, small ? 0.05 : 0.25, small ? 6.5 : 5.8);
         camera.aspect = newW / newH;
         camera.updateProjectionMatrix();
         renderer.setSize(newW, newH);
@@ -337,7 +343,7 @@ export function Trophy3D() {
   return (
     <div
       ref={mountRef}
-      className="relative w-full h-full min-h-[200px] flex items-center justify-center pointer-events-none"
+      className="relative w-full h-full flex items-center justify-center pointer-events-none"
     />
   );
 }
