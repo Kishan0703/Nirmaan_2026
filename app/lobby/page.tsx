@@ -152,10 +152,6 @@ export default function LobbyPage() {
                   </h1>
                   <ShieldCheck size={18} className="text-yellow shrink-0" />
                 </div>
-                <p className="text-[10px] sm:text-xs font-bold text-white/90 mt-1 flex items-center gap-1">
-                  <span className="h-2.5 w-2.5 rounded-full bg-yellow animate-pulse inline-block" />
-                  Live Neon DB Sync Active
-                </p>
               </div>
             </div>
 
