@@ -27,7 +27,7 @@ export function Hero({ onBook }: { onBook?: () => void }) {
           {/* Top Badges Stack */}
           <div className="flex flex-col items-start gap-1.5 mb-4">
             <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-yellow text-ink font-display text-[10px] uppercase font-black tracking-wider border border-ink/10 shadow-xs">
-              RESKILL15 × CODING CLUB × ALTERINO
+              MASTRYHUB × CODING CLUB × ALTERINO
             </span>
             <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-purple text-white font-display text-[10px] uppercase font-black tracking-wider shadow-xs">
               24-HOUR HACKATHON
