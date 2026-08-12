@@ -11,7 +11,7 @@ const DB_PATH = path.join(process.cwd(), dbRelativePath);
 const TEAM_MEMBERS_DATABASE = [
   "anmol narayan", "anmol",
   "dheeksha n", "dheeksha",
-  "kishan m", "kishan kumar", "kishan",
+  "kishan mn", "kishan m n", "kishan m", "kishan kumar", "kishan",
   "shashikiran b s", "shashikiran", "shashi",
   "gaurav nayak k", "gaurav nayak", "gaurav",
   "arnav paniya", "arnav",
