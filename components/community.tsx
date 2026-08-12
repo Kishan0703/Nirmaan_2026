@@ -7,12 +7,12 @@ import { ArrowUpRight } from "@/components/icons";
 export function Community() {
   return (
     <section id="community" className="my-gap" data-reveal>
-      <div className="grid gap-gap lg:grid-cols-12 items-stretch">
+      <div className="grid gap-gap grid-cols-1 lg:grid-cols-12 items-stretch">
         
-        {/* Left Column: Community Lobby Callout (5 cols on laptop) */}
-        <div className="lg:col-span-5 flex flex-col justify-between rounded-brand bg-red p-6 sm:p-box clay-card text-white shadow-soft relative overflow-hidden min-h-[340px]">
+        {/* Card 1: Red Community Lobby Card (5 cols on laptop) */}
+        <div className="lg:col-span-5 flex flex-col justify-between rounded-brand bg-red p-6 sm:p-box clay-card text-white shadow-soft relative overflow-hidden min-h-[340px] sm:min-h-[380px]">
           <div className="flex items-center justify-between z-10">
-            <span className="rounded-pill bg-white/20 backdrop-blur-md px-3 py-1 text-white font-display text-[10px] sm:text-xs uppercase font-black tracking-wider flex items-center gap-1.5 border border-white/30">
+            <span className="rounded-pill bg-white/20 backdrop-blur-md px-3.5 py-1 text-white font-display text-[10px] sm:text-xs uppercase font-black tracking-wider flex items-center gap-1.5 border border-white/30">
               Co-Op Hub
             </span>
             <span className="pulse-dot" aria-hidden="true" />
@@ -38,31 +38,27 @@ export function Community() {
           </div>
         </div>
 
-        {/* Right Column: 2 Team Photo Cards Grid (7 cols on laptop) */}
-        <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-gap items-center">
-          
-          {/* Card 1: Round 3 Team Photo */}
-          <div className="relative aspect-[4/3] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-paper clay-card">
-            <Image
-              src="/assets/images/nirmaan-team-round3.jpg"
-              alt="Nirmaan 2026 Organizing Team and Round-3 Participants"
-              fill
-              className="object-cover object-center filter saturate-110 contrast-105 transition-transform duration-500 hover:scale-105"
-              sizes="(min-width: 1024px) 35vw, 100vw"
-            />
-          </div>
+        {/* Card 2: Round 3 Team Photo (4 cols on laptop) - Equal Height */}
+        <div className="lg:col-span-4 relative min-h-[340px] sm:min-h-[380px] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-paper clay-card">
+          <Image
+            src="/assets/images/nirmaan-team-round3.jpg"
+            alt="Nirmaan 2026 Organizing Team and Round-3 Participants"
+            fill
+            className="object-cover object-center filter saturate-110 contrast-105 transition-transform duration-500 hover:scale-105"
+            sizes="(min-width: 1024px) 33vw, 100vw"
+            priority
+          />
+        </div>
 
-          {/* Card 2: Organizing Team Collage Photo (100% uncropped faces) */}
-          <div className="relative aspect-[4/3] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-[#faf7f2] clay-card">
-            <Image
-              src="/assets/images/nirmaan-team-collage.jpg"
-              alt="Nirmaan Organizing Team Collage"
-              fill
-              className="object-contain object-center p-1 filter contrast-105 transition-transform duration-500 hover:scale-105"
-              sizes="(min-width: 1024px) 35vw, 100vw"
-            />
-          </div>
-
+        {/* Card 3: Organizing Team Collage Photo (3 cols on laptop) - Equal Height Edge-to-Edge */}
+        <div className="lg:col-span-3 relative min-h-[340px] sm:min-h-[380px] w-full rounded-brand border-2 border-white/40 shadow-soft overflow-hidden bg-[#faf7f2] clay-card">
+          <Image
+            src="/assets/images/nirmaan-team-collage.jpg"
+            alt="Nirmaan Organizing Team Collage"
+            fill
+            className="object-cover object-center scale-[1.02] filter contrast-105 transition-transform duration-500 hover:scale-105"
+            sizes="(min-width: 1024px) 25vw, 100vw"
+          />
         </div>
 
       </div>
