@@ -53,18 +53,18 @@ export function SponsorWall() {
           </div>
         </div>
 
-        {/* Sponsor Section Header */}
+        {/* Collaborator Section Header */}
         <div className="flex flex-wrap items-end justify-between gap-5 border-b border-ink/15 pb-6 mb-8">
           <div>
             <span className="text-[12px] font-display uppercase tracking-[0.25em] font-black text-ink/60 block mb-1">
               Official Partners & Bounties
             </span>
             <h2 className="font-display text-section uppercase text-ink font-black">
-              Event Sponsors
+              Event Collaborators
             </h2>
           </div>
           <p className="max-w-[480px] text-body-xl font-bold text-ink/90">
-            Sponsors shape the build floor. Challenge prompts, API briefs, cloud credits, and developer recruitment slots.
+            Collaborators shape the build floor. Challenge prompts, API briefs, cloud credits, and developer recruitment slots.
           </p>
         </div>
 
@@ -73,13 +73,13 @@ export function SponsorWall() {
           <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-yellow/20 rounded-full blur-2xl pointer-events-none" />
           <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
             <span className="px-4 py-1.5 rounded-full bg-yellow text-ink font-display text-[12px] uppercase font-black tracking-widest mb-3 border border-ink/10 shadow-sm">
-              Sponsor Lineup
+              Collaborator Lineup
             </span>
             <h3 className="font-display text-[28px] sm:text-[36px] uppercase font-black text-ink tracking-tight mb-2">
               To Be Announced
             </h3>
             <p className="text-body-lg font-bold text-ink/70 max-w-md">
-              We are finalizing headline track sponsors, bounty partners, and recruitment slots. Full sponsor reveal dropping soon!
+              We are finalizing headline track collaborators, bounty partners, and recruitment slots. Full collaborator reveal dropping soon!
             </p>
           </div>
         </div>

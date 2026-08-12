@@ -46,6 +46,19 @@ export function BugSquasherGame() {
   const [isLoadingLeaderboard, setIsLoadingLeaderboard] = useState(true);
   const [lastSubmittedRank, setLastSubmittedRank] = useState<number | null>(null);
 
+  // Score & player refs for deterministic async submissions
+  const scoreRef = useRef(0);
+  const playerNameRef = useRef(playerName);
+  const playerIdRef = useRef(playerId);
+
+  useEffect(() => {
+    playerNameRef.current = playerName;
+  }, [playerName]);
+
+  useEffect(() => {
+    playerIdRef.current = playerId;
+  }, [playerId]);
+
   const clearBugTimeouts = useCallback(() => {
     bugTimeoutsRef.current.forEach(clearTimeout);
     bugTimeoutsRef.current = [];
@@ -90,24 +103,18 @@ export function BugSquasherGame() {
     }
   };
 
-  const savePlayerName = (name: string) => {
-    const clean = name.trim().slice(0, 20) || "Anonymous Bug Squasher";
-    setPlayerName(clean);
-    localStorage.setItem(PLAYER_NAME_KEY, clean);
-    setIsEditingName(false);
-    setShowNameModal(false);
-  };
-
-  const submitScoreToLeaderboard = async (finalScore: number) => {
+  const submitScoreToLeaderboard = useCallback(async (finalScore: number, customName?: string) => {
     if (finalScore <= 0) return;
 
     try {
-      const activeName = playerName || "Anonymous Bug Squasher";
+      const activeName = (customName || playerNameRef.current || localStorage.getItem(PLAYER_NAME_KEY) || "Anonymous Bug Squasher").trim();
+      const activeId = playerIdRef.current || localStorage.getItem(PLAYER_ID_KEY) || `player_${Date.now()}`;
+
       const res = await fetch("/api/leaderboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: playerId,
+          id: activeId,
           name: activeName,
           score: finalScore,
         }),
@@ -118,12 +125,27 @@ export function BugSquasherGame() {
         if (data.leaderboard) {
           setLeaderboard(data.leaderboard);
         }
-        if (data.rank) {
-          setLastSubmittedRank(data.rank);
+        const rank = data.userRank ?? data.rank;
+        if (rank) {
+          setLastSubmittedRank(rank);
         }
       }
-    } catch {
-      // Silent error fallback
+    } catch (err) {
+      console.error("Error submitting score:", err);
+    }
+  }, []);
+
+  const savePlayerName = (name: string) => {
+    const clean = name.trim().slice(0, 20) || "Anonymous Bug Squasher";
+    setPlayerName(clean);
+    playerNameRef.current = clean;
+    localStorage.setItem(PLAYER_NAME_KEY, clean);
+    setIsEditingName(false);
+    setShowNameModal(false);
+
+    const activeScore = Math.max(scoreRef.current, highScore);
+    if (activeScore > 0) {
+      submitScoreToLeaderboard(activeScore, clean);
     }
   };
 
@@ -132,7 +154,8 @@ export function BugSquasherGame() {
     clearBugTimeouts();
     setBugs([]);
 
-    setScore((finalScore) => {
+    const finalScore = scoreRef.current;
+    if (finalScore > 0) {
       setHighScore((currentHigh) => {
         if (finalScore > currentHigh) {
           localStorage.setItem(HIGH_SCORE_STORAGE_KEY, finalScore.toString());
@@ -142,9 +165,8 @@ export function BugSquasherGame() {
       });
 
       submitScoreToLeaderboard(finalScore);
-      return finalScore;
-    });
-  }, [clearBugTimeouts]);
+    }
+  }, [clearBugTimeouts, submitScoreToLeaderboard]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -197,7 +219,11 @@ export function BugSquasherGame() {
   }, [isPlaying, currentSpawnInterval, spawnBug]);
 
   const squashBug = (id: number) => {
-    setScore((s) => s + 10);
+    setScore((s) => {
+      const next = s + 10;
+      scoreRef.current = next;
+      return next;
+    });
     setBugs((b) => b.filter((bug) => bug.id !== id));
   };
 
@@ -209,6 +235,7 @@ export function BugSquasherGame() {
     clearBugTimeouts();
     setBugs([]);
     setScore(0);
+    scoreRef.current = 0;
     setTimeLeft(GAME_DURATION_SECONDS);
     setLastSubmittedRank(null);
     setIsPlaying(true);

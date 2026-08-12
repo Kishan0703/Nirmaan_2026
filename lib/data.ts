@@ -16,12 +16,55 @@ type EventFlowCard = {
 
 export type TrackType = "software" | "hardware";
 
-type TrackCard = {
+export type TrackCard = {
   title: string;
   prompt: string;
+  note?: string;
   color: string;
-  type: TrackType;
+  badge?: string;
 };
+
+export const trackCards: TrackCard[] = [
+  {
+    title: "1. Cyber-Physical Security & Defense",
+    prompt: "Explore innovative solutions that protect physical systems, devices, infrastructure, and digital environments from threats, misuse, tampering, and disruption. The track focuses on strengthening security, resilience, trust, and safety across the physical and digital world.",
+    color: "bg-purple",
+    badge: "SECURITY & DEFENSE",
+  },
+  {
+    title: "2. Smart Mobility & Aerospace",
+    prompt: "Reimagine how people, vehicles, machines, and aerial systems move and interact. This track focuses on making transportation and aerospace systems safer, smarter, more efficient, connected, and sustainable, while addressing real-world mobility challenges.",
+    note: "Note: Drone-based projects must comply with applicable DGCA regulations, safety requirements, and permitted drone size/weight categories.",
+    color: "bg-blue",
+    badge: "MOBILITY & AERO",
+  },
+  {
+    title: "3. HealthTech & Bio-Wearables",
+    prompt: "Explore technology-driven solutions that improve healthcare, personal well-being, accessibility, and quality of life. The track covers challenges involving monitoring, assistance, prevention, rehabilitation, and personalized care.",
+    note: "Note: Health-related projects must comply with applicable healthcare, safety, ethical, privacy, and regulatory requirements.",
+    color: "bg-red",
+    badge: "HEALTH & BIO",
+  },
+  {
+    title: "4. Deep Tech & Edge AI",
+    prompt: "Focus on applying advanced technologies and intelligent computing to solve complex real-world problems. The track encourages innovation in areas such as automation, robotics, intelligent machines, real-time systems, and technologies that can operate effectively with limited dependence on the cloud.",
+    color: "bg-yellow",
+    badge: "DEEP TECH & AI",
+  },
+  {
+    title: "5. AgriTech",
+    prompt: "Explore innovative technologies that address challenges across modern farming and agriculture. The track focuses on improving productivity, efficiency, resource utilization, monitoring, automation, and decision-making throughout the agricultural ecosystem.",
+    color: "bg-green",
+    badge: "AGRICULTURE TECH",
+  },
+  {
+    title: "6. Open Innovation",
+    prompt: "Hardware-aligned software solutions that address meaningful real-world challenges, bridging software innovation with hardware-driven and physical-world applications. Solutions may span AI, applications, platforms, data-driven systems, and emerging technologies, with a focus on relevant Sustainable Development Goals (SDGs), scalability, and tangible real-world impact.",
+    note: "Note: We will select limited ideas from the Open Innovation track, so competition is high—please register accordingly. All the best!",
+    color: "bg-orange",
+    badge: "HIGH COMPETITION · LIMITED SELECTION",
+  },
+];
 
 type FaqItem = {
   question: string;
@@ -30,7 +73,7 @@ type FaqItem = {
 
 export const menuItems: MenuItem[] = [
   { index: "01", label: "Overview", href: "#overview", color: "bg-blue text-white" },
-  { index: "02", label: "Problem Statements", href: "#tracks", color: "bg-yellow text-ink" },
+  { index: "02", label: "Domain Tracks", href: "#tracks", color: "bg-yellow text-ink" },
   { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange text-white" },
   { index: "04", label: "Bug Game", href: "#game", color: "bg-red text-white", external: true },
   { index: "05", label: "Location", href: "#location", color: "bg-green text-ink" },
@@ -103,54 +146,18 @@ export type ScheduleGroup = {
 
 export const scheduleTimeline: ScheduleGroup[] = [
   {
-    date: "Aug 12",
-    items: [
-      { time: "10:00 PM", title: "Event period begins", color: "bg-yellow" }
-    ]
-  },
-  {
-    date: "Aug 16",
-    items: [
-      { time: "03:30 AM", title: "Submission of PPT opens", color: "bg-green-light" }
-    ]
-  },
-  {
-    date: "Sep 6",
-    items: [
-      { time: "05:29 AM", title: "Submission of PPT closes", color: "bg-red text-white" }
-    ]
-  },
-  {
-    date: "Sep 12",
-    items: [
-      { time: "09:00 PM – 10:00 PM", title: "Declaration of Round-1 Results", color: "bg-purple text-white" }
-    ]
-  },
-  {
-    date: "Sep 13",
-    items: [
-      { time: "03:30 AM", title: "Registration for Second Round opens", color: "bg-blue text-white" }
-    ]
-  },
-  {
-    date: "Sep 21",
-    items: [
-      { time: "03:30 AM", title: "Second Round Registration closes", color: "bg-orange text-white" }
-    ]
-  },
-  {
     date: "Sep 25",
     items: [
-      { time: "09:30 AM – 11:00 AM", title: "On-Site Check-In", color: "bg-yellow" },
-      { time: "11:30 AM", title: "Grand Finale begins", color: "bg-green text-white" }
+      { time: "09:30 AM – 10:30 AM", title: "On-Site Check-In", detail: "Badge collection, desk assignment & kit allocation", color: "bg-yellow" },
+      { time: "11:30 AM", title: "Grand Finale begins", detail: "24-hour hackathon build sprint officially launched", color: "bg-green text-white" }
     ]
   },
   {
     date: "Sep 26",
     items: [
-      { time: "12:30 PM", title: "Grand Finale ends", color: "bg-red text-white" },
-      { time: "12:30 PM – 01:30 PM", title: "Prize Distribution", color: "bg-yellow" },
-      { time: "04:00 PM", title: "Overall event period end", color: "bg-purple text-white" }
+      { time: "12:30 PM", title: "Grand Finale ends", detail: "Hacking & project submissions freeze", color: "bg-red text-white" },
+      { time: "12:30 PM – 01:30 PM", title: "Prize Distribution", detail: "Judge evaluation scoring & award ceremony", color: "bg-yellow" },
+      { time: "04:00 PM", title: "Overall event period end", detail: "Community wrap-up & departure", color: "bg-purple text-white" }
     ]
   }
 ];
@@ -173,17 +180,7 @@ export const projectSubmissions = [
   { team: "Signal Forge", track: "Hardware Innovation", status: "Prototype live", score: "84" }
 ];
 
-export const trackCards: TrackCard[] = [
-  // ── SOFTWARE TRACKS ──
-  { title: "AI & Intelligent Systems", prompt: "Generative AI, LLM agentic workflows, predictive engines, and intelligent web applications", color: "bg-blue", type: "software" },
-  { title: "Web & App Innovation", prompt: "High-performance fullstack web apps, developer tools, FinTech, and cloud platforms", color: "bg-purple", type: "software" },
-  { title: "Cyber Security & Open Tech", prompt: "Threat telemetry dashboards, secure network protocols, civic software, and open innovation", color: "bg-yellow", type: "software" },
-  
-  // ── HARDWARE TRACKS ──
-  { title: "Embedded Systems & IoT", prompt: "Microcontroller logic (ESP32/STM32), wireless sensor nodes, edge telemetry, and smart IoT", color: "bg-green", type: "hardware" },
-  { title: "Robotics & Automation", prompt: "Autonomous robotic rigs, motor actuation setups, ROS control loops, and physical mechatronics", color: "bg-red", type: "hardware" },
-  { title: "Hardware Prototyping & Health", prompt: "Biometric sensor hardware, wearable health devices, CAD enclosures, and circuit prototypes", color: "bg-orange", type: "hardware" }
-];
+
 
 export const values = [
   {
@@ -218,14 +215,14 @@ export const announcements = [
 ];
 
 export const galleryImages = [
-  { id: 1, src: "/assets/images/nirmaan-hero.png", alt: "Active building floor", category: "Build Floor" },
-  { id: 2, src: "/assets/images/nirmaan-mentors.png", alt: "Mentor review sessions", category: "Mentorship" },
-  { id: 3, src: "/assets/images/nirmaan-demo-day.png", alt: "Final pitching stage", category: "Demo Day" },
-  { id: 4, src: "/assets/images/nirmaan-hero.png", alt: "Showcase winner ceremony", category: "Awards" },
-  { id: 5, src: "/assets/images/nirmaan-mentors.png", alt: "Hardware prototyping desk", category: "Hardware Track" },
-  { id: 6, src: "/assets/images/nirmaan-demo-day.png", alt: "Keynote presentation stage", category: "Keynote" },
-  { id: 7, src: "/assets/images/nirmaan-hero.png", alt: "Midnight coding jam", category: "Build Floor" },
-  { id: 8, src: "/assets/images/nirmaan-mentors.png", alt: "Team strategy whiteboarding", category: "Mentorship" },
+  { id: 1, src: "/assets/images/gallery/nirmaan-gallery-1.jpg", alt: "Nirmaan student builders organizing team in lab", category: "Organizing Team" },
+  { id: 2, src: "/assets/images/gallery/nirmaan-gallery-2.jpg", alt: "Hardware & prototyping core team collaboration", category: "Hardware Team" },
+  { id: 3, src: "/assets/images/gallery/nirmaan-gallery-3.jpg", alt: "Nirmaan participant cohort in lecture hall", category: "Participants" },
+  { id: 4, src: "/assets/images/gallery/nirmaan-gallery-4.jpg", alt: "Team problem solving and strategy session", category: "Strategy & Dev" },
+  { id: 5, src: "/assets/images/gallery/nirmaan-gallery-5.jpg", alt: "Nirmaan Round 3 event team gathering", category: "Event Floor" },
+  { id: 6, src: "/assets/images/gallery/nirmaan-gallery-6.jpg", alt: "Core Team Varsity jackets in auditorium", category: "Core Team" },
+  { id: 7, src: "/assets/images/gallery/nirmaan-gallery-7.jpg", alt: "Decode2Deploy judging evaluation round", category: "Judging Round" },
+  { id: 8, src: "/assets/images/gallery/nirmaan-gallery-8.jpg", alt: "Decode2Deploy Day 1 stage ceremony", category: "Stage Ceremony" },
 ];
 
 export const faqs: FaqItem[] = [

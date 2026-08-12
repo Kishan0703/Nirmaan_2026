@@ -34,6 +34,7 @@ export async function POST(request: Request) {
       success: true,
       leaderboard: result.leaderboard,
       userRank: result.userRank,
+      rank: result.userRank,
     });
   } catch (err) {
     console.error("Leaderboard POST error:", err);
