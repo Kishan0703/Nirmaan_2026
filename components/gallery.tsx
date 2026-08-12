@@ -33,8 +33,8 @@ export function GallerySection() {
           </Link>
         </div>
 
-        {/* Clean Image Grid — 5 Real Nirmaan Event Photos */}
-        <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+        {/* Clean Image Grid — 8 Real Nirmaan Event Photos */}
+        <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
           {galleryImages.map((img, i) => (
             <Link key={img.id || i} href="/gallery" className="group">
               <div className="clay-card bg-paper p-2 sm:p-2.5 rounded-[18px] text-ink border-2 border-white/40 shadow-md group-hover:scale-[1.03] transition-transform duration-300 overflow-hidden">
@@ -44,7 +44,7 @@ export function GallerySection() {
                     alt={img.alt}
                     fill
                     className="object-cover filter saturate-105 contrast-105 group-hover:scale-110 transition-transform duration-500"
-                    sizes="(min-width: 1024px) 18vw, 40vw"
+                    sizes="(min-width: 1024px) 22vw, 45vw"
                   />
                 </div>
                 <div className="mt-2 text-center">

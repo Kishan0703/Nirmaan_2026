@@ -220,6 +220,9 @@ export const galleryImages = [
   { id: 3, src: "/assets/images/gallery/nirmaan-gallery-3.jpg", alt: "Nirmaan participant cohort in lecture hall", category: "Participants" },
   { id: 4, src: "/assets/images/gallery/nirmaan-gallery-4.jpg", alt: "Team problem solving and strategy session", category: "Strategy & Dev" },
   { id: 5, src: "/assets/images/gallery/nirmaan-gallery-5.jpg", alt: "Nirmaan Round 3 event team gathering", category: "Event Floor" },
+  { id: 6, src: "/assets/images/gallery/nirmaan-gallery-6.jpg", alt: "Core Team Varsity jackets in auditorium", category: "Core Team" },
+  { id: 7, src: "/assets/images/gallery/nirmaan-gallery-7.jpg", alt: "Decode2Deploy judging evaluation round", category: "Judging Round" },
+  { id: 8, src: "/assets/images/gallery/nirmaan-gallery-8.jpg", alt: "Decode2Deploy Day 1 stage ceremony", category: "Stage Ceremony" },
 ];
 
 export const faqs: FaqItem[] = [
