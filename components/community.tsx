@@ -12,7 +12,7 @@ export function Community() {
           src="/assets/images/nirmaan-team-round3.jpg"
           alt="Nirmaan 2026 Organizing Team and Round-3 Participants"
           fill
-          className="object-cover object-center filter saturate-110 contrast-105"
+          className="object-cover object-right filter saturate-110 contrast-105"
           sizes="(min-width: 1024px) 42vw, 100vw"
           priority
         />
