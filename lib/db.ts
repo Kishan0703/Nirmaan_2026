@@ -100,6 +100,23 @@ export function saveFileLeaderboardScore(entry: { id: string; name: string; scor
   }
 }
 
+export async function clearLeaderboard(): Promise<boolean> {
+  try {
+    ensureDbFile();
+    if (fs.existsSync(DB_FILE)) {
+      fs.writeFileSync(DB_FILE, JSON.stringify([], null, 2), "utf-8");
+    }
+    if (process.env.DATABASE_URL) {
+      const { clearNeonTables } = await import("./neon");
+      await clearNeonTables();
+    }
+    return true;
+  } catch (error) {
+    console.error("Error clearing leaderboard database:", error);
+    return false;
+  }
+}
+
 export async function saveLeaderboardScore(entry: { id: string; name: string; score: number }): Promise<{
   leaderboard: LeaderboardEntry[];
   userRank: number | null;

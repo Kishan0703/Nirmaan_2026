@@ -160,23 +160,6 @@ export async function getNeonMessages(): Promise<LobbyMessage[] | null> {
       LIMIT 200;
     `;
 
-    if (rows.length === 0) {
-      const welcome: LobbyMessage = {
-        id: "msg-welcome",
-        sender: "Nirmaan Organizers",
-        type: "REPLY",
-        text: "Welcome to the NIRMAAN 2026 Community Lobby! Connect with fellow builders, ask questions to organizers, and collaborate live.",
-        time: "10:00 AM",
-      };
-      await saveNeonMessage(welcome);
-      rows = await sql`
-        SELECT id, sender, type, text, time
-        FROM lobby_messages
-        ORDER BY created_at ASC, id ASC
-        LIMIT 200;
-      `;
-    }
-
     return rows.map((r) => ({
       id: String(r.id),
       sender: String(r.sender),
@@ -203,6 +186,21 @@ export async function saveNeonMessage(msg: LobbyMessage): Promise<boolean> {
     return true;
   } catch (error) {
     console.error("Neon saveMessage error:", error);
+    return false;
+  }
+}
+
+export async function clearNeonTables(): Promise<boolean> {
+  const sql = getNeonSql();
+  if (!sql) return false;
+
+  try {
+    await initNeonTables();
+    await sql`DELETE FROM lobby_messages;`;
+    await sql`DELETE FROM leaderboard;`;
+    return true;
+  } catch (error) {
+    console.error("Neon clearNeonTables error:", error);
     return false;
   }
 }

@@ -2,43 +2,34 @@
 
 import { useState, useRef, useEffect, FormEvent } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { Send, CheckCheck, ArrowLeft, ShieldCheck, User } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
 
-type MessageType = "QUERY" | "REPLY";
+type MessageType = "ANNOUNCEMENT" | "QUERY" | "REPLY";
 
 type ChatMessage = {
   id: string;
   sender: string;
-  type: MessageType;
+  type: MessageType | string;
   text: string;
   time: string;
 };
 
 const PLAYER_NAME_KEY = "nirmaan_player_name";
+const LAST_SEEN_MSG_KEY = "nirmaan_last_seen_msg_id";
 
 export default function LobbyPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "msg-welcome",
-      sender: "Nirmaan Organizers",
-      type: "REPLY",
-      text: "Welcome to the NIRMAAN 2026 Community!",
-      time: "10:00 AM",
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [userName, setUserName] = useState("");
+  const [activeFilter, setActiveFilter] = useState<"ALL" | "ANNOUNCEMENT" | "QUERY">("ALL");
   const [sending, setSending] = useState(false);
   const chatScrollRef = useRef<HTMLDivElement>(null);
 
-  // Sync user profile name with localStorage on mount
+  // Sync user profile name
   useEffect(() => {
     const savedName = localStorage.getItem(PLAYER_NAME_KEY) || "";
-    if (savedName) {
-      setUserName(savedName);
-    }
+    if (savedName) setUserName(savedName);
   }, []);
 
   const handleNameChange = (val: string) => {
@@ -55,15 +46,18 @@ export default function LobbyPage() {
       const data = await res.json();
       if (data.success && Array.isArray(data.messages)) {
         setMessages(data.messages);
+        if (data.messages.length > 0) {
+          const newest = data.messages[data.messages.length - 1];
+          localStorage.setItem(LAST_SEEN_MSG_KEY, newest.id);
+        }
       }
     } catch (err) {
-      console.error("Failed to sync messages:", err);
+      console.error("Failed to sync lobby messages:", err);
     }
   };
 
   useEffect(() => {
     fetchMessages();
-    // Live synchronization every 3 seconds across all devices
     const interval = setInterval(fetchMessages, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -72,7 +66,7 @@ export default function LobbyPage() {
     if (chatScrollRef.current) {
       chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, activeFilter]);
 
   const handleSendMessage = async (e: FormEvent) => {
     e.preventDefault();
@@ -80,7 +74,7 @@ export default function LobbyPage() {
 
     setSending(true);
     const textToSend = inputText.trim();
-    const senderToSend = (userName.trim() || localStorage.getItem(PLAYER_NAME_KEY) || "Builder").trim();
+    const senderToSend = (userName.trim() || localStorage.getItem(PLAYER_NAME_KEY) || "Hacker").trim();
 
     if (senderToSend) {
       localStorage.setItem(PLAYER_NAME_KEY, senderToSend);
@@ -92,163 +86,255 @@ export default function LobbyPage() {
       const res = await fetch("/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sender: senderToSend, text: textToSend }),
+        body: JSON.stringify({
+          sender: senderToSend,
+          text: textToSend,
+        }),
       });
       const data = await res.json();
       if (data.success && Array.isArray(data.messages)) {
         setMessages(data.messages);
+        if (data.messages.length > 0) {
+          localStorage.setItem(LAST_SEEN_MSG_KEY, data.messages[data.messages.length - 1].id);
+        }
       }
     } catch (err) {
-      console.error("Error sending message:", err);
+      console.error("Error sending lobby message:", err);
     } finally {
       setSending(false);
     }
   };
 
+  // Filter messages based on active filter
+  const filteredMessages = messages.filter((msg) => {
+    if (activeFilter === "ANNOUNCEMENT") {
+      return msg.type === "ANNOUNCEMENT" || msg.type === "REPLY";
+    }
+    if (activeFilter === "QUERY") {
+      return msg.type === "QUERY";
+    }
+    return true;
+  });
+
   return (
-    <div className="min-h-screen bg-paper text-ink selection:bg-yellow selection:text-ink font-sans flex flex-col justify-between p-3 sm:p-6 relative overflow-x-hidden">
+    <div className="min-h-screen bg-paper text-ink font-sans flex flex-col justify-between p-3 sm:p-6 relative overflow-x-hidden">
       
-      {/* Background Grid */}
+      {/* Background Dots */}
       <div
-        className="fixed inset-0 pointer-events-none opacity-40 z-0"
+        className="fixed inset-0 pointer-events-none opacity-20 z-0"
         style={{
-          backgroundImage: "linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
+          backgroundImage: "radial-gradient(#18181b 1.5px, transparent 1.5px)",
+          backgroundSize: "20px 20px",
         }}
       />
 
-      <div className="max-w-4xl w-full mx-auto relative z-10 my-auto">
+      <div className="max-w-4xl w-full mx-auto relative z-10 my-auto flex flex-col gap-4">
         
         {/* Navigation Bar */}
-        <div className="flex items-center justify-between gap-3 mb-4 sm:mb-6">
+        <div className="flex items-center justify-between gap-3">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 font-display text-xs uppercase font-black hover:bg-red transition-all clay-card shadow-sm active:translate-y-0.5"
+            className="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 font-display text-xs uppercase font-black hover:bg-red transition-all shadow-[3px_3px_0px_0px_#18181b] active:translate-y-0.5 border-2 border-ink"
           >
-            <ArrowLeft size={14} />
+            <ArrowLeft size={16} />
             <span>Back to Home</span>
           </Link>
         </div>
 
-        {/* ── Main Chat Box (Neon DB Connected) ── */}
-        <div className="clay-card rounded-brand border-2 border-white/60 bg-paper shadow-2xl overflow-hidden flex flex-col h-[640px] sm:h-[700px] relative">
+        {/* ── LOBBY PURPOSE & USAGE GUIDE BOX ── */}
+        <div className="rounded-2xl border-3 border-ink bg-yellow p-4 sm:p-5 shadow-[5px_5px_0px_0px_#18181b] text-ink">
+          <h2 className="font-display text-base sm:text-lg font-black uppercase tracking-tight mb-1">
+            HOW THE LOBBY WORKS
+          </h2>
+          <p className="font-sans text-xs sm:text-sm font-bold leading-relaxed">
+            Welcome to the Nirmaan Live Community Lobby! This central broadcast room connects event participants and organizing roster members in real-time.
+          </p>
+          <div className="mt-2.5 flex flex-col sm:flex-row gap-2 sm:gap-6 font-sans text-xs font-bold text-ink/90 pt-2 border-t-2 border-ink/20">
+            <div>
+              <span className="font-black underline uppercase">Organizers & Roster Members:</span> Authenticated roster members broadcast official event announcements and answers.
+            </div>
+            <div>
+              <span className="font-black underline uppercase">Participant Teams:</span> Ask hackathon questions, clarify schedule/rules, or request support directly from the organizing team.
+            </div>
+          </div>
+        </div>
+
+        {/* ── MAIN LOBBY CONTAINER ── */}
+        <div className="rounded-3xl border-4 border-ink bg-white shadow-[8px_8px_0px_0px_#18181b] overflow-hidden flex flex-col h-[640px] sm:h-[700px] relative">
           
-          {/* Header Bar */}
-          <div className="bg-red text-white p-4 sm:p-5 border-b-2 border-ink/10 flex items-center justify-between z-20 shrink-0 shadow-md">
-            <div className="flex items-center gap-3">
-              <h1 className="font-display text-xl sm:text-3xl uppercase font-black tracking-tight leading-none text-white">
-                NIRMAAN <span className="text-yellow">Community Lobby</span>
+          {/* Header & Filter Tabs */}
+          <div className="bg-red text-white p-4 sm:p-5 border-b-4 border-ink flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 z-20 shrink-0">
+            <div>
+              <h1 className="font-display text-2xl sm:text-3xl uppercase font-black tracking-tight text-white">
+                NIRMAAN COMMUNITY LOBBY
               </h1>
+              <p className="font-display text-xs uppercase font-bold text-white/90">
+                Official Announcements & Live Participant Q&A
+              </p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="bg-white/20 text-white border border-white/30 font-display text-[10px] sm:text-xs uppercase font-black px-3 py-1 rounded-full shadow-xs">
-                OFFICIAL FEED
-              </span>
+            {/* Filter Tabs */}
+            <div className="flex items-center gap-1.5 bg-ink/90 p-1.5 rounded-2xl border-2 border-white/40 shadow-inner self-stretch sm:self-auto justify-center">
+              <button
+                type="button"
+                onClick={() => setActiveFilter("ALL")}
+                className={`px-3 py-1 rounded-xl font-display text-xs font-black uppercase transition-all ${
+                  activeFilter === "ALL"
+                    ? "bg-yellow text-ink border-2 border-ink shadow-[2px_2px_0px_0px_#18181b]"
+                    : "text-white/80 hover:text-white"
+                }`}
+              >
+                ALL
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveFilter("ANNOUNCEMENT")}
+                className={`px-3 py-1 rounded-xl font-display text-xs font-black uppercase transition-all ${
+                  activeFilter === "ANNOUNCEMENT"
+                    ? "bg-yellow text-ink border-2 border-ink shadow-[2px_2px_0px_0px_#18181b]"
+                    : "text-white/80 hover:text-white"
+                }`}
+              >
+                ANNOUNCEMENTS
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveFilter("QUERY")}
+                className={`px-3 py-1 rounded-xl font-display text-xs font-black uppercase transition-all ${
+                  activeFilter === "QUERY"
+                    ? "bg-yellow text-ink border-2 border-ink shadow-[2px_2px_0px_0px_#18181b]"
+                    : "text-white/80 hover:text-white"
+                }`}
+              >
+                Q&A
+              </button>
             </div>
           </div>
 
-          {/* Chat Stream */}
+          {/* ── CHAT STREAM ── */}
           <div
             ref={chatScrollRef}
-            className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 relative z-10 scrollbar-thin scrollbar-thumb-ink/20"
+            className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 relative z-10 bg-[#fbf9f4]"
             style={{
-              backgroundImage: "radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px)",
-              backgroundSize: "24px 24px",
+              backgroundImage: "radial-gradient(#d1d5db 1px, transparent 1px)",
+              backgroundSize: "16px 16px",
             }}
           >
-            {messages.map((msg) => {
-              const isReply = msg.type === "REPLY";
-              const isSelf = userName.trim().toLowerCase() === msg.sender.trim().toLowerCase();
+            {filteredMessages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center p-6 border-4 border-dashed border-ink/20 rounded-3xl bg-white">
+                <h3 className="font-display text-lg uppercase font-black text-ink">
+                  No Messages In This Stream Yet
+                </h3>
+                <p className="font-sans text-xs font-bold text-ink/70 max-w-sm mt-1">
+                  Post a message or question below to start the conversation!
+                </p>
+              </div>
+            ) : (
+              filteredMessages.map((msg) => {
+                const isAnnouncement = msg.type === "ANNOUNCEMENT";
+                const isQuery = msg.type === "QUERY";
+                const isSelf = userName.trim().toLowerCase() === msg.sender.trim().toLowerCase();
 
-              return (
-                <motion.div
-                  key={msg.id}
-                  initial={{ opacity: 0, y: 10, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.2 }}
-                  className={`flex flex-col w-full ${isSelf && !isReply ? "items-end" : "items-start"}`}
-                >
-                  <div
-                    className={`max-w-[88%] sm:max-w-[78%] rounded-[20px] p-4 shadow-md relative text-xs sm:text-sm border-2 ${
-                      isReply
-                        ? "bg-yellow text-ink rounded-tl-none border-ink/20"
-                        : isSelf
-                        ? "bg-blue text-white rounded-tr-none border-white/30"
-                        : "bg-ink text-white rounded-tl-none border-white/20"
+                return (
+                  <motion.div
+                    key={msg.id}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className={`flex flex-col w-full ${
+                      isAnnouncement
+                        ? "items-center my-2"
+                        : isQuery
+                        ? "items-end"
+                        : "items-start"
                     }`}
                   >
-                    {/* Header */}
-                    <div className="flex items-center justify-between gap-4 mb-1.5">
-                      <span className="font-display text-xs uppercase font-black tracking-wide">
-                        {msg.sender} {isSelf && "(You)"}
-                      </span>
-
-                      <span className="text-[9px] font-black opacity-75">
-                        {msg.time}
-                      </span>
-                    </div>
-
-                    {/* Content */}
-                    <p className="font-sans font-bold leading-relaxed break-words whitespace-pre-wrap mt-1">
-                      {msg.text}
-                    </p>
-
-                    {/* Checkmark */}
-                    <div className="flex items-center justify-end gap-1 mt-2 text-[9px] font-black opacity-80">
-                      <CheckCheck size={14} className={isReply ? "text-ink" : "text-yellow"} />
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+                    {/* ANNOUNCEMENT CARD (Center) */}
+                    {isAnnouncement ? (
+                      <div className="w-full max-w-2xl bg-yellow border-4 border-ink rounded-3xl p-4 sm:p-5 shadow-[5px_5px_0px_0px_#18181b] relative text-ink">
+                        <div className="flex items-center justify-between gap-3 pb-2 mb-2 border-b-2 border-ink">
+                          <span className="font-display text-xs uppercase font-black tracking-wide">
+                            ANNOUNCEMENT FROM {msg.sender}
+                          </span>
+                          <span className="font-display text-[10px] font-black bg-white px-2 py-0.5 rounded-full border border-ink">
+                            {msg.time}
+                          </span>
+                        </div>
+                        <p className="font-sans font-extrabold text-sm sm:text-base leading-relaxed break-words whitespace-pre-wrap">
+                          {msg.text}
+                        </p>
+                      </div>
+                    ) : (
+                      /* QUERY (Right side) / REPLY (Left side) CARD */
+                      <div
+                        className={`max-w-[90%] sm:max-w-[80%] rounded-2xl border-3 border-ink p-4 shadow-[4px_4px_0px_0px_#18181b] relative text-xs sm:text-sm ${
+                          isQuery
+                            ? "bg-blue text-white rounded-tr-none"
+                            : "bg-purple text-white rounded-tl-none"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-3 mb-1.5 pb-1.5 border-b border-ink/20">
+                          <span className="font-display text-xs uppercase font-black">
+                            {msg.sender} {isSelf && "(You)"}
+                          </span>
+                          <span className="text-[9px] font-black opacity-80">
+                            {msg.time}
+                          </span>
+                        </div>
+                        <p className="font-sans font-bold leading-relaxed break-words whitespace-pre-wrap">
+                          {msg.text}
+                        </p>
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })
+            )}
           </div>
 
-          {/* Clean Input Bar */}
-          <form
-            onSubmit={handleSendMessage}
-            className="bg-paper p-3 sm:p-4 border-t-2 border-ink/10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 z-20"
-          >
-            {/* Alias Name Field */}
-            <div className="flex items-center gap-1.5 bg-white rounded-full px-3.5 py-2 border-2 border-ink/15 shadow-xs shrink-0">
-              <User size={14} className="text-ink/60" />
+          {/* ── COMPOSER BAR ── */}
+          <div className="p-3 sm:p-5 bg-yellow border-t-4 border-ink flex flex-col gap-3 shrink-0 relative z-20">
+            
+            {/* User Profile Name Input */}
+            <div className="flex items-center gap-2 bg-white border-3 border-ink rounded-2xl px-3 py-1.5 shadow-[3px_3px_0px_0px_#18181b]">
+              <span className="font-display text-xs uppercase font-black text-ink shrink-0">
+                YOUR NAME:
+              </span>
               <input
                 type="text"
-                placeholder="Your Name"
                 value={userName}
                 onChange={(e) => handleNameChange(e.target.value)}
-                className="bg-transparent text-xs text-ink placeholder-gray-500 focus:outline-none w-28 sm:w-36 font-bold"
+                placeholder="Enter your name (e.g. Participant Name / Roster Member Name)"
+                className="w-full bg-transparent font-sans font-bold text-xs text-ink outline-none placeholder:text-ink/40"
               />
             </div>
 
-            {/* Message Input */}
-            <div className="flex-1 flex items-center bg-white rounded-full px-4 py-2 border-2 border-ink/15 shadow-xs">
+            {/* Input Form */}
+            <form onSubmit={handleSendMessage} className="flex items-center gap-2">
               <input
                 type="text"
-                placeholder="Type your message..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="bg-transparent text-xs sm:text-sm text-ink placeholder-gray-500 focus:outline-none w-full font-bold"
+                placeholder="Type your message or question here..."
+                className="w-full bg-white text-ink font-sans font-bold text-xs sm:text-sm px-4 py-3 border-3 border-ink rounded-2xl outline-none placeholder:text-ink/40 shadow-[4px_4px_0px_0px_#18181b] focus:bg-amber-50 transition-all"
               />
-            </div>
 
-            {/* Send Button */}
-            <button
-              type="submit"
-              disabled={sending}
-              className="bg-red hover:bg-ink text-white font-display text-xs uppercase font-black px-6 py-2.5 sm:py-3 rounded-full flex items-center justify-center gap-1.5 transition-all active:translate-y-0.5 shrink-0 shadow-md clay-card disabled:opacity-50"
-            >
-              <span>{sending ? "Sending..." : "Send"}</span>
-              <Send size={14} />
-            </button>
-          </form>
-
+              <button
+                type="submit"
+                disabled={sending || !inputText.trim()}
+                className={`px-5 py-3 rounded-2xl border-3 border-ink font-display text-xs sm:text-sm uppercase font-black flex items-center gap-2 shadow-[4px_4px_0px_0px_#18181b] transition-all shrink-0 active:translate-y-0.5 bg-blue text-white hover:bg-green ${
+                  sending || !inputText.trim() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                }`}
+              >
+                <span>Send</span>
+                <Send size={16} />
+              </button>
+            </form>
+          </div>
         </div>
 
-        {/* Footer Credit */}
-        <div className="mt-4 text-center font-display text-[10px] uppercase font-black text-ink/60 tracking-wider">
-          NIRMAAN 2026 COMMUNITY LOBBY // BMSIT BANGALORE
-        </div>
       </div>
     </div>
   );

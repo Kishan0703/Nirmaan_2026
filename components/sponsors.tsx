@@ -20,19 +20,17 @@ export function SponsorWall() {
             </div>
 
             <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-              {/* Mastryhub Card */}
-              <div className="flex items-center gap-3 bg-white border-2 border-ink/15 rounded-[18px] px-5 py-3 shadow-sm hover:scale-[1.02] transition-transform">
-                <div className="relative h-10 w-10 rounded-xl overflow-hidden shadow-md bg-black border border-white/20 shrink-0">
+              {/* Mastry Hub Card */}
+              <div className="flex items-center bg-white border-2 border-ink/15 rounded-[18px] px-5 py-3 shadow-sm hover:scale-[1.02] transition-transform">
+                <div className="relative h-10 w-36 sm:w-44 shrink-0">
                   <Image
                     src="/assets/images/mastryhub-logo.png"
-                    alt="Mastryhub Logo"
+                    alt="Mastry Hub Logo"
                     fill
-                    className="object-contain p-0.5"
+                    className="object-contain"
+                    priority
                   />
                 </div>
-                <span className="font-display text-[20px] uppercase font-black text-ink tracking-tight">
-                  Mastryhub
-                </span>
               </div>
 
               {/* Connector */}

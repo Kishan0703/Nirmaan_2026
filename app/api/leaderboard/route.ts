@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getLeaderboard, saveLeaderboardScore } from "@/lib/db";
+import { getLeaderboard, saveLeaderboardScore, clearLeaderboard } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +11,16 @@ export async function GET() {
   } catch (err) {
     console.error("Leaderboard GET error:", err);
     return NextResponse.json({ leaderboard: [] });
+  }
+}
+
+export async function DELETE() {
+  try {
+    await clearLeaderboard();
+    return NextResponse.json({ success: true, leaderboard: [] });
+  } catch (err) {
+    console.error("Leaderboard DELETE error:", err);
+    return NextResponse.json({ error: "Failed to clear leaderboard" }, { status: 500 });
   }
 }
 

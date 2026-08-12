@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
-import { getNeonMessages, saveNeonMessage, LobbyMessage } from "@/lib/neon";
+import { getNeonMessages, saveNeonMessage, clearNeonTables, LobbyMessage } from "@/lib/neon";
 
 export const dynamic = 'force-dynamic';
 
@@ -10,6 +10,7 @@ const DB_PATH = path.join(process.cwd(), dbRelativePath);
 
 const TEAM_MEMBERS_DATABASE = [
   "anmol narayan", "anmol",
+  "amey vikram singh", "amey",
   "dheeksha n", "dheeksha",
   "kishan mn", "kishan m n", "kishan m", "kishan kumar", "kishan",
   "shashikiran b s", "shashikiran", "shashi",
@@ -25,11 +26,7 @@ const TEAM_MEMBERS_DATABASE = [
   "likitha s", "likitha",
   "sai amrutha as", "sai amrutha", "amrutha",
   "sneha mudgal", "sneha",
-  "ayush y a", "ayush",
   "saurabh kumar", "saurabh",
-  "darshan a b", "darshan",
-  "aradhya prakash", "aradhya",
-  "ahmed umar", "ahmed",
   "sonika k", "sonika",
   "mansi kalgudi", "mansi",
   "kanishk upadhyay", "kanishk",
@@ -39,24 +36,19 @@ const TEAM_MEMBERS_DATABASE = [
   "ravindra a", "ravindra",
   "vanshika biswal", "vanshika",
   "namratha r bagade", "namratha",
-  "samrudhi m r", "samrudhi",
-  "ayush kumar",
+  "ayush kumar", "ayush",
   "sisir raj", "sisir",
+  "eklavya agarwal", "eklavya",
+  "sajja chaulagain", "sajja",
+  "shlesha singh thakuri", "shlesha",
+  "sarjath", "prateek mitra", "prateek",
   "nirmaan organizers", "organizer", "admin", "lead", "mentor"
 ];
 
 function readDB(): LobbyMessage[] {
   try {
     if (!fs.existsSync(DB_PATH)) {
-      const initial: LobbyMessage[] = [
-        {
-          id: "msg-welcome",
-          sender: "Nirmaan Organizers",
-          type: "REPLY",
-          text: "Welcome to the NIRMAAN 2026 Community!",
-          time: "10:00 AM"
-        }
-      ];
+      const initial: LobbyMessage[] = [];
       fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
       fs.writeFileSync(DB_PATH, JSON.stringify(initial, null, 2), "utf-8");
       return initial;
@@ -81,24 +73,20 @@ export async function GET() {
   if (process.env.DATABASE_URL) {
     const neonMsgs = await getNeonMessages();
     if (neonMsgs) {
-      if (neonMsgs.length === 0) {
-        // Seed initial welcome message if Neon table is empty
-        const welcome: LobbyMessage = {
-          id: "msg-welcome",
-          sender: "Nirmaan Organizers",
-          type: "REPLY",
-          text: "Welcome to the NIRMAAN 2026 Community!",
-          time: "10:00 AM",
-        };
-        await saveNeonMessage(welcome);
-        return NextResponse.json({ success: true, messages: [welcome] });
-      }
       return NextResponse.json({ success: true, messages: neonMsgs });
     }
   }
 
   const messages = readDB();
   return NextResponse.json({ success: true, messages });
+}
+
+export async function DELETE() {
+  writeDB([]);
+  if (process.env.DATABASE_URL) {
+    await clearNeonTables();
+  }
+  return NextResponse.json({ success: true, messages: [] });
 }
 
 export async function POST(req: Request) {
@@ -113,13 +101,16 @@ export async function POST(req: Request) {
     const nameTrimmed = (sender || "Builder").trim();
     const nameLower = nameTrimmed.toLowerCase();
 
+    // Strict server-side verification against TEAM_MEMBERS_DATABASE
     const isTeamMember = TEAM_MEMBERS_DATABASE.some((teamName) => {
       if (!nameLower) return false;
       return nameLower === teamName || (nameLower.length >= 3 && (nameLower.includes(teamName) || teamName.includes(nameLower)));
     });
 
     const currentTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    const msgType = isTeamMember ? "REPLY" : "QUERY";
+    
+    // Only verified roster members can post ANNOUNCEMENT / REPLY. Everyone else is QUERY.
+    const msgType = isTeamMember ? "ANNOUNCEMENT" : "QUERY";
 
     const newMsg: LobbyMessage = {
       id: `msg-${Date.now()}`,
@@ -130,12 +121,12 @@ export async function POST(req: Request) {
     };
 
     let autoReceipt: LobbyMessage | null = null;
-    if (!isTeamMember) {
+    if (!isTeamMember && msgType === "QUERY") {
       autoReceipt = {
         id: `bot-${Date.now() + 1}`,
         sender: "Nirmaan Organizers",
         type: "REPLY",
-        text: `Thanks @${nameTrimmed}! Your message has been logged to the lobby floor. Organizers will respond shortly! 🚀`,
+        text: `Thanks @${nameTrimmed}! Your question has been posted to the Lobby Q&A stream. Organizers will broadcast an answer shortly! ⚡`,
         time: currentTime,
       };
     }

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { FormEvent, MutableRefObject } from "react";
-import { ArrowUpRight, CloseIcon, DownArrows, SocialInstagram, SocialTwitter } from "@/components/icons";
+import { ArrowUpRight, CloseIcon, DownArrows, SocialInstagram, SocialLinkedin } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { menuItems } from "@/lib/data";
 import { Sparkles } from "lucide-react";
@@ -29,7 +29,7 @@ import { Footer } from "./footer";
 import { Marquee, SectionTitle } from "./helpers";
 import { AnimatePresence } from "framer-motion";
 import { Preloader } from "./preloader";
-import { PosterModal } from "./poster-modal";
+import { LobbyNotificationListener } from "./lobby-notification";
 
 const MARQUEE_ONE_ITEMS = ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"];
 const MARQUEE_TWO_ITEMS = ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"];
@@ -52,13 +52,12 @@ function Rail({ onBook }: { onBook: () => void }) {
             href={item.href}
             className={`${item.color} group clay-card relative flex flex-1 min-h-[42px] xl:min-h-[46px] w-full flex-col justify-between rounded-[12px] p-2 xl:p-2.5 transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper`}
           >
+
             <div className="flex items-center justify-between w-full">
               <span className="font-aeonik text-[10px] xl:text-[11px] font-normal opacity-75 leading-none">
                 {item.index}
               </span>
-              {item.external && (
-                <ArrowUpRight className="h-[12px] w-[12px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              )}
+              <ArrowUpRight className="h-[12px] w-[12px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </div>
             <span className="font-aeonik text-xs xl:text-[13px] font-bold leading-snug text-left truncate">
               {item.label}
@@ -106,13 +105,13 @@ function Rail({ onBook }: { onBook: () => void }) {
             <SocialInstagram className="w-3 h-3" />
           </a>
           <a
-            href="https://twitter.com"
+            href="https://www.linkedin.com/in/codingclub-bmsit/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Twitter / X"
+            aria-label="LinkedIn"
             className="flex h-7 w-7 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue hover:scale-110 transition-all shadow-sm"
           >
-            <SocialTwitter className="w-3 h-3" />
+            <SocialLinkedin className="w-3 h-3" />
           </a>
         </div>
       </div>
@@ -153,7 +152,10 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
             tabIndex={open ? 0 : -1}
             className={`${item.color} clay-card rounded-[12px] p-4 font-display text-lg uppercase flex items-center justify-between`}
           >
-            <span>{item.label}</span>
+            <span className="flex items-center gap-2">
+              <span>{item.label}</span>
+              <ArrowUpRight className="h-4 w-4 opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </span>
             <span className="font-aeonik text-xs opacity-75 font-normal">{item.index}</span>
           </a>
         ))}
@@ -170,13 +172,13 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
             <SocialInstagram className="w-4 h-4" />
           </a>
           <a
-            href="https://twitter.com"
+            href="https://www.linkedin.com/in/codingclub-bmsit/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Twitter / X"
+            aria-label="LinkedIn"
             className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue transition-all"
           >
-            <SocialTwitter className="w-4 h-4" />
+            <SocialLinkedin className="w-4 h-4" />
           </a>
         </div>
       </div>
@@ -372,8 +374,6 @@ export function SiteExperience() {
         {loading && <Preloader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
-      {!loading && <PosterModal />}
-
       <Rail onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       
@@ -427,6 +427,7 @@ export function SiteExperience() {
       </main>
       
       <ParticipationModal open={modalOpen} onClose={() => setModalOpen(false)} returnFocusRef={lastModalTriggerRef} />
+      <LobbyNotificationListener />
     </>
   );
 }
