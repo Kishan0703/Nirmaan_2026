@@ -89,16 +89,75 @@ export const liveMetrics = [
   ["Judges assigned", "0"]
 ];
 
-export const scheduleItems = [
-  { day: "Day 1 - Sept 25", time: "09:00", title: "Check-in opens", detail: "QR desk, badge pickup, team zones unlock", color: "bg-yellow" },
-  { day: "Day 1 - Sept 25", time: "10:30", title: "Opening brief", detail: "Rules, tracks, sponsor prompts, judging rubric", color: "bg-blue text-white" },
-  { day: "Day 1 - Sept 25", time: "13:00", title: "Team formation lock", detail: "Solo builders matched, team pages generated", color: "bg-green-light" },
-  { day: "Day 1 - Sept 25", time: "18:00", title: "Mentor circuit", detail: "Design, AI, pitch, hardware, and business rooms", color: "bg-orange" },
-  { day: "Day 1 - Sept 25", time: "23:30", title: "Checkpoint 01", detail: "Problem, prototype plan, risk notes, next actions", color: "bg-red text-white" },
-  { day: "Day 2 - Sept 26", time: "09:30", title: "Submission freeze", detail: "Repos, decks, demo links, and project gallery", color: "bg-purple" },
-  { day: "Day 2 - Sept 26", time: "12:00", title: "Judging round", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
-  { day: "Day 2 - Sept 26", time: "16:00", title: "Demo day", detail: "Final pitches, winners, certificates, archive", color: "bg-green text-white" }
+export type ScheduleItem = {
+  time: string;
+  title: string;
+  detail?: string;
+  color: string;
+};
+
+export type ScheduleGroup = {
+  date: string;
+  items: ScheduleItem[];
+};
+
+export const scheduleTimeline: ScheduleGroup[] = [
+  {
+    date: "Aug 12",
+    items: [
+      { time: "10:00 PM", title: "Event period begins", color: "bg-yellow" }
+    ]
+  },
+  {
+    date: "Aug 16",
+    items: [
+      { time: "03:30 AM", title: "Submission of PPT opens", color: "bg-green-light" }
+    ]
+  },
+  {
+    date: "Sep 6",
+    items: [
+      { time: "05:29 AM", title: "Submission of PPT closes", color: "bg-red text-white" }
+    ]
+  },
+  {
+    date: "Sep 12",
+    items: [
+      { time: "09:00 PM – 10:00 PM", title: "Declaration of Round-1 Results", color: "bg-purple text-white" }
+    ]
+  },
+  {
+    date: "Sep 13",
+    items: [
+      { time: "03:30 AM", title: "Registration for Second Round opens", color: "bg-blue text-white" }
+    ]
+  },
+  {
+    date: "Sep 21",
+    items: [
+      { time: "03:30 AM", title: "Second Round Registration closes", color: "bg-orange text-white" }
+    ]
+  },
+  {
+    date: "Sep 25",
+    items: [
+      { time: "09:30 AM – 11:00 AM", title: "On-Site Check-In", color: "bg-yellow" },
+      { time: "11:30 AM", title: "Grand Finale begins", color: "bg-green text-white" }
+    ]
+  },
+  {
+    date: "Sep 26",
+    items: [
+      { time: "12:30 PM", title: "Grand Finale ends", color: "bg-red text-white" },
+      { time: "12:30 PM – 01:30 PM", title: "Prize Distribution", color: "bg-yellow" },
+      { time: "04:00 PM", title: "Overall event period end", color: "bg-purple text-white" }
+    ]
+  }
 ];
+
+export const scheduleItems = scheduleTimeline.flatMap((group) =>
+  group.items.map((item) => ({ ...item, date: group.date }))
+);
 
 export const sponsorTiers = [
   { name: "Blueprint Partner", slots: "2 slots", perks: ["Named challenge track", "Final judging seat", "Talent shortlist"] },
@@ -150,11 +209,12 @@ export const values = [
 ];
 
 export const announcements = [
-  { id: 1, date: "Aug 12, 2026 (10 PM)", tag: "REGISTRATION", content: "Round 1 Online Registration is officially open!" },
-  { id: 2, date: "Aug 15, 2026 (10 PM)", tag: "PPT START", content: "Round 1 PPT Submission portal opens for all teams!" },
-  { id: 3, date: "Sept 05, 2026", tag: "PPT DEADLINE", content: "Round 1 PPT Submission window closes." },
-  { id: 4, date: "Sept 12, 2026", tag: "RESULTS", content: "Round 1 evaluation results announced. Top selected teams proceed to Finale." },
-  { id: 5, date: "Sept 25–26, 2026", tag: "FINALE", content: "Grand Finale: 24-hour on-site build-off at BMSIT campus Bangalore." }
+  { id: 1, date: "Aug 12, 2026 — 10:00 PM", tag: "START", content: "Event period officially begins nationwide!" },
+  { id: 2, date: "Aug 16, 2026 — 03:30 AM", tag: "PPT OPEN", content: "Submission of Round-1 PPT officially opens nationwide." },
+  { id: 3, date: "Sep 06, 2026 — 05:29 AM", tag: "PPT CLOSE", content: "Submission of Round-1 PPT closes. Evaluation phase begins." },
+  { id: 4, date: "Sep 12, 2026 — 9:00 PM–10:00 PM", tag: "RESULTS", content: "Declaration of Round-1 Results! Shortlisted teams proceed to Round 2." },
+  { id: 5, date: "Sep 13, 2026 — 03:30 AM", tag: "ROUND 2", content: "Registration for Second Round opens for shortlisted teams (Closes Sep 21 at 3:30 AM)." },
+  { id: 6, date: "Sep 25, 2026 — 11:30 AM", tag: "FINALE", content: "Grand Finale begins on-site at BMSIT campus Bangalore! Check-in starts 9:30 AM." }
 ];
 
 export const galleryImages = [

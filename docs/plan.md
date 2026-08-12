@@ -17,11 +17,14 @@
 ## Timeline
 | Milestone | Date | Details |
 |---|---|---|
-| Round 1 Registration Opens | 12 Aug 2026 (10:00 PM) | Online registration opens |
-| Round 1 PPT Submission Opens | 15 Aug 2026 (10:00 PM) | PPT submission portal unlocks |
-| Round 1 PPT Submission Deadline | 5 Sept 2026 | Last date for PPT submissions |
-| Round 1 Result Announcement | 12 Sept 2026 | Shortlisted teams for finale announced |
-| Grand Finale | 25–26 Sept 2026 | 24-hr on-site build-off, Bangalore |
+| Event Period Begins | 12 Aug 2026 (10:00 PM) | Event period officially begins |
+| Submission of PPT Opens | 16 Aug 2026 (3:30 AM) | Submission of PPT opens |
+| Submission of PPT Closes | 6 Sep 2026 (5:29 AM) | Submission of PPT closes |
+| Declaration of Round-1 Results | 12 Sep 2026 (9:00 PM–10:00 PM) | Declaration of Round-1 Results |
+| Registration for Second Round Opens | 13 Sep 2026 (3:30 AM) | Registration for Second Round opens |
+| Second Round Registration Closes | 21 Sep 2026 (3:30 AM) | Second Round Registration closes |
+| On-Site Check-In & Grand Finale Begins | 25 Sep 2026 (9:30 AM–11:00 AM Check-In, 11:30 AM Finale) | On-Site Check-In & Grand Finale begins |
+| Grand Finale Ends & Prize Distribution | 26 Sep 2026 (12:30 PM Finale End, 12:30–1:30 PM Prizes, 4:00 PM Event End) | Grand Finale ends & Prize Distribution |
 
 ## Tracks
 1. **Hardware-Based Problem Statement** — robotics, IoT, hardware innovation; physical/device-based solutions; prototyping, sensing, automation
@@ -49,10 +52,13 @@
 - **Grand Finale dates:** 25–26 Sept 2026
 - **Duration:** 24 hours continuous
 - **Team size:** 2–4 members
-- **Registration opens:** 12 Aug 2026 (10:00 PM)
-- **PPT Submission starts:** 15 Aug 2026 (10:00 PM)
-- **PPT Submission deadline:** 5 Sept 2026
-- **Results announced:** 12 Sept 2026
+- **Event period begins:** 12 Aug 2026 (10:00 PM)
+- **Submission of PPT opens:** 16 Aug 2026 (3:30 AM)
+- **Submission of PPT closes:** 6 Sep 2026 (5:29 AM)
+- **Declaration of Round-1 Results:** 12 Sep 2026 (9:00 PM–10:00 PM)
+- **Registration for Second Round:** 13 Sep 2026 (3:30 AM) – 21 Sep 2026 (3:30 AM)
+- **Grand Finale begins:** 25 Sep 2026 (11:30 AM, Check-In 9:30 AM–11:00 AM)
+- **Grand Finale ends:** 26 Sep 2026 (12:30 PM, Prizes 12:30–1:30 PM, Event End 4:00 PM)
 
 ---
 *All dates tentative, subject to confirmation closer to event.*

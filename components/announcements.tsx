@@ -12,19 +12,23 @@ export function Announcements() {
         
         <div className="grid gap-gap lg:grid-cols-5 items-stretch">
           {/* Left Side: Bulletins (3 columns wide on large screen) */}
-          <div className="lg:col-span-3 flex flex-col gap-4">
+          <div className="lg:col-span-3 flex flex-col gap-3">
             {announcements.map((item) => (
               <div 
                 key={item.id} 
-                className="clay-card rounded-[20px] bg-white/60 p-5 border border-white/40 flex flex-col md:flex-row md:items-center justify-between gap-3 flex-1"
+                className="clay-card rounded-[18px] bg-white/70 p-3.5 sm:p-4 border border-white/50 flex flex-col sm:grid sm:grid-cols-[85px_210px_1fr] items-start sm:items-center gap-2 sm:gap-4 shadow-sm hover:translate-x-1 transition-transform"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-[9px] font-display uppercase bg-blue text-white px-2.5 py-1 rounded-[8px] font-black tracking-wide">
+                <div className="flex items-center w-full sm:w-auto">
+                  <span className="text-[10px] font-display uppercase bg-blue text-white px-2.5 py-1 rounded-[8px] font-black tracking-wider text-center min-w-[75px] shadow-xs">
                     {item.tag}
                   </span>
-                  <span className="text-xs text-gray-500 font-bold">{item.date}</span>
                 </div>
-                <p className="text-sm font-bold text-ink leading-relaxed flex-1 md:px-4">{item.content}</p>
+                <span className="text-xs text-ink/70 font-display font-bold uppercase tracking-tight whitespace-nowrap">
+                  {item.date}
+                </span>
+                <p className="text-xs sm:text-sm font-bold text-ink leading-snug">
+                  {item.content}
+                </p>
               </div>
             ))}
           </div>
