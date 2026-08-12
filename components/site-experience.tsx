@@ -384,7 +384,7 @@ export function SiteExperience() {
           {/* 01. Overview & Announcements */}
           <Announcements />
           
-          {/* 02. Problem Statements & Tracks */}
+          {/* 02. Domain Tracks */}
           <Tracks onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
           
           {/* Prize Pool Breakdown */}

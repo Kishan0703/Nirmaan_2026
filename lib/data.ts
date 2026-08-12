@@ -16,12 +16,55 @@ type EventFlowCard = {
 
 export type TrackType = "software" | "hardware";
 
-type TrackCard = {
+export type TrackCard = {
   title: string;
   prompt: string;
+  note?: string;
   color: string;
-  type: TrackType;
+  badge?: string;
 };
+
+export const trackCards: TrackCard[] = [
+  {
+    title: "1. Cyber-Physical Security & Defense",
+    prompt: "Explore innovative solutions that protect physical systems, devices, infrastructure, and digital environments from threats, misuse, tampering, and disruption. The track focuses on strengthening security, resilience, trust, and safety across the physical and digital world.",
+    color: "bg-purple",
+    badge: "SECURITY & DEFENSE",
+  },
+  {
+    title: "2. Smart Mobility & Aerospace",
+    prompt: "Reimagine how people, vehicles, machines, and aerial systems move and interact. This track focuses on making transportation and aerospace systems safer, smarter, more efficient, connected, and sustainable, while addressing real-world mobility challenges.",
+    note: "Note: Drone-based projects must comply with applicable DGCA regulations, safety requirements, and permitted drone size/weight categories.",
+    color: "bg-blue",
+    badge: "MOBILITY & AERO",
+  },
+  {
+    title: "3. HealthTech & Bio-Wearables",
+    prompt: "Explore technology-driven solutions that improve healthcare, personal well-being, accessibility, and quality of life. The track covers challenges involving monitoring, assistance, prevention, rehabilitation, and personalized care.",
+    note: "Note: Health-related projects must comply with applicable healthcare, safety, ethical, privacy, and regulatory requirements.",
+    color: "bg-red",
+    badge: "HEALTH & BIO",
+  },
+  {
+    title: "4. Deep Tech & Edge AI",
+    prompt: "Focus on applying advanced technologies and intelligent computing to solve complex real-world problems. The track encourages innovation in areas such as automation, robotics, intelligent machines, real-time systems, and technologies that can operate effectively with limited dependence on the cloud.",
+    color: "bg-yellow",
+    badge: "DEEP TECH & AI",
+  },
+  {
+    title: "5. AgriTech",
+    prompt: "Explore innovative technologies that address challenges across modern farming and agriculture. The track focuses on improving productivity, efficiency, resource utilization, monitoring, automation, and decision-making throughout the agricultural ecosystem.",
+    color: "bg-green",
+    badge: "AGRICULTURE TECH",
+  },
+  {
+    title: "6. Open Innovation",
+    prompt: "Hardware-aligned software solutions that address meaningful real-world challenges, bridging software innovation with hardware-driven and physical-world applications. Solutions may span AI, applications, platforms, data-driven systems, and emerging technologies, with a focus on relevant Sustainable Development Goals (SDGs), scalability, and tangible real-world impact.",
+    note: "Note: Only 5 teams will be selected for the Open Innovation track. Competition is high, so make your idea stand out through innovation, feasibility, and impact. All the best!",
+    color: "bg-orange",
+    badge: "HIGH COMPETITION · TOP 5 SELECTION",
+  },
+];
 
 type FaqItem = {
   question: string;
@@ -30,7 +73,7 @@ type FaqItem = {
 
 export const menuItems: MenuItem[] = [
   { index: "01", label: "Overview", href: "#overview", color: "bg-blue text-white" },
-  { index: "02", label: "Problem Statements", href: "#tracks", color: "bg-yellow text-ink" },
+  { index: "02", label: "Domain Tracks", href: "#tracks", color: "bg-yellow text-ink" },
   { index: "03", label: "Timeline", href: "#schedule", color: "bg-orange text-white" },
   { index: "04", label: "Bug Game", href: "#game", color: "bg-red text-white", external: true },
   { index: "05", label: "Location", href: "#location", color: "bg-green text-ink" },
@@ -173,17 +216,7 @@ export const projectSubmissions = [
   { team: "Signal Forge", track: "Hardware Innovation", status: "Prototype live", score: "84" }
 ];
 
-export const trackCards: TrackCard[] = [
-  // ── SOFTWARE TRACKS ──
-  { title: "AI & Intelligent Systems", prompt: "Generative AI, LLM agentic workflows, predictive engines, and intelligent web applications", color: "bg-blue", type: "software" },
-  { title: "Web & App Innovation", prompt: "High-performance fullstack web apps, developer tools, FinTech, and cloud platforms", color: "bg-purple", type: "software" },
-  { title: "Cyber Security & Open Tech", prompt: "Threat telemetry dashboards, secure network protocols, civic software, and open innovation", color: "bg-yellow", type: "software" },
-  
-  // ── HARDWARE TRACKS ──
-  { title: "Embedded Systems & IoT", prompt: "Microcontroller logic (ESP32/STM32), wireless sensor nodes, edge telemetry, and smart IoT", color: "bg-green", type: "hardware" },
-  { title: "Robotics & Automation", prompt: "Autonomous robotic rigs, motor actuation setups, ROS control loops, and physical mechatronics", color: "bg-red", type: "hardware" },
-  { title: "Hardware Prototyping & Health", prompt: "Biometric sensor hardware, wearable health devices, CAD enclosures, and circuit prototypes", color: "bg-orange", type: "hardware" }
-];
+
 
 export const values = [
   {
