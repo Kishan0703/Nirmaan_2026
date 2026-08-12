@@ -41,55 +41,52 @@ export function ScheduleBoard() {
         </div>
       </motion.div>
 
-      {/* Right Schedule Items List - Responsive Grid (Row & Column Layout) */}
-      <div className="rounded-brand bg-paper p-4 sm:p-6 clay-card overflow-hidden max-h-[680px] sm:max-h-[760px] overflow-y-auto no-scrollbar flex flex-col justify-between">
+      {/* Right Schedule Items List - 2 Column Small Box Grid (Laptop + Mobile) */}
+      <div className="rounded-brand bg-paper p-3 sm:p-6 clay-card overflow-hidden max-h-[680px] sm:max-h-[760px] overflow-y-auto no-scrollbar flex flex-col justify-between">
         <div>
           {/* Header Label */}
-          <div className="flex items-center justify-between px-1 mb-5 border-b border-ink/10 pb-3">
+          <div className="flex items-center justify-between px-1 mb-4 border-b border-ink/10 pb-2.5">
             <span className="font-display text-[10px] sm:text-xs uppercase tracking-widest font-black text-ink/70">
               NIRMAAN 2026 // EVENT CALENDAR
             </span>
-            <span className="font-display text-[10px] sm:text-xs uppercase font-black text-ink bg-yellow px-3.5 py-1 rounded-full shadow-xs">
+            <span className="font-display text-[10px] sm:text-xs uppercase font-black text-ink bg-yellow px-3 py-1 rounded-full shadow-xs">
               GRID TIMELINE 📅
             </span>
           </div>
 
-          {/* Schedule Timeline Grouped by Date in Rows and Columns */}
-          <div className="space-y-6">
+          {/* Schedule Timeline Grouped by Date - 2 Column Small Box Grid Everywhere */}
+          <div className="space-y-5">
             {scheduleTimeline.map((group) => (
-              <div key={group.date} className="flex flex-col gap-3">
+              <div key={group.date} className="flex flex-col gap-2.5">
                 {/* Date Header Badge */}
                 <div className="flex items-center gap-2">
-                  <span className="rounded-[10px] bg-ink text-paper px-3.5 py-1 font-display text-xs sm:text-sm uppercase font-black tracking-wider clay-card shadow-sm">
+                  <span className="rounded-[10px] bg-ink text-paper px-3 py-0.5 font-display text-[11px] sm:text-xs uppercase font-black tracking-wider clay-card shadow-sm">
                     🗓 {group.date}
                   </span>
                   <div className="h-[2px] flex-1 bg-ink/15 rounded-full" />
                 </div>
 
-                {/* Event Cards Grid (2 Columns on MD+ screens) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                {/* Event Cards Grid - 2 Columns on Mobile & Laptop */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {group.items.map((item) => (
                     <article
                       key={`${group.date}-${item.time}-${item.title}`}
-                      className="schedule-row flex flex-col justify-between gap-3 rounded-[18px] bg-white/80 p-4 shadow-sm hover:scale-[1.02] transition-transform border border-white/60 overflow-hidden clay-card"
+                      className="schedule-row flex flex-col justify-between gap-2 rounded-[14px] sm:rounded-[16px] bg-white/85 p-2.5 sm:p-3.5 shadow-sm hover:scale-[1.02] transition-transform border border-white/60 overflow-hidden clay-card"
                     >
                       {/* Time Badge Box */}
-                      <div className={`flex items-center justify-between px-3.5 py-2.5 rounded-[12px] ${item.color} clay-card shadow-sm`}>
-                        <span className="font-display text-xs sm:text-sm uppercase font-black text-ink tracking-tight truncate">
+                      <div className={`flex items-center justify-center px-2 py-1.5 rounded-[10px] ${item.color} clay-card shadow-xs text-center`}>
+                        <span className="font-display text-[10px] sm:text-xs uppercase font-black text-ink tracking-tight truncate">
                           {item.time}
-                        </span>
-                        <span className="font-display text-[9px] uppercase font-black text-ink/70 tracking-wider shrink-0">
-                          {group.date}
                         </span>
                       </div>
 
                       {/* Title & Detail */}
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-display text-xs sm:text-sm uppercase leading-snug text-ink font-black break-words">
+                      <div className="min-w-0 flex-1 flex flex-col justify-center">
+                        <h3 className="font-display text-[11px] sm:text-xs uppercase leading-snug text-ink font-black break-words">
                           {item.title}
                         </h3>
                         {item.detail && (
-                          <p className="mt-1 text-[11px] text-gray-800 font-bold leading-normal break-words">
+                          <p className="mt-0.5 text-[9px] sm:text-[10px] text-gray-700 font-bold leading-tight break-words">
                             {item.detail}
                           </p>
                         )}
