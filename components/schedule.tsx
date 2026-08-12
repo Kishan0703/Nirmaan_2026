@@ -23,8 +23,8 @@ export function ScheduleBoard() {
           </p>
         </div>
 
-        {/* 3D Metallic Trophy Cup (Enlarged) */}
-        <div className="my-2 sm:my-3 relative h-[280px] sm:h-[340px] lg:h-[380px] w-full flex items-center justify-center overflow-hidden">
+        {/* 3D Metallic Trophy Cup */}
+        <div className="my-2 sm:my-3 relative h-[260px] sm:h-[300px] lg:h-[320px] w-full flex items-center justify-center overflow-hidden">
           <Trophy3D />
         </div>
 
