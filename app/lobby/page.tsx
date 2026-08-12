@@ -136,28 +136,14 @@ export default function LobbyPage() {
           {/* Header Bar */}
           <div className="bg-red text-white p-4 sm:p-5 border-b-2 border-ink/10 flex items-center justify-between z-20 shrink-0 shadow-md">
             <div className="flex items-center gap-3">
-              <div className="relative h-11 w-11 sm:h-12 sm:w-12 rounded-full overflow-hidden border-2 border-white/40 bg-black flex items-center justify-center p-0.5 shadow-md shrink-0">
-                <Image
-                  src="/assets/images/codingclub-logo.png"
-                  alt="Nirmaan Community Logo"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <h1 className="font-display text-base sm:text-xl uppercase font-black tracking-wide leading-none text-white">
-                    Nirmaan Community Lobby
-                  </h1>
-                  <ShieldCheck size={18} className="text-yellow shrink-0" />
-                </div>
-              </div>
+              <h1 className="font-display text-xl sm:text-3xl uppercase font-black tracking-tight leading-none text-white">
+                NIRMAAN <span className="text-yellow">Community Lobby</span>
+              </h1>
             </div>
 
-            <div className="hidden sm:flex items-center gap-2">
-              <span className="bg-yellow text-ink font-display text-[10px] uppercase font-black px-3 py-1 rounded-full shadow-xs">
-                OFFICIAL
+            <div className="flex items-center gap-2">
+              <span className="bg-white/20 text-white border border-white/30 font-display text-[10px] sm:text-xs uppercase font-black px-3 py-1 rounded-full shadow-xs">
+                OFFICIAL FEED
               </span>
             </div>
           </div>
