@@ -146,54 +146,18 @@ export type ScheduleGroup = {
 
 export const scheduleTimeline: ScheduleGroup[] = [
   {
-    date: "Aug 12",
-    items: [
-      { time: "10:00 PM", title: "Event period begins", color: "bg-yellow" }
-    ]
-  },
-  {
-    date: "Aug 16",
-    items: [
-      { time: "03:30 AM", title: "Submission of PPT opens", color: "bg-green-light" }
-    ]
-  },
-  {
-    date: "Sep 6",
-    items: [
-      { time: "05:29 AM", title: "Submission of PPT closes", color: "bg-red text-white" }
-    ]
-  },
-  {
-    date: "Sep 12",
-    items: [
-      { time: "09:00 PM – 10:00 PM", title: "Declaration of Round-1 Results", color: "bg-purple text-white" }
-    ]
-  },
-  {
-    date: "Sep 13",
-    items: [
-      { time: "03:30 AM", title: "Registration for Second Round opens", color: "bg-blue text-white" }
-    ]
-  },
-  {
-    date: "Sep 21",
-    items: [
-      { time: "03:30 AM", title: "Second Round Registration closes", color: "bg-orange text-white" }
-    ]
-  },
-  {
     date: "Sep 25",
     items: [
-      { time: "09:30 AM – 11:00 AM", title: "On-Site Check-In", color: "bg-yellow" },
-      { time: "11:30 AM", title: "Grand Finale begins", color: "bg-green text-white" }
+      { time: "09:30 AM – 10:30 AM", title: "On-Site Check-In", detail: "Badge collection, desk assignment & kit allocation", color: "bg-yellow" },
+      { time: "11:30 AM", title: "Grand Finale begins", detail: "24-hour hackathon build sprint officially launched", color: "bg-green text-white" }
     ]
   },
   {
     date: "Sep 26",
     items: [
-      { time: "12:30 PM", title: "Grand Finale ends", color: "bg-red text-white" },
-      { time: "12:30 PM – 01:30 PM", title: "Prize Distribution", color: "bg-yellow" },
-      { time: "04:00 PM", title: "Overall event period end", color: "bg-purple text-white" }
+      { time: "12:30 PM", title: "Grand Finale ends", detail: "Hacking & project submissions freeze", color: "bg-red text-white" },
+      { time: "12:30 PM – 01:30 PM", title: "Prize Distribution", detail: "Judge evaluation scoring & award ceremony", color: "bg-yellow" },
+      { time: "04:00 PM", title: "Overall event period end", detail: "Community wrap-up & departure", color: "bg-purple text-white" }
     ]
   }
 ];
