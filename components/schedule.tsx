@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { scheduleItems } from "@/lib/data";
+import { scheduleTimeline } from "@/lib/data";
 import { Trophy3D } from "./trophy-3d";
 
 export function ScheduleBoard() {
@@ -42,83 +42,61 @@ export function ScheduleBoard() {
       </motion.div>
 
       {/* Right Schedule Items List */}
-      <div className="rounded-brand bg-paper p-3 sm:p-4 clay-card overflow-hidden">
-        {/* Mobile Header Label */}
-        <div className="sm:hidden flex items-center justify-between px-1 mb-3">
-          <span className="font-display text-[10px] uppercase tracking-widest font-black text-ink/60">
+      <div className="rounded-brand bg-paper p-3 sm:p-5 clay-card overflow-hidden max-h-[640px] sm:max-h-[720px] overflow-y-auto no-scrollbar">
+        {/* Header Label */}
+        <div className="flex items-center justify-between px-1 mb-4">
+          <span className="font-display text-[10px] sm:text-xs uppercase tracking-widest font-black text-ink/70">
             NIRMAAN 2026 // EVENT CALENDAR
           </span>
-          <span className="font-display text-[10px] uppercase font-black text-ink bg-yellow px-2.5 py-0.5 rounded-full shadow-xs">
-            24H TIMELINE 📅
+          <span className="font-display text-[10px] sm:text-xs uppercase font-black text-ink bg-yellow px-3 py-1 rounded-full shadow-xs">
+            FULL TIMELINE 📅
           </span>
         </div>
 
-        {/* ── MOBILE ONLY: Calendar Flip Card Layout ── */}
-        <div className="sm:hidden space-y-3">
-          {scheduleItems.map((item) => (
-            <article
-              key={`mobile-${item.time}-${item.title}`}
-              className="relative rounded-[20px] bg-white border-2 border-ink/15 shadow-md overflow-hidden group hover:shadow-lg transition-shadow"
-            >
-              {/* Calendar Binder Ring Pins (Top holes) */}
-              <div className="absolute top-2 left-0 right-0 flex justify-between px-6 z-20 pointer-events-none">
-                <span className="h-2 w-2 rounded-full bg-black/20 border border-black/30 shadow-inner" />
-                <span className="h-2 w-2 rounded-full bg-black/20 border border-black/30 shadow-inner" />
+        {/* Schedule Timeline Grouped by Date */}
+        <div className="grid gap-5">
+          {scheduleTimeline.map((group) => (
+            <div key={group.date} className="flex flex-col gap-2.5">
+              {/* Date Header Badge */}
+              <div className="flex items-center gap-2 pt-1">
+                <span className="rounded-[10px] bg-ink text-paper px-3 py-1 font-display text-xs sm:text-sm uppercase font-black tracking-wider clay-card shadow-sm">
+                  🗓 {group.date}
+                </span>
+                <div className="h-[2px] flex-1 bg-ink/15 rounded-full" />
               </div>
 
-              {/* Top Header Banner (Calendar Month / Time Banner) */}
-              <div className={`flex items-center justify-between px-4 pt-3.5 pb-2.5 ${item.color} border-b border-black/10 shadow-xs relative z-10`}>
-                <span className="font-display text-sm uppercase font-black tracking-wider leading-none">
-                  {item.time}
-                </span>
-                <span className="font-display text-[9px] uppercase font-black tracking-widest opacity-90">
-                  {item.day}
-                </span>
-              </div>
+              {/* Event Cards under this date */}
+              <div className="grid gap-2.5">
+                {group.items.map((item) => (
+                  <article
+                    key={`${group.date}-${item.time}-${item.title}`}
+                    className="schedule-row flex flex-col sm:grid sm:grid-cols-[185px_1fr] md:grid-cols-[200px_1fr] gap-2.5 sm:gap-4 rounded-[18px] bg-white/75 p-3 sm:p-4 shadow-sm hover:translate-x-1 transition-transform border border-white/50 overflow-hidden"
+                  >
+                    {/* Time Badge Box */}
+                    <div className={`flex sm:grid items-center justify-between sm:justify-center px-3.5 py-2.5 sm:px-4 sm:py-3 min-h-0 sm:min-h-[54px] rounded-[12px] ${item.color} clay-card shadow-sm text-center`}>
+                      <span className="font-display text-xs sm:text-sm leading-none uppercase font-black text-ink whitespace-nowrap tracking-tight">
+                        {item.time}
+                      </span>
+                      <span className="sm:hidden font-display text-[9px] uppercase font-black text-ink/70 tracking-wider">
+                        {group.date}
+                      </span>
+                    </div>
 
-              {/* Calendar Card Body */}
-              <div className="p-4 bg-white text-center flex flex-col items-center justify-center">
-                <h3 className="font-display text-sm sm:text-base uppercase text-ink font-black leading-tight tracking-tight">
-                  {item.title}
-                </h3>
-                <p className="mt-1 text-xs text-gray-700 font-bold leading-snug">
-                  {item.detail}
-                </p>
+                    {/* Title & Description */}
+                    <div className="self-center min-w-0">
+                      <h3 className="font-display text-sm sm:text-base uppercase leading-snug text-ink font-black break-words">
+                        {item.title}
+                      </h3>
+                      {item.detail && (
+                        <p className="mt-0.5 sm:mt-1 text-xs text-gray-800 font-bold leading-normal break-words">
+                          {item.detail}
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                ))}
               </div>
-            </article>
-          ))}
-        </div>
-
-        {/* ── DESKTOP/LAPTOP ONLY: Horizontal Grid Row Layout (Unchanged) ── */}
-        <div className="hidden sm:grid gap-3">
-          {scheduleItems.map((item) => (
-            <article
-              key={`desktop-${item.time}-${item.title}`}
-              className="schedule-row flex sm:grid sm:grid-cols-[100px_1fr] md:grid-cols-[100px_1fr_130px] gap-2.5 sm:gap-4 rounded-[18px] bg-white/70 p-3 sm:p-4 shadow-sm hover:translate-x-1 transition-transform border border-white/50 overflow-hidden"
-            >
-              {/* Time Badge Box */}
-              <div className={`flex sm:grid items-center justify-between sm:justify-center px-3.5 py-2 sm:p-0 min-h-0 sm:min-h-[66px] rounded-[12px] ${item.color} clay-card shadow-sm`}>
-                <span className="font-display text-xs sm:text-[20px] lg:text-[22px] leading-none uppercase font-black text-ink">
-                  {item.time}
-                </span>
-                <span className="sm:hidden font-display text-[9px] uppercase font-black text-ink/70 tracking-wider">
-                  {item.day}
-                </span>
-              </div>
-
-              {/* Title & Description */}
-              <div className="self-center min-w-0">
-                <div className="hidden sm:inline-block mb-1 px-2 py-0.5 rounded-[6px] bg-ink/10 font-display text-[10px] uppercase font-black text-ink/70">
-                  {item.day}
-                </div>
-                <h3 className="font-display text-sm sm:text-[18px] uppercase leading-snug text-ink font-black break-words">
-                  {item.title}
-                </h3>
-                <p className="mt-0.5 sm:mt-1 text-xs text-gray-800 font-bold leading-normal break-words">
-                  {item.detail}
-                </p>
-              </div>
-            </article>
+            </div>
           ))}
         </div>
       </div>
