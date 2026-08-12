@@ -106,17 +106,19 @@ export async function saveNeonLeaderboardScore(entry: {
     const cleanName = String(entry.name).trim().slice(0, 20) || "Anonymous Bug Squasher";
     const dateStr = new Date().toISOString().split("T")[0];
 
-    // Check existing score
+    // Check existing score by id or case-insensitive name
     const existing = await sql`
-      SELECT id, score FROM leaderboard WHERE id = ${entry.id} OR LOWER(name) = LOWER(${cleanName}) LIMIT 1;
+      SELECT id, score, name FROM leaderboard WHERE id = ${entry.id} OR LOWER(name) = LOWER(${cleanName}) LIMIT 1;
     `;
 
     if (existing && existing.length > 0) {
       const existingRecord = existing[0];
-      if (entry.score > Number(existingRecord.score)) {
+      const existingScore = Number(existingRecord.score);
+      // Update if new score is higher or equal to refresh timestamp/name
+      if (entry.score >= existingScore) {
         await sql`
           UPDATE leaderboard
-          SET score = ${entry.score}, date = ${dateStr}, name = ${cleanName}
+          SET score = ${entry.score}, date = ${dateStr}, name = ${cleanName}, id = ${entry.id}
           WHERE id = ${existingRecord.id};
         `;
       }
@@ -128,7 +130,9 @@ export async function saveNeonLeaderboardScore(entry: {
     }
 
     const leaderboard = (await getNeonLeaderboard()) || [];
-    const userRankIndex = leaderboard.findIndex((e) => e.id === entry.id);
+    const userRankIndex = leaderboard.findIndex(
+      (e) => e.id === entry.id || e.name.toLowerCase() === cleanName.toLowerCase()
+    );
     const userRank = userRankIndex >= 0 ? userRankIndex + 1 : null;
 
     return {
@@ -152,7 +156,7 @@ export async function getNeonMessages(): Promise<LobbyMessage[] | null> {
     const rows = await sql`
       SELECT id, sender, type, text, time
       FROM lobby_messages
-      ORDER BY created_at ASC
+      ORDER BY created_at ASC, id ASC
       LIMIT 200;
     `;
 

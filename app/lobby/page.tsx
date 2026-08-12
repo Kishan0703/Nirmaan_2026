@@ -16,6 +16,8 @@ type ChatMessage = {
   time: string;
 };
 
+const PLAYER_NAME_KEY = "nirmaan_player_name";
+
 export default function LobbyPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -31,7 +33,22 @@ export default function LobbyPage() {
   const [sending, setSending] = useState(false);
   const chatScrollRef = useRef<HTMLDivElement>(null);
 
-  // Fetch messages from hidden server database
+  // Sync user profile name with localStorage on mount
+  useEffect(() => {
+    const savedName = localStorage.getItem(PLAYER_NAME_KEY) || "";
+    if (savedName) {
+      setUserName(savedName);
+    }
+  }, []);
+
+  const handleNameChange = (val: string) => {
+    setUserName(val);
+    if (val.trim()) {
+      localStorage.setItem(PLAYER_NAME_KEY, val.trim());
+    }
+  };
+
+  // Fetch messages from live server database
   const fetchMessages = async () => {
     try {
       const res = await fetch("/api/messages");
@@ -63,7 +80,11 @@ export default function LobbyPage() {
 
     setSending(true);
     const textToSend = inputText.trim();
-    const senderToSend = userName.trim() || "Builder";
+    const senderToSend = (userName.trim() || localStorage.getItem(PLAYER_NAME_KEY) || "Builder").trim();
+
+    if (senderToSend) {
+      localStorage.setItem(PLAYER_NAME_KEY, senderToSend);
+    }
 
     setInputText("");
 
@@ -109,7 +130,7 @@ export default function LobbyPage() {
           </Link>
         </div>
 
-        {/* ── Main Chat Box (Hidden Server DB Connected) ── */}
+        {/* ── Main Chat Box (Neon DB Connected) ── */}
         <div className="clay-card rounded-brand border-2 border-white/60 bg-paper shadow-2xl overflow-hidden flex flex-col h-[640px] sm:h-[700px] relative">
           
           {/* Header Bar */}
@@ -133,7 +154,7 @@ export default function LobbyPage() {
                 </div>
                 <p className="text-[10px] sm:text-xs font-bold text-white/90 mt-1 flex items-center gap-1">
                   <span className="h-2.5 w-2.5 rounded-full bg-yellow animate-pulse inline-block" />
-                  Live Sync Active
+                  Live Neon DB Sync Active
                 </p>
               </div>
             </div>
@@ -156,6 +177,7 @@ export default function LobbyPage() {
           >
             {messages.map((msg) => {
               const isReply = msg.type === "REPLY";
+              const isSelf = userName.trim().toLowerCase() === msg.sender.trim().toLowerCase();
 
               return (
                 <motion.div
@@ -163,19 +185,21 @@ export default function LobbyPage() {
                   initial={{ opacity: 0, y: 10, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.2 }}
-                  className="flex flex-col items-start w-full"
+                  className={`flex flex-col w-full ${isSelf && !isReply ? "items-end" : "items-start"}`}
                 >
                   <div
                     className={`max-w-[88%] sm:max-w-[78%] rounded-[20px] p-4 shadow-md relative text-xs sm:text-sm border-2 ${
                       isReply
                         ? "bg-yellow text-ink rounded-tl-none border-ink/20"
-                        : "bg-blue text-white rounded-tr-none border-white/30"
+                        : isSelf
+                        ? "bg-blue text-white rounded-tr-none border-white/30"
+                        : "bg-ink text-white rounded-tl-none border-white/20"
                     }`}
                   >
                     {/* Header */}
                     <div className="flex items-center justify-between gap-4 mb-1.5">
                       <span className="font-display text-xs uppercase font-black tracking-wide">
-                        {msg.sender}
+                        {msg.sender} {isSelf && "(You)"}
                       </span>
 
                       <span className="text-[9px] font-black opacity-75">
@@ -210,7 +234,7 @@ export default function LobbyPage() {
                 type="text"
                 placeholder="Your Name"
                 value={userName}
-                onChange={(e) => setUserName(e.target.value)}
+                onChange={(e) => handleNameChange(e.target.value)}
                 className="bg-transparent text-xs text-ink placeholder-gray-500 focus:outline-none w-28 sm:w-36 font-bold"
               />
             </div>
