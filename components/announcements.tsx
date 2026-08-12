@@ -38,7 +38,6 @@ export function Announcements() {
             <div className="w-full max-w-[320px] aspect-[9/16] rounded-[20px] overflow-hidden border-2 border-white/40 shadow-md bg-black">
               <video
                 src="/announcement.mp4"
-                controls
                 autoPlay
                 muted
                 loop
