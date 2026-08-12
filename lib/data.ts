@@ -232,7 +232,7 @@ export const faqs: FaqItem[] = [
   },
   {
     question: "What is the team size limit?",
-    answer: "Teams must consist of 2 to 4 members."
+    answer: "Teams must consist of 3 to 4 members."
   },
   {
     question: "What is the structure of the event?",

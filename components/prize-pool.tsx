@@ -104,7 +104,7 @@ const TRACK_SPECIAL_PRIZES = [
 
 const EXTRA_PERKS = [
   { icon: Gift, title: "Swag Kits for All Finalists", desc: "Custom stickers, t-shirts, and hacker badges for every finalist team." },
-  { icon: Pizza, title: "Free Meals & Midnight Snacks", desc: "Red Bull energy drinks, midnight pizza boxes, and coffee on tap for 24 hours." },
+  { icon: Pizza, title: "Free Meals & Midnight Snacks", desc: "Drinks, midnight snacks, and coffee on tap for 24 hours." },
   { icon: Zap, title: "Collaborator Bounties", desc: "Additional API & track bounties awarded by partner companies." },
 ];
 
