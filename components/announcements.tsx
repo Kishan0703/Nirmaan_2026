@@ -33,16 +33,16 @@ export function Announcements() {
             ))}
           </div>
           
-          {/* Right Side: Announcement Video Player (2 columns wide on large screen) */}
-          <div className="lg:col-span-2 flex justify-center">
-            <div className="w-full max-w-[320px] aspect-[9/16] rounded-[20px] overflow-hidden border-2 border-white/40 shadow-md bg-black">
+          {/* Right Side: Announcement Video Player (9:16 on phone, 16:9 on laptop) */}
+          <div className="lg:col-span-2 flex justify-center items-center">
+            <div className="w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[540px] aspect-[9/16] lg:aspect-[16/9] rounded-[20px] overflow-hidden border-2 border-white/40 shadow-xl bg-black relative flex items-center justify-center">
               <video
                 src="/announcement.mp4"
                 autoPlay
                 muted
                 loop
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain bg-black"
               />
             </div>
           </div>
