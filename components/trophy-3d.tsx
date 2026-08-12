@@ -11,14 +11,14 @@ export function Trophy3D() {
     if (!container) return;
 
     // Dimensions
-    const width = container.clientWidth || 380;
-    const height = container.clientHeight || 440;
+    const width = container.clientWidth || 320;
+    const height = container.clientHeight || 280;
 
     // Scene, Camera, Renderer
     const scene = new THREE.Scene();
 
-    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
-    camera.position.set(0, 0.1, 5.8);
+    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
+    camera.position.set(0, 0.05, 6.8);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
@@ -71,8 +71,8 @@ export function Trophy3D() {
 
     // ── Main Trophy Group ──
     const trophyGroup = new THREE.Group();
-    trophyGroup.scale.set(1.05, 1.05, 1.05);
-    trophyGroup.position.set(0, -0.1, 0);
+    trophyGroup.scale.set(0.82, 0.82, 0.82);
+    trophyGroup.position.set(0, -0.05, 0);
 
     // 1. Dark Marble Base
     const baseGeo = new THREE.BoxGeometry(1.2, 0.42, 1.2);
@@ -313,9 +313,11 @@ export function Trophy3D() {
       if (!container) return;
       const newW = container.clientWidth;
       const newH = container.clientHeight;
-      camera.aspect = newW / newH;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newW, newH);
+      if (newW > 0 && newH > 0) {
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      }
     };
 
     window.addEventListener("resize", handleResize);
@@ -335,7 +337,7 @@ export function Trophy3D() {
   return (
     <div
       ref={mountRef}
-      className="relative w-full h-[360px] sm:h-[420px] flex items-center justify-center pointer-events-none"
+      className="relative w-full h-full min-h-[200px] flex items-center justify-center pointer-events-none"
     />
   );
 }

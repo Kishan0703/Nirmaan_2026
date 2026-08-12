@@ -1,12 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { getNeonLeaderboard, saveNeonLeaderboardScore, LeaderboardEntry } from "./neon";
 
-export type LeaderboardEntry = {
-  id: string;
-  name: string;
-  score: number;
-  date: string;
-};
+export type { LeaderboardEntry };
 
 const DB_DIR = path.join(process.cwd(), "data");
 const DB_FILE = path.join(DB_DIR, "leaderboard.json");
@@ -26,7 +22,7 @@ function ensureDbFile(): void {
   }
 }
 
-export function getLeaderboard(): LeaderboardEntry[] {
+export function getFileLeaderboard(): LeaderboardEntry[] {
   try {
     ensureDbFile();
     if (fs.existsSync(DB_FILE)) {
@@ -42,13 +38,25 @@ export function getLeaderboard(): LeaderboardEntry[] {
   return initialSeed;
 }
 
-export function saveLeaderboardScore(entry: { id: string; name: string; score: number }): {
+export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
+  // Try Neon DB first if configured
+  if (process.env.DATABASE_URL) {
+    const neonData = await getNeonLeaderboard();
+    if (neonData) {
+      return neonData;
+    }
+  }
+  // Fallback to local file database
+  return getFileLeaderboard();
+}
+
+export function saveFileLeaderboardScore(entry: { id: string; name: string; score: number }): {
   leaderboard: LeaderboardEntry[];
   userRank: number | null;
 } {
   try {
     ensureDbFile();
-    let current = getLeaderboard();
+    let current = getFileLeaderboard();
     const cleanName = String(entry.name).trim().slice(0, 20) || "Anonymous Bug Squasher";
     const dateStr = new Date().toISOString().split("T")[0];
 
@@ -71,7 +79,6 @@ export function saveLeaderboardScore(entry: { id: string; name: string; score: n
       });
     }
 
-    // Sort descending and cap persistent records
     current = current.sort((a, b) => b.score - a.score).slice(0, 50);
 
     if (fs.existsSync(DB_DIR)) {
@@ -87,8 +94,23 @@ export function saveLeaderboardScore(entry: { id: string; name: string; score: n
   } catch (error) {
     console.error("Error writing to leaderboard database:", error);
     return {
-      leaderboard: getLeaderboard().slice(0, 10),
+      leaderboard: getFileLeaderboard().slice(0, 10),
       userRank: null,
     };
   }
+}
+
+export async function saveLeaderboardScore(entry: { id: string; name: string; score: number }): Promise<{
+  leaderboard: LeaderboardEntry[];
+  userRank: number | null;
+}> {
+  // Try Neon DB first if configured
+  if (process.env.DATABASE_URL) {
+    const neonRes = await saveNeonLeaderboardScore(entry);
+    if (neonRes) {
+      return neonRes;
+    }
+  }
+  // Fallback to file database
+  return saveFileLeaderboardScore(entry);
 }

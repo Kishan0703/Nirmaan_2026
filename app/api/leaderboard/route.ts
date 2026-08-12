@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { getLeaderboard, saveLeaderboardScore } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
-    const sorted = getLeaderboard().slice(0, 10);
+    const list = await getLeaderboard();
+    const sorted = list.slice(0, 10);
     return NextResponse.json({ leaderboard: sorted });
-  } catch {
+  } catch (err) {
+    console.error("Leaderboard GET error:", err);
     return NextResponse.json({ leaderboard: [] });
   }
 }
@@ -20,7 +24,7 @@ export async function POST(request: Request) {
     }
 
     const entryId = id || userId || `user_${Date.now()}`;
-    const result = saveLeaderboardScore({
+    const result = await saveLeaderboardScore({
       id: entryId,
       name,
       score,
@@ -31,7 +35,8 @@ export async function POST(request: Request) {
       leaderboard: result.leaderboard,
       userRank: result.userRank,
     });
-  } catch {
+  } catch (err) {
+    console.error("Leaderboard POST error:", err);
     return NextResponse.json({ error: "Failed to submit score" }, { status: 500 });
   }
 }

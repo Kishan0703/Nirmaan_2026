@@ -24,7 +24,7 @@ export function ScheduleBoard() {
         </div>
 
         {/* 3D Metallic Trophy Cup */}
-        <div className="my-3 sm:my-2 flex items-center justify-center h-[200px] sm:h-[260px] lg:h-[300px]">
+        <div className="my-2 sm:my-3 relative h-[220px] sm:h-[260px] lg:h-[280px] w-full flex items-center justify-center overflow-hidden">
           <Trophy3D />
         </div>
 

@@ -43,7 +43,7 @@ const DEPARTMENTS: Department[] = [
     members: [
       { name: "Anmol Narayan", role: "President (Coding Club)", tag: "President", initials: "AN", avatar: "https://drive.google.com/thumbnail?id=13sVKpdiAgg2vJ4Z5vZbLR-z3WwQx2KU_&sz=w500", linkedin: "https://www.linkedin.com/in/anmol-narayan-8133a532a", github: "https://github.com/anmolnarayan" },
       { name: "Dheeksha N", role: "Vice President (Coding Club)", tag: "Vice President", initials: "DN", avatar: "https://drive.google.com/thumbnail?id=10DKueLQJbU-9gpz-rwP7WCfSeCrW2lzF&sz=w500", linkedin: "https://www.linkedin.com/in/dheekshanaveen/", github: "https://github.com/dheekshanaveen" },
-      { name: "Kishan M", role: "Co-Lead & Operations", tag: "Strategy", initials: "KM", avatar: "/assets/images/team/kishan.jpg", linkedin: "https://www.linkedin.com/in/kishan-mn-898b67334", github: "https://github.com/Kishan0703" },
+      { name: "Kishan MN", role: "Co-Lead & Marketing Lead", tag: "Marketing Lead", initials: "KMN", avatar: "/assets/images/team/kishan.jpg", linkedin: "https://www.linkedin.com/in/kishan-mn-898b67334", github: "https://github.com/Kishan0703" },
       { name: "Shashikiran B S", role: "Core Tech Lead (Coding Club)", tag: "Core Tech", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG&sz=w500", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
       { name: "Ayush Y A", role: "Secretary (Coding Club)", tag: "Secretary", initials: "AY", avatar: "https://drive.google.com/thumbnail?id=18v4LdQri5D6UoP6wZjvRa33TS_bzgg36&sz=w500", linkedin: "https://www.linkedin.com/in/ayush-y-a-99018032a" },
       { name: "Saurabh Kumar", role: "Co-Chair (Alterino)", tag: "Co-Chair", initials: "SK", avatar: "https://drive.google.com/thumbnail?id=1XincBkx8sKuO5QbTtiP2aAKqmXXAWM5d&sz=w500", linkedin: "https://www.linkedin.com/in/saurabh-kumar-6358a433b" },
@@ -59,12 +59,6 @@ const DEPARTMENTS: Department[] = [
     textColor: "text-blue",
     description: "Engineering the digital platform, hackathon portals, and judge scoreboards.",
     members: [
-      { name: "Gaurav Nayak K", role: "Head - App Dev (Alterino)", tag: "Head (App Dev)", initials: "GN", avatar: "https://drive.google.com/thumbnail?id=1HsV2oYc3E37Y30zTdZRxtQfrQb08v4lV&sz=w500", description: "There’s a story behind every line of code. Wanna hear mine? Ping me.", linkedin: "https://www.linkedin.com/in/gauravnayakk", website: "https://gauravnayakk.netlify.app" },
-      { name: "Darshan A B", role: "Co-Head - App Dev (Alterino)", tag: "App Dev", initials: "DA", avatar: "https://drive.google.com/thumbnail?id=1iqTWyZ4gQfYWw55TBEfBs-FBuTAN8WzD&sz=w500", linkedin: "https://www.linkedin.com/in/darshan-ab-", github: "https://github.com/DARSHAN-AB" },
-      { name: "Aradhya Prakash", role: "Head of R&D (Alterino)", tag: "R&D Lead", initials: "AP", avatar: "https://drive.google.com/thumbnail?id=1ckU65cvFaX4yAxxSa2CKVtLPlyEWV2j7&sz=w500", linkedin: "https://www.linkedin.com/in/aradhya-prakash-454321236/", github: "https://github.com/aradhyap136" },
-      { name: "Shashikiran B S", role: "Technical Core (Coding Club)", tag: "Fullstack", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG&sz=w500", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
-      { name: "Arnav Paniya", role: "Technical Associate (Alterino)", tag: "VLSI & AI", initials: "AP", avatar: "/assets/images/team/arnav.jpg", description: "VLSI & AI Enthusiast | Freelancer", website: "https://arnavpaniya.netlify.app/", linkedin: "https://www.linkedin.com/in/arnav-paniya/", github: "https://github.com/arnavpaniya" },
-      { name: "Swapnil Biswas", role: "Technical Associate (Coding Club)", tag: "Fullstack & AI", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=10VGrCW4Mjl1a1tVf6vF3kMYRrPH9AJMk&sz=w500", description: "Full Stack developer and robotics enthusiast focused on creating scalable software and intelligent systems.", linkedin: "https://www.linkedin.com/in/swapnil-biswas-b33b35399/", github: "https://github.com/Swapnil-Biswas" },
       { name: "Ahmed Umar", role: "Technical Associate (Coding Club)", tag: "Fullstack", initials: "AU", avatar: "", linkedin: "https://www.linkedin.com/in/ahmed-umar-6b3053288", github: "https://github.com/U-m-4r" },
       { name: "A Mokshith", role: "Technical Associate (Coding Club)", tag: "Fullstack", initials: "AM", avatar: "https://drive.google.com/thumbnail?id=1Wpce0P1pHpTkBrUuPL5GqUhpoQrBZ950&sz=w500", linkedin: "https://www.linkedin.com/in/mokshith2c/", github: "https://github.com/Mokshith2c" },
     ],
@@ -125,6 +119,7 @@ const DEPARTMENTS: Department[] = [
     textColor: "text-green",
     description: "Driving campaign hype, social content, hacker stories, and live updates.",
     members: [
+      { name: "Kishan MN", role: "Marketing Lead & Co-Lead", tag: "Marketing Lead", initials: "KMN", avatar: "/assets/images/team/kishan.jpg", linkedin: "https://www.linkedin.com/in/kishan-mn-898b67334", github: "https://github.com/Kishan0703" },
       { name: "Lakshya Shukla", role: "Marketing Head (Alterino)", tag: "Marketing Head", initials: "LS", avatar: "https://drive.google.com/thumbnail?id=16zryD_q6NNLcZcr6Qq6a1EmilJ2daXiJ&sz=w500" },
       { name: "Sai Amrutha AS", role: "Marketing Associate (Coding Club)", tag: "Campaigns", initials: "SA", avatar: "https://drive.google.com/thumbnail?id=1wICOPf4tsrI3yE_JIxDzte3FoHbejSIn&sz=w500", linkedin: "https://www.linkedin.com/in/sai-amrutha-a-s-443671307/", github: "https://github.com/saiamruthaas-as" },
       { name: "Sneha Mudgal", role: "Marketing Associate (Coding Club)", tag: "Outreach", initials: "SM", avatar: "https://drive.google.com/thumbnail?id=1XuIV2l_cy-DWdLr9CBYGK8FDme0QfJDa&sz=w500", linkedin: "https://www.linkedin.com/in/sneha-mudgal0806/", github: "https://github.com/Sneham-06" },
