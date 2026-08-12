@@ -29,6 +29,7 @@ import { Footer } from "./footer";
 import { Marquee, SectionTitle } from "./helpers";
 import { AnimatePresence } from "framer-motion";
 import { Preloader } from "./preloader";
+import { PosterModal } from "./poster-modal";
 
 const MARQUEE_ONE_ITEMS = ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"];
 const MARQUEE_TWO_ITEMS = ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"];
@@ -370,6 +371,8 @@ export function SiteExperience() {
       <AnimatePresence>
         {loading && <Preloader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
+
+      <PosterModal />
 
       <Rail onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
