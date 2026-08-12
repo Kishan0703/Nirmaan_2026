@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { AlertTriangle, Info, ShieldAlert, Cpu, HeartPulse, Zap, Sprout, Sparkles } from "lucide-react";
 import { trackCards } from "@/lib/data";
 import { REGISTRATION_URL } from "@/lib/config";
@@ -7,6 +8,12 @@ import { REGISTRATION_URL } from "@/lib/config";
 const TRACK_ICONS = [ShieldAlert, Cpu, HeartPulse, Zap, Sprout, Sparkles];
 
 export function Tracks({ onBook }: { onBook?: () => void }) {
+  const [expandedTracks, setExpandedTracks] = useState<Record<number, boolean>>({});
+
+  const toggleTrack = (idx: number) => {
+    setExpandedTracks((prev) => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
   return (
     <section id="tracks" className="my-gap grid gap-gap" data-reveal>
       <div className="flex flex-col rounded-brand p-4 sm:p-box bg-paper clay-card">
@@ -38,48 +45,64 @@ export function Tracks({ onBook }: { onBook?: () => void }) {
         </div>
 
         {/* 6 Official Domain Tracks Grid */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {trackCards.map((track, idx) => {
             const TrackIcon = TRACK_ICONS[idx % TRACK_ICONS.length];
+            const isExpanded = !!expandedTracks[idx];
 
             return (
               <div
                 key={track.title}
-                className="rounded-[24px] p-5 sm:p-6 clay-card bg-paper shadow-md border-2 border-white/60 flex flex-col justify-between hover:scale-[1.02] transition-transform relative overflow-hidden"
+                className="rounded-[20px] sm:rounded-[24px] p-4 sm:p-6 clay-card bg-paper shadow-md border-2 border-white/60 flex flex-col justify-between hover:scale-[1.01] sm:hover:scale-[1.02] transition-transform relative overflow-hidden"
               >
                 <div>
-                  {/* Top Badge + Icon */}
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className={`px-3 py-1 rounded-full font-display text-[10px] uppercase font-black tracking-wider text-ink ${track.color} border border-ink/10 shadow-xs`}>
-                      {track.badge}
-                    </span>
-                    <div className="h-8 w-8 rounded-full bg-ink/10 flex items-center justify-center text-ink shrink-0">
-                      <TrackIcon size={16} />
+                  {/* Clickable Header on Mobile, Static Header on Desktop */}
+                  <button
+                    type="button"
+                    onClick={() => toggleTrack(idx)}
+                    className="w-full text-left focus:outline-none md:pointer-events-none cursor-pointer md:cursor-default"
+                  >
+                    {/* Top Badge + Icon + Toggle Arrow */}
+                    <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4">
+                      <span className={`px-3 py-1 rounded-full font-display text-[10px] uppercase font-black tracking-wider text-ink ${track.color} border border-ink/10 shadow-xs`}>
+                        {track.badge}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <div className="h-8 w-8 rounded-full bg-ink/10 flex items-center justify-center text-ink shrink-0">
+                          <TrackIcon size={16} />
+                        </div>
+                        {/* Mobile Expand Indicator */}
+                        <span className="md:hidden text-ink font-bold text-base px-2 py-0.5 rounded-full bg-ink/5">
+                          {isExpanded ? "−" : "+"}
+                        </span>
+                      </div>
                     </div>
+
+                    {/* Track Title */}
+                    <h3 className="font-display text-base sm:text-xl uppercase font-black text-ink leading-snug mb-1 sm:mb-2 flex items-center justify-between">
+                      <span>{track.title}</span>
+                    </h3>
+                  </button>
+
+                  {/* Description: Hidden by default on Mobile unless clicked, Always visible on MD+ */}
+                  <div className={`${isExpanded ? "block" : "hidden md:block"} mt-2 sm:mt-0 transition-all`}>
+                    <p className="text-xs sm:text-sm font-bold text-gray-800 leading-relaxed pt-2 md:pt-0">
+                      {track.prompt}
+                    </p>
+
+                    {/* Track Note (If applicable) */}
+                    {track.note && (
+                      <div className="mt-3 sm:mt-4 pt-3 border-t border-ink/10">
+                        <div className="rounded-[14px] bg-yellow/20 border-l-4 border-yellow p-3 flex items-start gap-2 shadow-xs">
+                          <Info size={16} className="text-ink shrink-0 mt-0.5" />
+                          <p className="text-[11px] sm:text-xs font-bold text-ink leading-snug">
+                            {track.note}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
-
-                  {/* Track Title */}
-                  <h3 className="font-display text-lg sm:text-xl uppercase font-black text-ink leading-snug mb-2">
-                    {track.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-xs sm:text-sm font-bold text-gray-800 leading-relaxed">
-                    {track.prompt}
-                  </p>
                 </div>
-
-                {/* Track Note (If applicable) */}
-                {track.note && (
-                  <div className="mt-4 pt-3 border-t border-ink/10">
-                    <div className="rounded-[14px] bg-yellow/20 border-l-4 border-yellow p-3 flex items-start gap-2 shadow-xs">
-                      <Info size={16} className="text-ink shrink-0 mt-0.5" />
-                      <p className="text-[11px] sm:text-xs font-bold text-ink leading-snug">
-                        {track.note}
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
             );
           })}

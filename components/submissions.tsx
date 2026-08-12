@@ -39,7 +39,7 @@ export function SubmissionBoard() {
       </div>
       
       {/* Right Side Image Card */}
-      <div className="relative min-h-[340px] sm:min-h-[520px] overflow-hidden rounded-brand border-2 border-white/20 shadow-soft">
+      <div className="relative min-h-[220px] sm:min-h-[520px] overflow-hidden rounded-brand border-2 border-white/20 shadow-soft">
         <Image
           src="/assets/images/nirmaan-demo-day.png"
           alt="Demo day project presentation"

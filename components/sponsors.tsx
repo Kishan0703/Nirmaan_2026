@@ -8,8 +8,8 @@ export function SponsorWall() {
       <div className="rounded-brand bg-green p-box clay-card overflow-hidden text-ink">
         
         {/* Powered by Mastryhub & Reskill — prominent hero section above sponsors */}
-        <div className="mb-10 bg-paper border-2 border-ink/15 rounded-[24px] p-6 shadow-md clay-card">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="mb-5 sm:mb-10 bg-paper border-2 border-ink/15 rounded-[24px] p-4 sm:p-6 shadow-md clay-card">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-ink text-paper text-[11px] font-display uppercase tracking-[0.2em] font-black mb-2">
                 <span>Powered By</span>
@@ -54,7 +54,7 @@ export function SponsorWall() {
         </div>
 
         {/* Collaborator Section Header */}
-        <div className="flex flex-wrap items-end justify-between gap-5 border-b border-ink/15 pb-6 mb-8">
+        <div className="flex flex-wrap items-end justify-between gap-3 sm:gap-5 border-b border-ink/15 pb-4 sm:pb-6 mb-4 sm:mb-8">
           <div>
             <span className="text-[12px] font-display uppercase tracking-[0.25em] font-black text-ink/60 block mb-1">
               Official Partners & Bounties
@@ -69,7 +69,7 @@ export function SponsorWall() {
         </div>
 
         {/* To Be Announced Hero Box */}
-        <div className="bg-paper/90 border-2 border-dashed border-ink/30 rounded-[24px] p-8 text-center clay-card relative overflow-hidden">
+        <div className="bg-paper/90 border-2 border-dashed border-ink/30 rounded-[24px] p-5 sm:p-8 text-center clay-card relative overflow-hidden">
           <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-yellow/20 rounded-full blur-2xl pointer-events-none" />
           <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
             <span className="px-4 py-1.5 rounded-full bg-yellow text-ink font-display text-[12px] uppercase font-black tracking-widest mb-3 border border-ink/10 shadow-sm">

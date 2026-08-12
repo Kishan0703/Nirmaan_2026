@@ -177,21 +177,21 @@ export function ReverseCountdownClock() {
   };
 
   return (
-    <section id="countdown-clock" className="my-gap relative overflow-hidden bg-paper px-4 pb-12 pt-6 text-ink sm:px-6 lg:px-box lg:pb-16 lg:pt-8" data-reveal>
-      <div className="relative z-10 grid min-h-[570px] items-center gap-8 lg:grid-cols-[minmax(190px,.7fr)_minmax(320px,1fr)_minmax(190px,.7fr)]">
+    <section id="countdown-clock" className="my-gap relative overflow-hidden bg-paper px-4 pb-6 pt-4 text-ink sm:px-6 lg:px-box lg:pb-16 lg:pt-8" data-reveal>
+      <div className="relative z-10 grid items-center gap-6 lg:min-h-[570px] lg:gap-8 lg:grid-cols-[minmax(190px,.7fr)_minmax(320px,1fr)_minmax(190px,.7fr)]">
         <motion.div
           initial={{ opacity: 0, x: -24 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-          className="order-2 lg:order-1 flex items-center justify-center lg:justify-start min-h-[44px] lg:min-h-[88px] w-full px-2 overflow-hidden"
+          className="order-2 lg:order-1 hidden lg:flex items-center justify-center lg:justify-start min-h-[44px] lg:min-h-[88px] w-full px-2 overflow-hidden"
         >
           <TypingText words={typedLines.left} />
         </motion.div>
 
         <div className="order-1 flex flex-col items-center lg:order-2">
           {/* Clock + stopwatch hardware wrapper */}
-          <div className="relative pt-[85px] pb-4">
+          <div className="relative pt-[70px] lg:pt-[85px] pb-4">
             <motion.div
               ref={clockRef}
               role="slider"
@@ -331,7 +331,7 @@ export function ReverseCountdownClock() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-          className="order-3 flex items-center justify-center lg:justify-end min-h-[44px] lg:min-h-[88px] w-full px-2 overflow-hidden"
+          className="order-3 hidden lg:flex items-center justify-center lg:justify-end min-h-[44px] lg:min-h-[88px] w-full px-2 overflow-hidden"
         >
           <TypingText words={typedLines.right} align="right" />
         </motion.div>
