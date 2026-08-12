@@ -11,21 +11,22 @@ export function Hero({ onBook }: { onBook?: () => void }) {
     "clay-card rounded-pill bg-yellow text-ink px-6 py-3.5 text-base sm:text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30 flex items-center gap-2 shadow-xl";
 
   return (
-    <section id="top" className="relative grid min-h-[calc(100dvh-60px)] sm:min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft bg-[#0d0b14]">
+    <section id="top" className="relative grid min-h-[calc(100dvh-60px)] sm:min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft bg-paper">
       
-      {/* Background Hero Image - Full Canva Banner Fitted inside Box (Zero Layover) */}
-      <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-4">
-        <Image
-          src="/assets/images/nirmaan-hero-banner.jpg"
-          alt="Nirmaan 2026 24-Hour National Level Hackathon Official Poster"
-          fill
-          priority
-          className="object-contain filter saturate-105 contrast-105"
-          sizes="(min-width: 1024px) 88vw, 100vw"
-        />
-      </div>
+      {/* Background Hero Image - Full Canva Banner Edge-to-Edge */}
+      <Image
+        src="/assets/images/nirmaan-hero-banner.jpg"
+        alt="Nirmaan 2026 24-Hour National Level Hackathon Official Poster"
+        fill
+        priority
+        className="object-cover filter saturate-105 contrast-105"
+        sizes="(min-width: 1024px) 88vw, 100vw"
+      />
 
-      {/* Z-10 Controls Layout (Live metrics top-right, Registration CTA bottom-left) */}
+      {/* Subtle bottom shadow gradient to guarantee button legibility */}
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent pointer-events-none" />
+
+      {/* Z-10 Controls Layout */}
       <div className="relative z-10 grid min-h-[calc(100dvh-60px)] sm:min-h-[calc(100dvh-50px)] content-between gap-6 px-4 py-6 text-white sm:px-8 sm:py-8 pointer-events-none">
         
         {/* Top bar details (Live Event Metrics) */}

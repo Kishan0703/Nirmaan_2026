@@ -60,9 +60,9 @@ export const trackCards: TrackCard[] = [
   {
     title: "6. Open Innovation",
     prompt: "Hardware-aligned software solutions that address meaningful real-world challenges, bridging software innovation with hardware-driven and physical-world applications. Solutions may span AI, applications, platforms, data-driven systems, and emerging technologies, with a focus on relevant Sustainable Development Goals (SDGs), scalability, and tangible real-world impact.",
-    note: "Note: Only 5 teams will be selected for the Open Innovation track. Competition is high, so make your idea stand out through innovation, feasibility, and impact. All the best!",
+    note: "Note: We will select limited ideas from the Open Innovation track, so competition is high—please register accordingly. All the best!",
     color: "bg-orange",
-    badge: "HIGH COMPETITION · TOP 5 SELECTION",
+    badge: "HIGH COMPETITION · LIMITED SELECTION",
   },
 ];
 
