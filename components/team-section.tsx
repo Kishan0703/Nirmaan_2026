@@ -272,7 +272,7 @@ export function TeamSection() {
 
                       {member.description && (
                         <p className="font-sans text-[11px] font-medium text-ink/80 mt-2 line-clamp-2 leading-relaxed bg-white/70 p-2 rounded-xl border border-ink/10">
-                          "{member.description}"
+                          &quot;{member.description}&quot;
                         </p>
                       )}
                     </div>
