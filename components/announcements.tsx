@@ -14,22 +14,22 @@ export function Announcements() {
         </p>
 
         <div className="mt-8 grid gap-gap lg:grid-cols-5 items-center">
-          {/* Left Side: Announcement Bulletins */}
-          <div className="lg:col-span-3 flex flex-col gap-3">
+          {/* Left Side: Announcement Bulletins (Enlarged size & text) */}
+          <div className="lg:col-span-3 flex flex-col gap-3.5 sm:gap-4">
             {announcements.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 rounded-[18px] p-4 clay-card bg-paper shadow-xs border border-white/60"
+                className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-[22px] p-4 sm:p-5 clay-card bg-paper shadow-md border-2 border-white/60 hover:scale-[1.01] transition-transform"
               >
-                <div className="flex items-center w-full sm:w-auto">
-                  <span className="text-[10px] font-display uppercase bg-blue text-white px-2.5 py-1 rounded-[8px] font-black tracking-wider text-center min-w-[75px] shadow-xs">
+                <div className="flex items-center w-full sm:w-auto shrink-0">
+                  <span className="text-xs sm:text-sm font-display uppercase bg-blue text-white px-3.5 py-1.5 rounded-[10px] font-black tracking-wider text-center min-w-[95px] shadow-sm">
                     {item.tag}
                   </span>
                 </div>
-                <span className="text-xs text-ink/70 font-display font-bold uppercase tracking-tight whitespace-nowrap">
+                <span className="text-xs sm:text-sm text-ink/80 font-display font-black uppercase tracking-tight whitespace-nowrap shrink-0">
                   {item.date}
                 </span>
-                <p className="text-xs sm:text-sm font-bold text-ink leading-snug">
+                <p className="text-sm sm:text-base font-bold text-ink leading-snug">
                   {item.content}
                 </p>
               </div>
