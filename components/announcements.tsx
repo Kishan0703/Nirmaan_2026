@@ -13,9 +13,9 @@ export function Announcements() {
           Real-time updates, timeline milestones, and build floor announcements from the Nirmaan 2026 organizing team.
         </p>
 
-        <div className="mt-8 grid gap-gap lg:grid-cols-5 items-center">
-          {/* Left Side: Announcement Bulletins */}
-          <div className="lg:col-span-3 flex flex-col gap-3">
+        <div className="mt-8 grid gap-gap lg:grid-cols-12 items-stretch">
+          {/* Left Side: Announcement Bulletins (6 cols on laptop) */}
+          <div className="lg:col-span-6 flex flex-col gap-3 justify-center">
             {announcements.map((item) => (
               <div
                 key={item.id}
@@ -36,9 +36,9 @@ export function Announcements() {
             ))}
           </div>
           
-          {/* Right Side: Announcement Video Player (9:16 on phone, prominent 16:9 on laptop) */}
-          <div className="lg:col-span-2 flex justify-center items-center">
-            <div className="w-full max-w-[290px] sm:max-w-[320px] lg:max-w-[680px] aspect-[9/16] lg:aspect-[16/9] rounded-[22px] overflow-hidden border-2 border-white/60 shadow-2xl bg-black relative flex items-center justify-center">
+          {/* Right Side: Announcement Video Player (6 cols on laptop, 100% filled, 16:9 widescreen) */}
+          <div className="lg:col-span-6 flex justify-center items-center">
+            <div className="w-full max-w-[320px] lg:max-w-none aspect-[9/16] lg:aspect-[16/9] min-h-[360px] sm:min-h-[420px] lg:min-h-[440px] rounded-[24px] overflow-hidden border-2 border-white/60 shadow-2xl bg-black relative flex items-center justify-center">
               <video
                 src="/announcement.mp4"
                 autoPlay
