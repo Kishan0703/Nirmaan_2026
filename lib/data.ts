@@ -48,28 +48,28 @@ export const eventFlowCards: EventFlowCard[] = [
   {
     title: "Launch",
     subtitle: "Open the event cleanly",
-    image: "/assets/images/nirmaan-mentors.png",
+    image: "/assets/images/lounch.JPG",
     speed: "slow",
     details: ["Registration opens", "Team creation and announcements", "Participant onboarding flow"]
   },
   {
     title: "Run",
     subtitle: "Keep the floor moving",
-    image: "/assets/images/nirmaan-demo-day.png",
+    image: "/assets/images/run.JPG",
     speed: "fast",
     details: ["Check-ins and mentor slots", "Live support and checkpoints", "Submission windows that stay clear"]
   },
   {
     title: "Judge",
     subtitle: "Score without chaos",
-    image: "/assets/images/nirmaan-mentors.png",
+    image: "/assets/images/judging.jpeg",
     speed: "slow",
     details: ["Reviewer assignment", "Rubric-led scoring", "Finalist selection and scoreboards"]
   },
   {
     title: "Showcase",
     subtitle: "Turn projects into proof",
-    image: "/assets/images/nirmaan-demo-day.png",
+    image: "/assets/images/showcase.jpg",
     speed: "fast",
     details: ["Project gallery and demo links", "Winner archive", "Certificates and community follow-up"]
   }

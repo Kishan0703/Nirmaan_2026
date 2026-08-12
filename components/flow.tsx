@@ -92,7 +92,7 @@ export function EventFlow() {
                         src={card.image}
                         alt={card.title}
                         fill
-                        className="object-cover filter contrast-125 saturate-50 hover:scale-105 transition-transform duration-500"
+                        className="object-cover filter contrast-105 hover:scale-105 transition-transform duration-500"
                         sizes="360px"
                       />
                       <span className="absolute top-4 left-4 bg-ink text-yellow text-[9px] font-display uppercase font-black px-2.5 py-1 rounded-full shadow-md">
@@ -155,7 +155,7 @@ export function EventFlow() {
                   src={card.image}
                   alt={card.title}
                   fill
-                  className="object-cover filter contrast-125 saturate-50"
+                  className="object-cover filter contrast-105"
                   sizes="320px"
                 />
                 <span className="absolute top-3 left-3 bg-ink text-yellow text-[9px] font-display uppercase font-black px-2.5 py-1 rounded-full shadow-md">
