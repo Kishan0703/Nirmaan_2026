@@ -33,33 +33,33 @@ import { Preloader } from "./preloader";
 const MARQUEE_ONE_ITEMS = ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"];
 const MARQUEE_TWO_ITEMS = ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"];
 
-// Side Rail Navigation (Expanding tabs to fill full height without empty whitespace)
+// Side Rail Navigation (Compact sleek tabs)
 function Rail({ onBook }: { onBook: () => void }) {
   return (
-    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[200px] xl:w-[215px] flex-col px-[10px] py-[12px] lg:flex justify-between bg-paper/20 backdrop-blur-md overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    <header className="fixed left-0 top-0 z-40 hidden h-dvh w-[165px] xl:w-[180px] flex-col px-[8px] py-[10px] lg:flex justify-between bg-paper/20 backdrop-blur-md overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       
       {/* Top Header Section with Logo Block */}
       <div className="flex flex-col items-start gap-1 pb-1 px-1 shrink-0">
         <Logo />
       </div>
 
-      {/* Main Navigation Stack (Fully Expanding Tabs) */}
-      <nav aria-label="Main navigation" className="flex-1 flex flex-col gap-2 my-2 w-full justify-between">
+      {/* Main Navigation Stack (Compact Sleek Tabs) */}
+      <nav aria-label="Main navigation" className="flex-1 flex flex-col gap-1.5 my-2 w-full justify-between">
         {menuItems.map((item) => (
           <a
             key={item.index}
             href={item.href}
-            className={`${item.color} group clay-card relative flex flex-1 min-h-[64px] xl:min-h-[70px] w-full flex-col justify-between rounded-[14px] p-[11px] xl:p-3.5 transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper`}
+            className={`${item.color} group clay-card relative flex flex-1 min-h-[42px] xl:min-h-[46px] w-full flex-col justify-between rounded-[12px] p-2 xl:p-2.5 transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-paper`}
           >
             <div className="flex items-center justify-between w-full">
-              <span className="font-aeonik text-[11px] xl:text-[12px] font-normal opacity-75 leading-none">
+              <span className="font-aeonik text-[10px] xl:text-[11px] font-normal opacity-75 leading-none">
                 {item.index}
               </span>
               {item.external && (
-                <ArrowUpRight className="h-[13px] w-[13px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight className="h-[12px] w-[12px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               )}
             </div>
-            <span className="font-aeonik text-sm xl:text-[15px] font-bold leading-snug text-left">
+            <span className="font-aeonik text-xs xl:text-[13px] font-bold leading-snug text-left truncate">
               {item.label}
             </span>
           </a>
@@ -70,48 +70,48 @@ function Rail({ onBook }: { onBook: () => void }) {
           href={REGISTRATION_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="group clay-card relative flex flex-1 min-h-[64px] xl:min-h-[70px] w-full flex-col justify-between rounded-[14px] bg-purple p-[11px] xl:p-3.5 text-white transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper text-left"
+          className="group clay-card relative flex flex-1 min-h-[42px] xl:min-h-[46px] w-full flex-col justify-between rounded-[12px] bg-purple p-2 xl:p-2.5 text-white transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper text-left"
         >
           <div className="flex items-center justify-between w-full">
-            <span className="font-aeonik text-[11px] xl:text-[12px] font-normal opacity-75 leading-none">
+            <span className="font-aeonik text-[10px] xl:text-[11px] font-normal opacity-75 leading-none">
               07
             </span>
-            <ArrowUpRight className="h-[13px] w-[13px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="h-[12px] w-[12px] opacity-80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
-          <span className="font-aeonik text-sm xl:text-[15px] font-bold leading-snug">
+          <span className="font-aeonik text-xs xl:text-[13px] font-bold leading-snug truncate">
             Join Nirmaan
           </span>
         </a>
       </nav>
 
       {/* Bottom Legal / Year Box & Social Icons */}
-      <div className="flex flex-col gap-2 pt-2 border-t border-ink/10 shrink-0">
+      <div className="flex flex-col gap-1.5 pt-1.5 border-t border-ink/10 shrink-0">
         <a
           href="#top"
-          className="group clay-card flex w-full items-center justify-center rounded-[12px] bg-paper py-1.5 transition-all hover:scale-[1.02]"
+          className="group clay-card flex w-full items-center justify-center rounded-[10px] bg-paper py-1 transition-all hover:scale-[1.02]"
         >
-          <span className="font-aeonik text-[11px] uppercase tracking-wider font-bold text-gray-700">Nirmaan 2026</span>
+          <span className="font-aeonik text-[10px] uppercase tracking-wider font-bold text-gray-700">Nirmaan 2026</span>
         </a>
 
         {/* Social Media Icons Row */}
-        <div className="flex items-center justify-center gap-3 px-1">
+        <div className="flex items-center justify-center gap-2.5 px-1">
           <a
             href="https://www.instagram.com/codingclub_bmsit/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="flex h-8 w-8 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-red hover:scale-110 transition-all shadow-sm"
+            className="flex h-7 w-7 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-red hover:scale-110 transition-all shadow-sm"
           >
-            <SocialInstagram className="w-3.5 h-3.5" />
+            <SocialInstagram className="w-3 h-3" />
           </a>
           <a
             href="https://twitter.com"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter / X"
-            className="flex h-8 w-8 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue hover:scale-110 transition-all shadow-sm"
+            className="flex h-7 w-7 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue hover:scale-110 transition-all shadow-sm"
           >
-            <SocialTwitter className="w-3.5 h-3.5" />
+            <SocialTwitter className="w-3 h-3" />
           </a>
         </div>
       </div>
@@ -374,7 +374,7 @@ export function SiteExperience() {
       <Rail onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       <MobileHeader open={menuOpen} setOpen={setMenuOpen} onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
       
-      <main className="relative ml-0 overflow-x-clip px-2.5 sm:px-0 pt-[68px] lg:ml-[200px] xl:ml-[215px] lg:px-0 lg:pr-5 lg:pt-[30px]">
+      <main className="relative ml-0 overflow-x-clip px-2.5 sm:px-0 pt-[68px] lg:ml-[170px] xl:ml-[185px] lg:px-0 lg:pr-5 lg:pt-[30px]">
         <article className="home">
           {/* Hero & Countdown */}
           <Hero onBook={() => openModal(document.activeElement instanceof HTMLElement ? document.activeElement : null)} />
