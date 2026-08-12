@@ -14,12 +14,14 @@
 2. **Shortlisting** — Top teams selected by evaluation
 3. **Grand Finale** — Shortlisted teams, on-site 24-hour build-off in Bangalore
 
-## Timeline (tentative)
+## Timeline
 | Milestone | Date | Details |
 |---|---|---|
-| Round 1 Registration & Submission | 5 Aug 2026 | Online PPT submission opens |
-| Round 1 Result Announcement | First week of Sept 2026 | Shortlisted teams for finale announced |
-| Grand Finale | 18–19 Sept 2026 | 24-hr on-site build-off, Bangalore |
+| Round 1 Registration Opens | 12 Aug 2026 (10:00 PM) | Online registration opens |
+| Round 1 PPT Submission Opens | 15 Aug 2026 (10:00 PM) | PPT submission portal unlocks |
+| Round 1 PPT Submission Deadline | 5 Sept 2026 | Last date for PPT submissions |
+| Round 1 Result Announcement | 12 Sept 2026 | Shortlisted teams for finale announced |
+| Grand Finale | 25–26 Sept 2026 | 24-hr on-site build-off, Bangalore |
 
 ## Tracks
 1. **Hardware-Based Problem Statement** — robotics, IoT, hardware innovation; physical/device-based solutions; prototyping, sensing, automation
@@ -44,10 +46,13 @@
 
 ## Event Details
 - **Venue:** BMS Institute of Technology and Management, Bangalore
-- **Grand Finale dates:** 18–19 Sept 2026 (tentative)
+- **Grand Finale dates:** 25–26 Sept 2026
 - **Duration:** 24 hours continuous
 - **Team size:** 2–4 members
-- **Round 1 opens:** 5 Aug 2026 (tentative), full details with registration
+- **Registration opens:** 12 Aug 2026 (10:00 PM)
+- **PPT Submission starts:** 15 Aug 2026 (10:00 PM)
+- **PPT Submission deadline:** 5 Sept 2026
+- **Results announced:** 12 Sept 2026
 
 ---
 *All dates tentative, subject to confirmation closer to event.*

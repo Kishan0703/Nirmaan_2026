@@ -90,14 +90,14 @@ export const liveMetrics = [
 ];
 
 export const scheduleItems = [
-  { day: "Day 1 - Sept 18", time: "09:00", title: "Check-in opens", detail: "QR desk, badge pickup, team zones unlock", color: "bg-yellow" },
-  { day: "Day 1 - Sept 18", time: "10:30", title: "Opening brief", detail: "Rules, tracks, sponsor prompts, judging rubric", color: "bg-blue text-white" },
-  { day: "Day 1 - Sept 18", time: "13:00", title: "Team formation lock", detail: "Solo builders matched, team pages generated", color: "bg-green-light" },
-  { day: "Day 1 - Sept 18", time: "18:00", title: "Mentor circuit", detail: "Design, AI, pitch, hardware, and business rooms", color: "bg-orange" },
-  { day: "Day 1 - Sept 18", time: "23:30", title: "Checkpoint 01", detail: "Problem, prototype plan, risk notes, next actions", color: "bg-red text-white" },
-  { day: "Day 2 - Sept 19", time: "09:30", title: "Submission freeze", detail: "Repos, decks, demo links, and project gallery", color: "bg-purple" },
-  { day: "Day 2 - Sept 19", time: "12:00", title: "Judging round", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
-  { day: "Day 2 - Sept 19", time: "16:00", title: "Demo day", detail: "Final pitches, winners, certificates, archive", color: "bg-green text-white" }
+  { day: "Day 1 - Sept 25", time: "09:00", title: "Check-in opens", detail: "QR desk, badge pickup, team zones unlock", color: "bg-yellow" },
+  { day: "Day 1 - Sept 25", time: "10:30", title: "Opening brief", detail: "Rules, tracks, sponsor prompts, judging rubric", color: "bg-blue text-white" },
+  { day: "Day 1 - Sept 25", time: "13:00", title: "Team formation lock", detail: "Solo builders matched, team pages generated", color: "bg-green-light" },
+  { day: "Day 1 - Sept 25", time: "18:00", title: "Mentor circuit", detail: "Design, AI, pitch, hardware, and business rooms", color: "bg-orange" },
+  { day: "Day 1 - Sept 25", time: "23:30", title: "Checkpoint 01", detail: "Problem, prototype plan, risk notes, next actions", color: "bg-red text-white" },
+  { day: "Day 2 - Sept 26", time: "09:30", title: "Submission freeze", detail: "Repos, decks, demo links, and project gallery", color: "bg-purple" },
+  { day: "Day 2 - Sept 26", time: "12:00", title: "Judging round", detail: "Rubric scoring, reviewer sync, finalist shortlist", color: "bg-yellow" },
+  { day: "Day 2 - Sept 26", time: "16:00", title: "Demo day", detail: "Final pitches, winners, certificates, archive", color: "bg-green text-white" }
 ];
 
 export const sponsorTiers = [
@@ -150,9 +150,11 @@ export const values = [
 ];
 
 export const announcements = [
-  { id: 1, date: "Aug 05, 2026", tag: "LAUNCH", content: "Round 1 Online PPT registration and submission is officially open!" },
-  { id: 2, date: "Sept 07, 2026", tag: "SHORTS", content: "Round 1 evaluation results announced. Top selected teams proceed to Finale." },
-  { id: 3, date: "Sept 18, 2026", tag: "FINALE", content: "Grand Finale: 24-hour on-site build-off begins at BMSIT campus Bangalore." }
+  { id: 1, date: "Aug 12, 2026 (10 PM)", tag: "REGISTRATION", content: "Round 1 Online Registration is officially open!" },
+  { id: 2, date: "Aug 15, 2026 (10 PM)", tag: "PPT START", content: "Round 1 PPT Submission portal opens for all teams!" },
+  { id: 3, date: "Sept 05, 2026", tag: "PPT DEADLINE", content: "Round 1 PPT Submission window closes." },
+  { id: 4, date: "Sept 12, 2026", tag: "RESULTS", content: "Round 1 evaluation results announced. Top selected teams proceed to Finale." },
+  { id: 5, date: "Sept 25–26, 2026", tag: "FINALE", content: "Grand Finale: 24-hour on-site build-off at BMSIT campus Bangalore." }
 ];
 
 export const galleryImages = [
