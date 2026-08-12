@@ -161,14 +161,14 @@ export function TeamSection() {
   const activeDept = DEPARTMENTS.find((d) => d.id === activeDeptId) || DEPARTMENTS[0];
 
   return (
-    <section id="team" className="my-gap space-y-gap w-full h-auto overflow-hidden sm:overflow-visible" data-reveal>
+    <section id="team" className="my-gap space-y-gap w-full max-w-full overflow-hidden" data-reveal>
       {/* ── Co-Organizer Club Cards ── */}
-      <div className="grid gap-gap md:grid-cols-2">
+      <div className="grid gap-gap md:grid-cols-2 w-full">
         {/* Coding Club BMSIT */}
-        <div className="clay-card bg-blue rounded-brand p-4 sm:p-box text-white flex flex-col justify-between">
+        <div className="clay-card bg-blue rounded-brand p-4 sm:p-box text-white flex flex-col justify-between min-w-0">
           <div>
             <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <div className="relative h-14 w-14 sm:h-20 sm:w-20 rounded-[16px] overflow-hidden border-2 border-white/20 bg-black flex items-center justify-center p-1 shadow-md">
+              <div className="relative h-14 w-14 sm:h-20 sm:w-20 rounded-[16px] overflow-hidden border-2 border-white/20 bg-black flex items-center justify-center p-1 shadow-md shrink-0">
                 <Image 
                   src="/assets/images/codingclub-logo.png" 
                   alt="Coding Club BMSIT Logo" 
@@ -180,7 +180,7 @@ export function TeamSection() {
                 href="https://www.instagram.com/codingclub_bmsit/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-[10px] font-display uppercase tracking-wider bg-white/20 text-white hover:bg-white/35 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-black border border-white/10 transition-transform active:translate-y-0.5"
+                className="text-[10px] font-display uppercase tracking-wider bg-white/20 text-white hover:bg-white/35 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-black border border-white/10 transition-transform active:translate-y-0.5 shrink-0"
               >
                 Instagram ↗
               </a>
@@ -194,10 +194,10 @@ export function TeamSection() {
         </div>
 
         {/* Alterino Club BMSIT */}
-        <div className="clay-card bg-yellow rounded-brand p-4 sm:p-box text-ink flex flex-col justify-between">
+        <div className="clay-card bg-yellow rounded-brand p-4 sm:p-box text-ink flex flex-col justify-between min-w-0">
           <div>
             <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <div className="relative h-14 w-14 sm:h-20 sm:w-20 rounded-[16px] overflow-hidden border-2 border-ink/10 bg-[#0f1b29] flex items-center justify-center p-1 shadow-md">
+              <div className="relative h-14 w-14 sm:h-20 sm:w-20 rounded-[16px] overflow-hidden border-2 border-ink/10 bg-[#0f1b29] flex items-center justify-center p-1 shadow-md shrink-0">
                 <Image 
                   src="/assets/images/alterino-logo.png" 
                   alt="Alterino Club BMSIT Logo" 
@@ -209,7 +209,7 @@ export function TeamSection() {
                 href="https://www.instagram.com/alterino_bmsit/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-[10px] font-display uppercase tracking-wider bg-ink/10 text-ink hover:bg-ink/20 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-black border border-ink/5 transition-transform active:translate-y-0.5"
+                className="text-[10px] font-display uppercase tracking-wider bg-ink/10 text-ink hover:bg-ink/20 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-black border border-ink/5 transition-transform active:translate-y-0.5 shrink-0"
               >
                 Instagram ↗
               </a>
@@ -224,7 +224,7 @@ export function TeamSection() {
       </div>
 
       {/* ── Interactive Department Filing Cabinet Section ── */}
-      <div className="w-full">
+      <div className="w-full max-w-full">
         {/* Header Section */}
         <div className="mb-4 sm:mb-6">
           <span className="font-display text-xs uppercase tracking-widest text-ink/60 font-black">
@@ -236,7 +236,7 @@ export function TeamSection() {
         </div>
 
         {/* Main Cuboid File Box Layout */}
-        <div className="grid gap-gap lg:grid-cols-[360px_1fr] w-full">
+        <div className="grid gap-gap lg:grid-cols-[360px_1fr] w-full min-w-0">
           
           {/* LEFT SIDE: Organizer Box (DESKTOP ONLY - Vibrant Gradient Container) */}
           <div className="hidden lg:flex relative flex-col justify-between p-5 bg-gradient-to-br from-[#3b0764] via-[#7e22ce] to-[#c026d3] border-2 border-white/40 rounded-brand shadow-2xl clay-card min-h-[480px]">
@@ -307,10 +307,10 @@ export function TeamSection() {
           </div>
 
           {/* RIGHT SIDE: Opened File Sheet */}
-          <div className="relative w-full h-auto">
+          <div className="relative w-full min-w-0">
             
             {/* MOBILE ONLY: Embedded Vibrant Gradient Horizontal Department Bar */}
-            <div className="lg:hidden mb-3 bg-gradient-to-r from-[#3b0764] via-[#7e22ce] to-[#c026d3] p-3 rounded-[18px] border-2 border-white/40 shadow-xl flex flex-col gap-2 w-full">
+            <div className="lg:hidden mb-3 bg-gradient-to-r from-[#3b0764] via-[#7e22ce] to-[#c026d3] p-3 rounded-[18px] border-2 border-white/40 shadow-xl flex flex-col gap-2 w-full max-w-full overflow-hidden">
               <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-1.5">
                   <Folder size={14} className="text-yellow" />
@@ -323,8 +323,8 @@ export function TeamSection() {
                 </span>
               </div>
 
-              {/* Horizontal Scroll Pill Selector */}
-              <div className="flex overflow-x-auto gap-2 pb-1 scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden w-full">
+              {/* Horizontal Scroll Pill Selector with Smooth Touch Pan */}
+              <div className="flex overflow-x-auto flex-nowrap gap-2 py-1 px-1 touch-pan-x overscroll-x-contain select-none scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden w-full">
                 {DEPARTMENTS.map((dept) => {
                   const isActive = dept.id === activeDeptId;
                   return (
@@ -332,9 +332,9 @@ export function TeamSection() {
                       key={dept.id}
                       type="button"
                       onClick={() => setActiveDeptId(dept.id)}
-                      className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-display text-[11px] uppercase font-black transition-all border ${
+                      className={`shrink-0 min-w-max flex items-center gap-1.5 px-3.5 py-2 rounded-full font-display text-[11px] uppercase font-black transition-all border ${
                         isActive
-                          ? `${dept.tabColor} border-white shadow-md ring-2 ring-white/40`
+                          ? `${dept.tabColor} border-white shadow-md ring-2 ring-white/50 scale-[1.02]`
                           : "bg-white/20 border-white/30 text-white hover:bg-white/30"
                       }`}
                     >
@@ -353,7 +353,7 @@ export function TeamSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ type: "spring", stiffness: 320, damping: 26 }}
-                className={`w-full h-auto rounded-brand border-2 border-white/40 ${activeDept.folderBg} p-3.5 sm:p-box clay-card flex flex-col justify-between shadow-xl relative overflow-hidden`}
+                className={`w-full max-w-full h-auto rounded-brand border-2 border-white/40 ${activeDept.folderBg} p-3 sm:p-box clay-card flex flex-col justify-between shadow-xl relative overflow-hidden`}
               >
                 <div>
                   {/* Folder Top Header Sheet */}
