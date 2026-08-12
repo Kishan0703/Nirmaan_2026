@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { CSSProperties } from "react";
 import { ArrowUpRight } from "@/components/icons";
 import { InteractiveTiltCard } from "./helpers";
@@ -12,21 +11,18 @@ export function Hero({ onBook }: { onBook?: () => void }) {
     "clay-card rounded-pill bg-yellow text-ink px-6 py-3.5 text-base sm:text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30 flex items-center gap-2 shadow-xl";
 
   return (
-    <section id="top" className="relative grid min-h-[calc(100dvh-60px)] sm:min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft bg-paper">
+    <section id="top" className="relative grid min-h-[calc(100dvh-60px)] sm:min-h-[calc(100dvh-50px)] overflow-hidden rounded-brand border-2 border-white/40 shadow-soft bg-black">
       
-      {/* Background Hero Image */}
-      <Image
-        src="/assets/images/nirmaan-hero.png"
-        alt="Hackathon teams building prototypes in a design studio"
-        fill
-        priority
-        className="object-cover opacity-75 filter saturate-110 contrast-110"
-        sizes="(min-width: 1024px) 88vw, 100vw"
+      {/* Background Hero Video (Merged videos seamless loop, No controls, No dark layover) */}
+      <video
+        src="/assets/videos/nirmaan-hero-merged.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
       />
 
-      <div className="clay-grid absolute inset-0 mix-blend-multiply opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent" />
-      
       <div className="relative z-10 grid min-h-[calc(100dvh-60px)] sm:min-h-[calc(100dvh-50px)] content-between gap-6 px-4 py-6 text-white sm:px-8 sm:py-8">
         
         {/* Top bar details (Live Event Metrics) */}
@@ -61,7 +57,7 @@ export function Hero({ onBook }: { onBook?: () => void }) {
                 return (
                   <span
                     key={`${word}-${index}`}
-                    className={`drop-shadow-md ${colors[index] || "text-white"}`}
+                    className={`drop-shadow-lg ${colors[index] || "text-white"}`}
                     style={{ "--word-index": index } as CSSProperties}
                   >
                     {word}
@@ -69,7 +65,7 @@ export function Hero({ onBook }: { onBook?: () => void }) {
                 );
               })}
           </h1>
-          <p className="mt-5 max-w-[900px] font-aeonik text-[clamp(20px,1.5vw,28px)] font-bold leading-[1.15] text-white drop-shadow">
+          <p className="mt-5 max-w-[900px] font-aeonik text-[clamp(20px,1.5vw,28px)] font-bold leading-[1.15] text-white drop-shadow-md">
             National-level 24-hour innovation challenge for student builders across India. Run an intense sprint from idea to working prototype with real-world impact.
           </p>
 
