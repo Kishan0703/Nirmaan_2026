@@ -215,14 +215,11 @@ export const announcements = [
 ];
 
 export const galleryImages = [
-  { id: 1, src: "/assets/images/nirmaan-hero.png", alt: "Active building floor", category: "Build Floor" },
-  { id: 2, src: "/assets/images/nirmaan-mentors.png", alt: "Mentor review sessions", category: "Mentorship" },
-  { id: 3, src: "/assets/images/nirmaan-demo-day.png", alt: "Final pitching stage", category: "Demo Day" },
-  { id: 4, src: "/assets/images/nirmaan-hero.png", alt: "Showcase winner ceremony", category: "Awards" },
-  { id: 5, src: "/assets/images/nirmaan-mentors.png", alt: "Hardware prototyping desk", category: "Hardware Track" },
-  { id: 6, src: "/assets/images/nirmaan-demo-day.png", alt: "Keynote presentation stage", category: "Keynote" },
-  { id: 7, src: "/assets/images/nirmaan-hero.png", alt: "Midnight coding jam", category: "Build Floor" },
-  { id: 8, src: "/assets/images/nirmaan-mentors.png", alt: "Team strategy whiteboarding", category: "Mentorship" },
+  { id: 1, src: "/assets/images/gallery/nirmaan-gallery-1.jpg", alt: "Nirmaan student builders organizing team in lab", category: "Organizing Team" },
+  { id: 2, src: "/assets/images/gallery/nirmaan-gallery-2.jpg", alt: "Hardware & prototyping core team collaboration", category: "Hardware Team" },
+  { id: 3, src: "/assets/images/gallery/nirmaan-gallery-3.jpg", alt: "Nirmaan participant cohort in lecture hall", category: "Participants" },
+  { id: 4, src: "/assets/images/gallery/nirmaan-gallery-4.jpg", alt: "Team problem solving and strategy session", category: "Strategy & Dev" },
+  { id: 5, src: "/assets/images/gallery/nirmaan-gallery-5.jpg", alt: "Nirmaan Round 3 event team gathering", category: "Event Floor" },
 ];
 
 export const faqs: FaqItem[] = [

@@ -33,19 +33,24 @@ export function GallerySection() {
           </Link>
         </div>
 
-        {/* Clean Image Grid — Image Cards ONLY, text captions removed */}
-        <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
-          {previewImages.map((img, i) => (
+        {/* Clean Image Grid — 5 Real Nirmaan Event Photos */}
+        <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+          {galleryImages.map((img, i) => (
             <Link key={img.id || i} href="/gallery" className="group">
-              <div className="clay-card bg-paper p-2.5 sm:p-3 rounded-[20px] text-ink border-2 border-white/40 shadow-md group-hover:scale-[1.02] transition-transform duration-300 overflow-hidden">
-                <div className="relative aspect-video w-full overflow-hidden rounded-[14px] border border-white/30">
+              <div className="clay-card bg-paper p-2 sm:p-2.5 rounded-[18px] text-ink border-2 border-white/40 shadow-md group-hover:scale-[1.03] transition-transform duration-300 overflow-hidden">
+                <div className="relative aspect-video w-full overflow-hidden rounded-[12px] border border-white/30">
                   <Image
                     src={img.src}
                     alt={img.alt}
                     fill
-                    className="object-cover filter contrast-125 saturate-90 group-hover:scale-110 transition-transform duration-500"
-                    sizes="(min-width: 1024px) 20vw, 50vw"
+                    className="object-cover filter saturate-105 contrast-105 group-hover:scale-110 transition-transform duration-500"
+                    sizes="(min-width: 1024px) 18vw, 40vw"
                   />
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="font-display text-[9px] sm:text-[10px] uppercase font-black text-ink/70 tracking-wider">
+                    {img.category}
+                  </span>
                 </div>
               </div>
             </Link>
