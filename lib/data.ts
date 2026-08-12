@@ -126,7 +126,7 @@ export const eventStats = [
 ];
 
 export const liveMetrics = [
-  ["Registrations", "0 / 420"],
+  ["Registrations", "0"],
   ["Teams formed", "0"],
   ["Submissions", "0 drafts"],
   ["Judges assigned", "0"]
@@ -149,7 +149,7 @@ export const scheduleTimeline: ScheduleGroup[] = [
     date: "Sep 25",
     items: [
       { time: "09:30 AM – 10:30 AM", title: "On-Site Check-In", detail: "Badge collection, desk assignment & kit allocation", color: "bg-yellow" },
-      { time: "11:30 AM", title: "Grand Finale begins", detail: "24-hour hackathon build sprint officially launched", color: "bg-green text-white" }
+      { time: "11:00 AM", title: "Grand Finale begins", detail: "24-hour hackathon build sprint officially launched", color: "bg-green text-white" }
     ]
   },
   {
@@ -207,11 +207,11 @@ export const values = [
 
 export const announcements = [
   { id: 1, date: "Aug 12, 2026 — 10:00 PM", tag: "START", content: "Event period officially begins nationwide!" },
-  { id: 2, date: "Aug 16, 2026 — 03:30 AM", tag: "PPT OPEN", content: "Submission of Round-1 PPT officially opens nationwide." },
-  { id: 3, date: "Sep 06, 2026 — 05:29 AM", tag: "PPT CLOSE", content: "Submission of Round-1 PPT closes. Evaluation phase begins." },
-  { id: 4, date: "Sep 12, 2026 — 9:00 PM–10:00 PM", tag: "RESULTS", content: "Declaration of Round-1 Results! Shortlisted teams proceed to Round 2." },
-  { id: 5, date: "Sep 13, 2026 — 03:30 AM", tag: "ROUND 2", content: "Registration for Second Round opens for shortlisted teams (Closes Sep 21 at 3:30 AM)." },
-  { id: 6, date: "Sep 25, 2026 — 11:30 AM", tag: "FINALE", content: "Grand Finale begins on-site at BMSIT campus Bangalore! Check-in starts 9:30 AM." }
+  { id: 2, date: "Aug 15, 2026 — 10:00 PM", tag: "PPT OPEN", content: "Submission of Round-1 PPT officially opens nationwide." },
+  { id: 3, date: "Sep 05, 2026 — 10:00 PM", tag: "PPT CLOSE", content: "Submission of Round-1 PPT closes. Evaluation phase begins." },
+  { id: 4, date: "Sep 12, 2026 — 10:00 PM", tag: "RESULTS", content: "Declaration of Round-1 Results! Shortlisted teams proceed to Round 2." },
+  { id: 5, date: "Sep 12, 2026 — 10:00 PM", tag: "ROUND 2", content: "Registration for Second Round opens for shortlisted teams (Closes Sep 21 at 3:30 AM)." },
+  { id: 6, date: "Sep 25, 2026 — 11:00 AM", tag: "FINALE", content: "Grand Finale begins on-site at BMSIT campus Bangalore! Check-in starts 9:30 AM." }
 ];
 
 export const galleryImages = [
