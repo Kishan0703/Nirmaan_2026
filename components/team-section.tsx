@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Folder, ChevronRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/icons";
 
 type Member = {
   name: string;
@@ -153,7 +153,7 @@ function MemberAvatar({ member }: { member: Member }) {
   const hasAvatar = Boolean(member.avatar && member.avatar.trim() !== "");
 
   return (
-    <div className="relative h-12 w-12 sm:h-14 sm:w-14 shrink-0 rounded-[14px] overflow-hidden border-2 border-ink/20 shadow-md bg-gradient-to-br from-ink to-gray-800 flex items-center justify-center text-white">
+    <div className="relative h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-[14px] overflow-hidden border-2 border-ink/20 shadow-md bg-gradient-to-br from-ink to-gray-800 flex items-center justify-center text-white">
       {hasAvatar && !imgError ? (
         <Image
           src={member.avatar}
@@ -164,7 +164,7 @@ function MemberAvatar({ member }: { member: Member }) {
           className="object-cover group-hover:scale-110 transition-transform duration-300"
         />
       ) : (
-        <span className="font-display text-xs sm:text-sm uppercase font-black tracking-wider text-yellow">
+        <span className="font-display text-xs uppercase font-black tracking-wider text-yellow">
           {member.initials}
         </span>
       )}
@@ -174,171 +174,193 @@ function MemberAvatar({ member }: { member: Member }) {
 
 export function TeamSection() {
   const [activeTab, setActiveTab] = useState("core");
-
-  const currentDept = DEPARTMENTS.find((d) => d.id === activeTab) || DEPARTMENTS[0];
+  const activeDept = DEPARTMENTS.find((d) => d.id === activeTab) || DEPARTMENTS[0];
 
   return (
     <section id="team" className="my-gap relative" data-reveal>
-      <div className="rounded-brand bg-paper p- box clay-card border-2 border-white/60 shadow-2xl relative overflow-hidden">
-        
-        {/* Header Title & Subtitle */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 sm:mb-10 pb-6 border-b border-ink/10">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ink text-paper text-[10px] sm:text-xs font-display uppercase tracking-[0.2em] font-black mb-3">
-              <span>Nirmaan 2026 Crew</span>
+      <div className="rounded-brand bg-red p-box clay-card text-white shadow-soft relative overflow-hidden">
+        {/* Decorative Background Accents */}
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-black/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10">
+          {/* Header Row */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 sm:mb-8">
+            <div>
+              <span className="rounded-pill bg-white/20 px-3.5 py-1 text-white font-display text-[10px] sm:text-xs uppercase font-black tracking-wider inline-block mb-2 border border-white/30 backdrop-blur-md">
+                ROSTER &amp; CREW
+              </span>
+              <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl uppercase text-white font-black leading-tight tracking-tight">
+                Organizing Team
+              </h2>
             </div>
-            <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl uppercase font-black tracking-tight text-ink">
-              Roster &amp; Organizers
-            </h2>
+            <p className="text-xs sm:text-sm text-white/90 font-semibold max-w-md leading-relaxed">
+              Meet the architects, engineers, designers, marketing strategists, and volunteer leads building Nirmaan 2026.
+            </p>
           </div>
-          <p className="max-w-md text-xs sm:text-sm font-bold text-ink/75 leading-relaxed">
-            Meet the architects, engineers, designers, marketing strategists, and volunteer leads building Nirmaan 2026.
-          </p>
-        </div>
 
-        {/* ── TOP FOLDER TABS NAVIGATION ── */}
-        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-3 pt-1 px-1 scrollbar-none mb-6">
-          {DEPARTMENTS.map((dept) => {
-            const isActive = activeTab === dept.id;
-            return (
-              <button
-                key={dept.id}
-                onClick={() => setActiveTab(dept.id)}
-                className={`relative px-4 sm:px-5 py-2.5 sm:py-3 rounded-[16px] font-display text-xs sm:text-sm font-black uppercase tracking-wide transition-all shrink-0 flex items-center gap-2 border-2 active:scale-95 ${
-                  isActive
-                    ? `${dept.tabColor} border-ink shadow-[4px_4px_0px_0px_#18181b] -translate-y-1`
-                    : "bg-paper text-ink/80 border-ink/20 hover:border-ink/40 hover:bg-white hover:text-ink"
-                }`}
-              >
-                <Folder size={14} className={isActive ? "fill-current" : "opacity-70"} />
-                <span>{dept.name}</span>
-                <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${isActive ? "bg-white/20 text-current" : "bg-ink/10 text-ink"}`}>
-                  {dept.members.length}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* ── ACTIVE DEPARTMENT DOSSIER CARD ── */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentDept.id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.2 }}
-            className="rounded-[24px] border-2 border-ink/20 bg-white p-5 sm:p-8 shadow-xl relative overflow-hidden"
-          >
-            {/* Header / Accent Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 mb-6 border-b border-ink/10">
-              <div className="flex items-center gap-3">
-                <span className={`px-3 py-1 rounded-full font-display text-xs font-black uppercase ${currentDept.badgeColor}`}>
-                  {currentDept.name}
-                </span>
-                <span className="text-xs font-bold text-ink/60">
-                  {currentDept.members.length} Active Roster Members
-                </span>
+          {/* Folder Dossier Tabs & Active Content */}
+          <div className="flex flex-col gap-3">
+            {/* Top Folder Tabs Bar */}
+            <div className="w-full overflow-x-auto pb-2 pt-1 scrollbar-none">
+              <div className="flex items-center gap-1.5 sm:gap-2 min-w-max">
+                {DEPARTMENTS.map((dept) => {
+                  const isActive = activeTab === dept.id;
+                  return (
+                    <button
+                      key={dept.id}
+                      onClick={() => setActiveTab(dept.id)}
+                      className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full font-display text-[11px] uppercase font-black transition-all border ${
+                        isActive
+                          ? `${dept.tabColor} border-white shadow-md ring-2 ring-white/50 scale-[1.02]`
+                          : "bg-white/20 border-white/30 text-white hover:bg-white/30"
+                      }`}
+                    >
+                      <span className={`h-2 w-2 rounded-full ${dept.tabColor.split(" ")[0]} border border-white/40 shrink-0`} />
+                      <span className="whitespace-nowrap">{dept.name}</span>
+                    </button>
+                  );
+                })}
               </div>
-              <p className="text-xs sm:text-sm font-bold text-ink/80 max-w-lg">
-                {currentDept.description}
-              </p>
             </div>
 
-            {/* ── MEMBER CARDS MATRIX (Heads on Top Row) ── */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {currentDept.members.map((member, idx) => (
-                <div
-                  key={`${member.name}-${idx}`}
-                  className="group relative rounded-[20px] bg-paper border-2 border-ink/15 p-4 sm:p-5 shadow-md hover:border-ink hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-                >
-                  <div className="flex items-start gap-3.5">
-                    <MemberAvatar member={member} />
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2">
-                        <h3 className="font-display text-sm sm:text-base uppercase font-black text-ink tracking-tight truncate group-hover:text-purple transition-colors">
-                          {member.name}
-                        </h3>
-
-                        <span className="shrink-0 px-2 py-0.5 rounded-full bg-ink/10 text-ink font-display text-[9px] sm:text-[10px] font-black uppercase">
-                          {member.tag}
-                        </span>
-                      </div>
-
-                      <p className="font-sans text-xs font-bold text-ink/70 mt-0.5 truncate">
-                        {member.role}
-                      </p>
-
-                      {member.description && (
-                        <p className="font-sans text-[11px] font-medium text-ink/80 mt-2 line-clamp-2 leading-relaxed bg-white/70 p-2 rounded-xl border border-ink/10">
-                          &quot;{member.description}&quot;
-                        </p>
-                      )}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeDept.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ type: "spring", stiffness: 320, damping: 26 }}
+                className={`w-full max-w-full h-auto rounded-brand border-2 border-white/40 ${activeDept.folderBg} p-3.5 sm:p-box clay-card flex flex-col justify-between shadow-xl relative overflow-hidden`}
+              >
+                <div>
+                  {/* Folder Top Header Sheet */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ink/15 pb-3 sm:pb-4 mb-3 sm:mb-6 relative z-10">
+                    <div>
+                      <span className="font-display text-[10px] sm:text-[11px] uppercase tracking-wider font-black text-ink/70">
+                        NIRMAAN 2026 // DEPARTMENT
+                      </span>
+                      <h3 className="font-display text-xl sm:text-card uppercase text-ink font-black leading-tight mt-0.5 break-words">
+                        {activeDept.name}
+                      </h3>
                     </div>
+
+                    <span className={`rounded-full px-3 py-1 font-display text-[10px] sm:text-xs uppercase font-black shadow-sm ${activeDept.badgeColor}`}>
+                      {activeDept.members.length} Members
+                    </span>
                   </div>
 
-                  {/* Social / External Links Bar */}
-                  {(member.github || member.linkedin || member.instagram || member.twitter || member.website) && (
-                    <div className="flex items-center gap-2 mt-4 pt-3 border-t border-ink/10 justify-end flex-wrap">
-                      {member.website && (
-                        <a
-                          href={member.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-purple transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
-                        >
-                          Website <ArrowUpRight size={9} />
-                        </a>
-                      )}
-                      {member.github && (
-                        <a
-                          href={member.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-red transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
-                        >
-                          GitHub <ArrowUpRight size={9} />
-                        </a>
-                      )}
-                      {member.linkedin && (
-                        <a
-                          href={member.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-blue transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
-                        >
-                          LinkedIn <ArrowUpRight size={9} />
-                        </a>
-                      )}
-                      {member.instagram && (
-                        <a
-                          href={member.instagram}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-red transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
-                        >
-                          Instagram <ArrowUpRight size={9} />
-                        </a>
-                      )}
-                      {member.twitter && (
-                        <a
-                          href={member.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-blue transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
-                        >
-                          Twitter <ArrowUpRight size={9} />
-                        </a>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </AnimatePresence>
+                  <p className="text-xs sm:text-body-xl text-ink font-semibold leading-snug mb-4 sm:mb-6 max-w-xl relative z-10 break-words">
+                    {activeDept.description}
+                  </p>
 
+                  {/* Member Dossier ID Cards Grid */}
+                  <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 relative z-10 w-full">
+                    {activeDept.members.map((member, index) => (
+                      <motion.div
+                        key={`${member.name}-${member.role}`}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.08 + 0.1 }}
+                        className="group rounded-[16px] sm:rounded-[20px] bg-white/95 backdrop-blur-md p-3 sm:p-4 border-2 border-white/80 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all flex flex-col justify-between min-w-0"
+                      >
+                        {/* Member Card Top Row */}
+                        <div className="flex items-start gap-2.5 sm:gap-3">
+                          {/* Avatar */}
+                          <MemberAvatar member={member} />
+
+                          {/* Info Column */}
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-display text-xs sm:text-base uppercase text-ink font-black truncate leading-tight">
+                              {member.name}
+                            </h4>
+
+                            <p className="text-[10px] sm:text-xs font-black text-ink/75 mt-0.5 truncate">
+                              {member.role}
+                            </p>
+
+                            {member.description && (
+                              <p className="text-[9px] sm:text-[10px] font-semibold text-ink/80 mt-1 leading-snug break-words">
+                                &quot;{member.description}&quot;
+                              </p>
+                            )}
+
+                            {/* Skill Tag Pill */}
+                            <span className="mt-1.5 inline-block rounded-full bg-ink text-yellow px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black tracking-wider shadow-sm truncate max-w-full">
+                              {member.tag}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Social Buttons Bottom Bar */}
+                        <div className="mt-2.5 pt-2 border-t border-ink/10 flex items-center justify-end">
+                          <div className="flex flex-wrap items-center gap-1">
+                            {member.website && (
+                              <a
+                                href={member.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-purple transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
+                              >
+                                Website <ArrowUpRight className="h-2.5 w-2.5" />
+                              </a>
+                            )}
+                            {member.github && (
+                              <a
+                                href={member.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-red transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
+                              >
+                                GitHub <ArrowUpRight className="h-2.5 w-2.5" />
+                              </a>
+                            )}
+                            {member.linkedin && (
+                              <a
+                                href={member.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-blue transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
+                              >
+                                LinkedIn <ArrowUpRight className="h-2.5 w-2.5" />
+                              </a>
+                            )}
+                            {member.instagram && (
+                              <a
+                                href={member.instagram}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-red transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
+                              >
+                                Instagram <ArrowUpRight className="h-2.5 w-2.5" />
+                              </a>
+                            )}
+                            {member.twitter && (
+                              <a
+                                href={member.twitter}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-orange transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
+                              >
+                                X / Twitter <ArrowUpRight className="h-2.5 w-2.5" />
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Folder Bottom Stamp */}
+                <div className="mt-5 sm:mt-8 pt-3 sm:pt-4 border-t border-ink/15 flex flex-wrap items-center justify-between gap-2 text-[9px] sm:text-xs font-display uppercase font-black text-ink/70 relative z-10">
+                  <span>NIRMAAN 2026 ORGANIZERS</span>
+                  <span>BMSIT</span>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </section>
   );
