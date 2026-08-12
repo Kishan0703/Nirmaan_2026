@@ -2,104 +2,91 @@
 
 import Image from "next/image";
 
-/* Sponsor data — Unstop is confirmed, rest are placeholder slots */
-const sponsors = [
-  { name: "Unstop", logo: "/assets/images/unstop-logo.png", tier: "Powered by" },
-  { name: "Title Sponsor", logo: null, tier: "Title" },
-  { name: "Gold Sponsor 1", logo: null, tier: "Gold" },
-  { name: "Gold Sponsor 2", logo: null, tier: "Gold" },
-  { name: "Silver Sponsor 1", logo: null, tier: "Silver" },
-  { name: "Silver Sponsor 2", logo: null, tier: "Silver" },
-  { name: "Silver Sponsor 3", logo: null, tier: "Silver" },
-  { name: "Community Partner 1", logo: null, tier: "Community" },
-  { name: "Community Partner 2", logo: null, tier: "Community" },
-  { name: "Community Partner 3", logo: null, tier: "Community" },
-  { name: "Community Partner 4", logo: null, tier: "Community" },
-];
-
-function SponsorCard({ sponsor }: { sponsor: typeof sponsors[0] }) {
-  return (
-    <div className="shrink-0 w-[140px] h-[100px] rounded-[16px] bg-paper clay-card border border-white/40 flex flex-col items-center justify-center gap-2 px-3 select-none">
-      {sponsor.logo ? (
-        <>
-          <div className="relative h-10 w-10 rounded-full overflow-hidden">
-            <Image src={sponsor.logo} alt={sponsor.name} fill className="object-cover" />
-          </div>
-          <span className="text-[9px] font-display uppercase font-black text-ink tracking-wider text-center leading-tight">
-            {sponsor.name}
-          </span>
-        </>
-      ) : (
-        <>
-          <div className="h-10 w-10 rounded-full border-2 border-dashed border-ink/15 flex items-center justify-center">
-            <span className="text-[14px] text-ink/15 font-black">?</span>
-          </div>
-          <span className="text-[8px] font-display uppercase font-black text-ink/25 tracking-wider text-center leading-tight">
-            {sponsor.tier} Sponsor
-          </span>
-        </>
-      )}
-    </div>
-  );
-}
-
 export function SponsorWall() {
-  // Duplicate the list for seamless infinite loop
-  const repeated = [...sponsors, ...sponsors, ...sponsors, ...sponsors];
-
   return (
     <section id="sponsors" className="my-gap" data-reveal>
       <div className="rounded-brand bg-green p-box clay-card overflow-hidden text-ink">
         
-        {/* Header */}
+        {/* Powered by Mastryhub & Reskill — prominent hero section above sponsors */}
+        <div className="mb-10 bg-paper border-2 border-ink/15 rounded-[24px] p-6 shadow-md clay-card">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-ink text-paper text-[11px] font-display uppercase tracking-[0.2em] font-black mb-2">
+                <span>Powered By</span>
+              </div>
+              <p className="text-body-lg font-bold text-ink/80">
+                Driven by industry leaders empowering student builders and skill transformation.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+              {/* Mastryhub Card */}
+              <div className="flex items-center gap-3 bg-white border-2 border-ink/15 rounded-[18px] px-5 py-3 shadow-sm hover:scale-[1.02] transition-transform">
+                <div className="relative h-10 w-10 rounded-xl overflow-hidden shadow-md bg-black border border-white/20 shrink-0">
+                  <Image
+                    src="/assets/images/mastryhub-logo.png"
+                    alt="Mastryhub Logo"
+                    fill
+                    className="object-contain p-0.5"
+                  />
+                </div>
+                <span className="font-display text-[20px] uppercase font-black text-ink tracking-tight">
+                  Mastryhub
+                </span>
+              </div>
+
+              {/* Connector */}
+              <span className="text-ink/40 font-black text-xl font-display">&amp;</span>
+
+              {/* Reskill Card */}
+              <div className="flex items-center gap-3 bg-black border-2 border-ink/15 rounded-[18px] px-5 py-3 shadow-sm hover:scale-[1.02] transition-transform">
+                <div className="relative h-9 w-32 sm:w-36 shrink-0">
+                  <Image
+                    src="/assets/images/reskill-logo.png"
+                    alt="Reskill Logo"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sponsor Section Header */}
         <div className="flex flex-wrap items-end justify-between gap-5 border-b border-ink/15 pb-6 mb-8">
-          <h2 className="font-display text-section uppercase text-ink font-black">Event Sponsors</h2>
+          <div>
+            <span className="text-[12px] font-display uppercase tracking-[0.25em] font-black text-ink/60 block mb-1">
+              Official Partners & Bounties
+            </span>
+            <h2 className="font-display text-section uppercase text-ink font-black">
+              Event Sponsors
+            </h2>
+          </div>
           <p className="max-w-[480px] text-body-xl font-bold text-ink/90">
-            Sponsors shape the build floor. Challenge prompts, API briefs, and developer recruitment slots.
+            Sponsors shape the build floor. Challenge prompts, API briefs, cloud credits, and developer recruitment slots.
           </p>
         </div>
 
-        {/* Powered by Unstop — compact hero */}
-        <div className="flex items-center gap-4 mb-8 bg-paper border-2 border-ink/15 rounded-[18px] px-5 py-4 w-fit shadow-md clay-card">
-          <span className="text-[10px] font-display uppercase tracking-[0.2em] font-black text-ink/60">
-            Powered by
-          </span>
-          <div className="relative h-9 w-9 rounded-full overflow-hidden shadow-md bg-white p-0.5 border border-ink/10">
-            <Image
-              src="/assets/images/unstop-logo.png"
-              alt="Unstop"
-              fill
-              className="object-cover"
-            />
-          </div>
-          <span className="font-display text-[18px] uppercase font-black text-ink tracking-tight">
-            Unstop
-          </span>
-        </div>
-
-        {/* Sliding sponsor ticker — row 1 (left to right) */}
-        <div className="overflow-hidden mb-4">
-          <div className="flex w-max animate-marquee items-center gap-4">
-            {repeated.map((sponsor, i) => (
-              <SponsorCard key={`r1-${i}`} sponsor={sponsor} />
-            ))}
+        {/* To Be Announced Hero Box */}
+        <div className="bg-paper/90 border-2 border-dashed border-ink/30 rounded-[24px] p-8 text-center clay-card relative overflow-hidden">
+          <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-yellow/20 rounded-full blur-2xl pointer-events-none" />
+          <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
+            <span className="px-4 py-1.5 rounded-full bg-yellow text-ink font-display text-[12px] uppercase font-black tracking-widest mb-3 border border-ink/10 shadow-sm">
+              Sponsor Lineup
+            </span>
+            <h3 className="font-display text-[28px] sm:text-[36px] uppercase font-black text-ink tracking-tight mb-2">
+              To Be Announced
+            </h3>
+            <p className="text-body-lg font-bold text-ink/70 max-w-md">
+              We are finalizing headline track sponsors, bounty partners, and recruitment slots. Full sponsor reveal dropping soon!
+            </p>
           </div>
         </div>
 
-        {/* Sliding sponsor ticker — row 2 (right to left, reversed) */}
-        <div className="overflow-hidden">
-          <div
-            className="flex w-max items-center gap-4"
-            style={{
-              animation: "marquee 26s linear infinite reverse",
-            }}
-          >
-            {[...repeated].reverse().map((sponsor, i) => (
-              <SponsorCard key={`r2-${i}`} sponsor={sponsor} />
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
 }
+
+

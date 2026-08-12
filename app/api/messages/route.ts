@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { getNeonMessages, saveNeonMessage, LobbyMessage } from "@/lib/neon";
 
 export const dynamic = 'force-dynamic';
 
@@ -44,10 +45,10 @@ const TEAM_MEMBERS_DATABASE = [
   "nirmaan organizers", "organizer", "admin", "lead", "mentor"
 ];
 
-function readDB() {
+function readDB(): LobbyMessage[] {
   try {
     if (!fs.existsSync(DB_PATH)) {
-      const initial = [
+      const initial: LobbyMessage[] = [
         {
           id: "msg-welcome",
           sender: "Nirmaan Organizers",
@@ -67,16 +68,35 @@ function readDB() {
   }
 }
 
-function writeDB(messages: any[]) {
+function writeDB(messages: LobbyMessage[]) {
   try {
     fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
     fs.writeFileSync(DB_PATH, JSON.stringify(messages, null, 2), "utf-8");
   } catch (err) {
-    console.error("Failed to write to DB:", err);
+    console.error("Failed to write to local DB:", err);
   }
 }
 
 export async function GET() {
+  if (process.env.DATABASE_URL) {
+    const neonMsgs = await getNeonMessages();
+    if (neonMsgs) {
+      if (neonMsgs.length === 0) {
+        // Seed initial welcome message if Neon table is empty
+        const welcome: LobbyMessage = {
+          id: "msg-welcome",
+          sender: "Nirmaan Organizers",
+          type: "REPLY",
+          text: "Welcome to the NIRMAAN 2026 Community!",
+          time: "10:00 AM",
+        };
+        await saveNeonMessage(welcome);
+        return NextResponse.json({ success: true, messages: [welcome] });
+      }
+      return NextResponse.json({ success: true, messages: neonMsgs });
+    }
+  }
+
   const messages = readDB();
   return NextResponse.json({ success: true, messages });
 }
@@ -93,7 +113,6 @@ export async function POST(req: Request) {
     const nameTrimmed = (sender || "Builder").trim();
     const nameLower = nameTrimmed.toLowerCase();
 
-    // Database check for team member
     const isTeamMember = TEAM_MEMBERS_DATABASE.some((teamName) => {
       if (!nameLower) return false;
       return nameLower === teamName || (nameLower.length >= 3 && (nameLower.includes(teamName) || teamName.includes(nameLower)));
@@ -102,7 +121,7 @@ export async function POST(req: Request) {
     const currentTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     const msgType = isTeamMember ? "REPLY" : "QUERY";
 
-    const newMsg = {
+    const newMsg: LobbyMessage = {
       id: `msg-${Date.now()}`,
       sender: nameTrimmed,
       type: msgType,
@@ -110,25 +129,39 @@ export async function POST(req: Request) {
       time: currentTime,
     };
 
-    const messages = readDB();
-    messages.push(newMsg);
-
-    // If query from non-team member, append receipt from Organizers
+    let autoReceipt: LobbyMessage | null = null;
     if (!isTeamMember) {
-      const autoReceipt = {
-        id: `bot-${Date.now()}`,
+      autoReceipt = {
+        id: `bot-${Date.now() + 1}`,
         sender: "Nirmaan Organizers",
         type: "REPLY",
         text: `Thanks @${nameTrimmed}! Your message has been logged to the lobby floor. Organizers will respond shortly! 🚀`,
         time: currentTime,
       };
-      messages.push(autoReceipt);
     }
 
+    if (process.env.DATABASE_URL) {
+      const saved1 = await saveNeonMessage(newMsg);
+      if (saved1) {
+        if (autoReceipt) {
+          await saveNeonMessage(autoReceipt);
+        }
+        const updatedNeonMsgs = (await getNeonMessages()) || [];
+        return NextResponse.json({ success: true, messages: updatedNeonMsgs });
+      }
+    }
+
+    // Local fallback if DATABASE_URL is not set or Neon query failed
+    const messages = readDB();
+    messages.push(newMsg);
+    if (autoReceipt) {
+      messages.push(autoReceipt);
+    }
     writeDB(messages);
 
     return NextResponse.json({ success: true, messages });
   } catch (error) {
+    console.error("Messages POST error:", error);
     return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }
