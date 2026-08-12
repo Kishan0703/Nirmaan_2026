@@ -1,6 +1,6 @@
 "use client";
 
-import { announcementItems } from "@/lib/data";
+import { announcements } from "@/lib/data";
 
 export function Announcements() {
   return (
@@ -16,7 +16,7 @@ export function Announcements() {
         <div className="mt-8 grid gap-gap lg:grid-cols-5 items-center">
           {/* Left Side: Announcement Bulletins */}
           <div className="lg:col-span-3 flex flex-col gap-3">
-            {announcementItems.map((item) => (
+            {announcements.map((item) => (
               <div
                 key={item.id}
                 className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 rounded-[18px] p-4 clay-card bg-paper shadow-xs border border-white/60"
