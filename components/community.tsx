@@ -6,20 +6,20 @@ import Link from "next/link";
 export function Community() {
   return (
     <section className="my-gap grid gap-gap lg:grid-cols-12 items-stretch" data-reveal>
-      {/* Left Box: Round 3 Team Photo (5 cols) - NO text overlay */}
-      <div className="lg:col-span-5 relative min-h-[360px] sm:min-h-[420px] overflow-hidden rounded-brand border-2 border-white/30 shadow-soft bg-paper">
+      {/* Left Box: Round 3 Team Photo (5 cols) - Full uncropped view */}
+      <div className="lg:col-span-5 relative aspect-[4/3] min-h-[320px] sm:min-h-[380px] overflow-hidden rounded-brand border-2 border-white/30 shadow-soft bg-paper">
         <Image
           src="/assets/images/nirmaan-team-round3.jpg"
           alt="Nirmaan 2026 Organizing Team and Round-3 Participants"
           fill
-          className="object-cover object-right filter saturate-110 contrast-105"
+          className="object-cover object-center filter saturate-110 contrast-105"
           sizes="(min-width: 1024px) 42vw, 100vw"
           priority
         />
       </div>
 
       {/* Center Box: Red Community Lobby Card (3 cols) */}
-      <div className="lg:col-span-3 flex flex-col justify-end min-h-[360px] sm:min-h-[420px] rounded-brand bg-red p-6 sm:p-7 clay-card text-white shadow-soft">
+      <div className="lg:col-span-3 flex flex-col justify-end min-h-[320px] sm:min-h-[380px] rounded-brand bg-red p-6 sm:p-7 clay-card text-white shadow-soft">
         <div>
           <h2 className="font-display text-section uppercase text-white font-black leading-none">
             Community Lobby
@@ -38,8 +38,8 @@ export function Community() {
         </div>
       </div>
 
-      {/* Right Box: Team Collage Photo (4 cols) - NO text overlay */}
-      <div className="lg:col-span-4 relative min-h-[360px] sm:min-h-[420px] overflow-hidden rounded-brand border-2 border-white/30 shadow-soft bg-paper">
+      {/* Right Box: Team Collage Photo (4 cols) */}
+      <div className="lg:col-span-4 relative aspect-[4/3] min-h-[320px] sm:min-h-[380px] overflow-hidden rounded-brand border-2 border-white/30 shadow-soft bg-paper">
         <Image
           src="/assets/images/nirmaan-team-collage.jpg"
           alt="Nirmaan Organizing Team Collage"
