@@ -130,7 +130,7 @@ const DEPARTMENTS: Department[] = [
       { name: "Sai Amrutha AS", role: "Marketing Strategist (Coding Club)", tag: "Campaign Lead", initials: "SA", avatar: "https://drive.google.com/thumbnail?id=1wICOPf4tsrI3yE_JIxDzte3FoHbejSIn&sz=w500", linkedin: "https://www.linkedin.com/in/sai-amrutha-a-s-443671307/", github: "https://github.com/saiamruthaas-as" },
       { name: "Sarjath", role: "Marketing Specialist", tag: "Growth & Hype", initials: "S", avatar: "" },
       { name: "Sakshi Sanjeev Jadhav", role: "Marketing Specialist (Coding Club)", tag: "Social Content", initials: "SJ", avatar: "https://drive.google.com/thumbnail?id=1VD209VQN0hT7epOoijKUDFsJ5oBRPSym&sz=w500", linkedin: "https://www.linkedin.com/in/sakshi-jadhav-aa5328387", github: "https://github.com/sakshisjadhav2708" },
-      { name: "Namratha R Bagade", role: "Marketing Specialist (Alterino)", tag: "Outreach & PR", initials: "NB", avatar: "https://drive.google.com/thumbnail?id=1CJg5AI1paNKpBq2oUB9ursiWwgjuyE8l&sz=w500", linkedin: "https://www.linkedin.com/in/namratha-r-bagade-b8b980384" },
+      { name: "Namratha R Bagade", role: "Marketing Specialist (Alterino)", tag: "Outreach & PR", initials: "NB", avatar: "https://drive.google.com/thumbnail?id=1CJg5AI1paNKpBq2oUB9ursiWwgjuyE8l&sz=w500", avatarPosition: "object-top", linkedin: "https://www.linkedin.com/in/namratha-r-bagade-b8b980384" },
     ],
   },
   {
