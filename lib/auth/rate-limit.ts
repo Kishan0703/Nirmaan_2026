@@ -1,34 +1,88 @@
 type RateLimitRecord = {
-  count: number;
-  resetTime: number;
+  tokens: number;
+  lastRefill: number;
 };
 
-const store = new Map<string, RateLimitRecord>();
+type SlidingWindowRecord = {
+  timestamps: number[];
+};
+
+const tokenBucketStore = new Map<string, RateLimitRecord>();
+const slidingWindowStore = new Map<string, SlidingWindowRecord>();
 
 /**
- * In-memory sliding window rate limiter
- * @param key Identification key (e.g. `login:192.168.1.1` or `forgot:user@example.com`)
- * @param limit Maximum allowed requests in window
- * @param windowMs Window duration in milliseconds (default 15 minutes)
+ * Token Bucket Rate Limiter
+ * Refills tokens continuously over time. Excellent for burst control on AI & API routes.
  */
-export function checkRateLimit(
+export function checkTokenBucket(
+  key: string,
+  capacity: number = 10,
+  fillRatePerSecond: number = 1
+): { success: boolean; remaining: number; retryAfterSeconds: number } {
+  const now = Date.now();
+  let record = tokenBucketStore.get(key);
+
+  if (!record) {
+    record = { tokens: capacity, lastRefill: now };
+    tokenBucketStore.set(key, record);
+  }
+
+  // Calculate refilled tokens
+  const elapsedSeconds = (now - record.lastRefill) / 1000;
+  record.tokens = Math.min(capacity, record.tokens + elapsedSeconds * fillRatePerSecond);
+  record.lastRefill = now;
+
+  if (record.tokens >= 1) {
+    record.tokens -= 1;
+    return { success: true, remaining: Math.floor(record.tokens), retryAfterSeconds: 0 };
+  }
+
+  const retryAfterSeconds = Math.ceil((1 - record.tokens) / fillRatePerSecond);
+  return { success: false, remaining: 0, retryAfterSeconds };
+}
+
+/**
+ * Sliding Window Log Rate Limiter
+ * Accurately tracks request timestamps over a moving window. Best for auth & strict limit enforcement.
+ */
+export function checkSlidingWindow(
   key: string,
   limit: number = 5,
   windowMs: number = 15 * 60 * 1000
 ): { success: boolean; remaining: number; retryAfterSeconds: number } {
   const now = Date.now();
-  const record = store.get(key);
+  const windowStart = now - windowMs;
 
-  if (!record || record.resetTime < now) {
-    store.set(key, { count: 1, resetTime: now + windowMs });
-    return { success: true, remaining: limit - 1, retryAfterSeconds: 0 };
+  let record = slidingWindowStore.get(key);
+  if (!record) {
+    record = { timestamps: [] };
+    slidingWindowStore.set(key, record);
   }
 
-  if (record.count >= limit) {
-    const retryAfterSeconds = Math.ceil((record.resetTime - now) / 1000);
+  // Filter out timestamps outside current sliding window
+  record.timestamps = record.timestamps.filter((ts) => ts > windowStart);
+
+  if (record.timestamps.length >= limit) {
+    const oldestInWindow = record.timestamps[0];
+    const retryAfterSeconds = Math.ceil((oldestInWindow + windowMs - now) / 1000);
     return { success: false, remaining: 0, retryAfterSeconds };
   }
 
-  record.count += 1;
-  return { success: true, remaining: limit - record.count, retryAfterSeconds: 0 };
+  record.timestamps.push(now);
+  return { success: true, remaining: limit - record.timestamps.length, retryAfterSeconds: 0 };
 }
+
+// Backward compatibility alias for existing routes
+export const checkRateLimit = checkSlidingWindow;
+
+/**
+ * Preset Rate Limiting Configuration Rules
+ */
+export const RATE_LIMIT_PRESETS = {
+  LOGIN: { limit: 5, windowMs: 15 * 60 * 1000 },
+  REGISTER: { limit: 3, windowMs: 60 * 60 * 1000 },
+  PASSWORD_RESET: { limit: 3, windowMs: 60 * 60 * 1000 },
+  GENERAL_API: { limit: 60, windowMs: 60 * 1000 },
+  AI_GENERATION: { capacity: 10, fillRatePerSecond: 0.1 }, // 1 token every 10 seconds, capacity 10
+  FILE_UPLOAD: { limit: 10, windowMs: 60 * 60 * 1000 },
+};

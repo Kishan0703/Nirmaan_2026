@@ -4,6 +4,35 @@ import type { NextRequest } from "next/server";
 // Secret for JWT verification
 const AUTH_SECRET = process.env.AUTH_SECRET || "nirmaan_2026_super_strong_default_secret_key_32_bytes_min!";
 
+// Edge-compatible Sliding Window Rate Limiter Store
+type EdgeRateLimitRecord = { timestamps: number[] };
+const edgeRateLimitStore = new Map<string, EdgeRateLimitRecord>();
+
+/**
+ * Edge Rate Limiter (60 requests per minute per IP for general API routes)
+ */
+function checkEdgeRateLimit(clientIp: string, limit: number = 60, windowMs: number = 60 * 1000): { success: boolean; retryAfter: number } {
+  const now = Date.now();
+  const windowStart = now - windowMs;
+
+  let record = edgeRateLimitStore.get(clientIp);
+  if (!record) {
+    record = { timestamps: [] };
+    edgeRateLimitStore.set(clientIp, record);
+  }
+
+  record.timestamps = record.timestamps.filter((ts) => ts > windowStart);
+
+  if (record.timestamps.length >= limit) {
+    const oldest = record.timestamps[0];
+    const retryAfter = Math.ceil((oldest + windowMs - now) / 1000);
+    return { success: false, retryAfter };
+  }
+
+  record.timestamps.push(now);
+  return { success: true, retryAfter: 0 };
+}
+
 /**
  * Lightweight Edge-compatible JWT verification for middleware
  */
@@ -51,8 +80,24 @@ async function verifyJwtEdge(token: string): Promise<{ userId: string; email: st
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const clientIp = request.headers.get("x-forwarded-for") || "unknown_ip";
 
-  // Protect Admin Pages and Admin API Endpoints
+  // 1. Global API Rate Limiting (Blocks bot flooding and automated scripts)
+  if (pathname.startsWith("/api")) {
+    const isAuthRoute = pathname.startsWith("/api/auth");
+    // Standard API limit: 60 req/min; Auth route limit handled in specific endpoint handlers
+    const limit = isAuthRoute ? 20 : 60;
+    const rateCheck = checkEdgeRateLimit(`${pathname}:${clientIp}`, limit, 60 * 1000);
+
+    if (!rateCheck.success) {
+      return NextResponse.json(
+        { error: "Too many requests. Global rate limit exceeded." },
+        { status: 429, headers: { "Retry-After": String(rateCheck.retryAfter) } }
+      );
+    }
+  }
+
+  // 2. Protect Admin Pages and Admin API Endpoints at Routing Layer
   const isAdminPageRoute = pathname.startsWith("/admin");
   const isAdminApiRoute = pathname.startsWith("/api/admin");
 
@@ -83,5 +128,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/:path*"],
 };
