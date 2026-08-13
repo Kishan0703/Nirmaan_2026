@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { getLeaderboard, saveLeaderboardScore, clearLeaderboard } from "@/lib/db";
 import { verifySessionToken } from "@/lib/auth/security";
 import { findUserById } from "@/lib/auth/db";
+import { handleServerError } from "@/lib/auth/error-handler";
 
 export const dynamic = "force-dynamic";
 
@@ -13,8 +14,7 @@ export async function GET() {
     const sorted = list.slice(0, 10);
     return NextResponse.json({ leaderboard: sorted });
   } catch (err) {
-    console.error("Leaderboard GET error:", err);
-    return NextResponse.json({ leaderboard: [] });
+    return handleServerError(err, "Leaderboard GET Error");
   }
 }
 
@@ -37,8 +37,7 @@ export async function DELETE() {
     await clearLeaderboard();
     return NextResponse.json({ success: true, leaderboard: [] });
   } catch (err) {
-    console.error("Leaderboard DELETE error:", err);
-    return NextResponse.json({ error: "Failed to clear leaderboard" }, { status: 500 });
+    return handleServerError(err, "Leaderboard DELETE Error");
   }
 }
 
@@ -65,7 +64,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid score data" }, { status: 400 });
     }
 
-    // IDOR Protection: Always bind entry ID and name strictly to authenticated user
     const result = await saveLeaderboardScore({
       id: user.id,
       name: user.name,
@@ -79,7 +77,6 @@ export async function POST(request: Request) {
       rank: result.userRank,
     });
   } catch (err) {
-    console.error("Leaderboard POST error:", err);
-    return NextResponse.json({ error: "Failed to submit score" }, { status: 500 });
+    return handleServerError(err, "Leaderboard POST Error");
   }
 }

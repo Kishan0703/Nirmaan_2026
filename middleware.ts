@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getCorsHeaders, handleCorsPreflight } from "@/lib/auth/cors";
 
 // Secret for JWT verification
 const AUTH_SECRET = process.env.AUTH_SECRET || "nirmaan_2026_super_strong_default_secret_key_32_bytes_min!";
@@ -8,9 +9,6 @@ const AUTH_SECRET = process.env.AUTH_SECRET || "nirmaan_2026_super_strong_defaul
 type EdgeRateLimitRecord = { timestamps: number[] };
 const edgeRateLimitStore = new Map<string, EdgeRateLimitRecord>();
 
-/**
- * Edge Rate Limiter (60 requests per minute per IP for general API routes)
- */
 function checkEdgeRateLimit(clientIp: string, limit: number = 60, windowMs: number = 60 * 1000): { success: boolean; retryAfter: number } {
   const now = Date.now();
   const windowStart = now - windowMs;
@@ -33,9 +31,6 @@ function checkEdgeRateLimit(clientIp: string, limit: number = 60, windowMs: numb
   return { success: true, retryAfter: 0 };
 }
 
-/**
- * Lightweight Edge-compatible JWT verification for middleware
- */
 async function verifyJwtEdge(token: string): Promise<{ userId: string; email: string; role?: string; exp: number } | null> {
   try {
     const parts = token.split(".");
@@ -43,13 +38,11 @@ async function verifyJwtEdge(token: string): Promise<{ userId: string; email: st
 
     const [headerB64, payloadB64, signatureB64] = parts;
 
-    // Reject 'none' algorithm or non-HS256 algorithms
     const headerJson = JSON.parse(atob(headerB64.replace(/-/g, "+").replace(/_/g, "/")));
     if (!headerJson || typeof headerJson.alg !== "string" || headerJson.alg.toUpperCase() !== "HS256") {
       return null;
     }
 
-    // Verify signature using Web Crypto API (Edge Runtime Compatible)
     const encoder = new TextEncoder();
     const key = await crypto.subtle.importKey(
       "raw",
@@ -69,7 +62,7 @@ async function verifyJwtEdge(token: string): Promise<{ userId: string; email: st
     const nowSeconds = Math.floor(Date.now() / 1000);
 
     if (payload.exp && payload.exp < nowSeconds) {
-      return null; // Expired token
+      return null;
     }
 
     return payload;
@@ -80,24 +73,30 @@ async function verifyJwtEdge(token: string): Promise<{ userId: string; email: st
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const clientIp = request.headers.get("x-forwarded-for") || "unknown_ip";
+  const origin = request.headers.get("origin");
 
-  // 1. Global API Rate Limiting (Blocks bot flooding and automated scripts)
+  // 1. CORS Preflight OPTIONS Handling
+  if (request.method === "OPTIONS" && pathname.startsWith("/api")) {
+    return handleCorsPreflight(origin);
+  }
+
+  // 2. Global API Rate Limiting
   if (pathname.startsWith("/api")) {
+    const clientIp = request.headers.get("x-forwarded-for") || "unknown_ip";
     const isAuthRoute = pathname.startsWith("/api/auth");
-    // Standard API limit: 60 req/min; Auth route limit handled in specific endpoint handlers
     const limit = isAuthRoute ? 20 : 60;
     const rateCheck = checkEdgeRateLimit(`${pathname}:${clientIp}`, limit, 60 * 1000);
 
     if (!rateCheck.success) {
+      const corsHeaders = getCorsHeaders(origin);
       return NextResponse.json(
         { error: "Too many requests. Global rate limit exceeded." },
-        { status: 429, headers: { "Retry-After": String(rateCheck.retryAfter) } }
+        { status: 429, headers: { ...corsHeaders, "Retry-After": String(rateCheck.retryAfter) } }
       );
     }
   }
 
-  // 2. Protect Admin Pages and Admin API Endpoints at Routing Layer
+  // 3. Admin Authorization Routing Protection
   const isAdminPageRoute = pathname.startsWith("/admin");
   const isAdminApiRoute = pathname.startsWith("/api/admin");
 
@@ -106,7 +105,7 @@ export async function middleware(request: NextRequest) {
 
     if (!sessionToken) {
       if (isAdminApiRoute) {
-        return NextResponse.json({ error: "Authentication required." }, { status: 401 });
+        return NextResponse.json({ error: "Authentication required." }, { status: 401, headers: getCorsHeaders(origin) });
       }
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
@@ -115,16 +114,24 @@ export async function middleware(request: NextRequest) {
 
     const payload = await verifyJwtEdge(sessionToken);
 
-    // Verify both token validity AND admin role at routing layer
     if (!payload || payload.role !== "admin") {
       if (isAdminApiRoute) {
-        return NextResponse.json({ error: "Forbidden: Admin role required." }, { status: 403 });
+        return NextResponse.json({ error: "Forbidden: Admin role required." }, { status: 403, headers: getCorsHeaders(origin) });
       }
       return NextResponse.redirect(new URL("/?error=unauthorized", request.url));
     }
   }
 
-  return NextResponse.next();
+  // 4. Attach CORS Headers to all API responses
+  const response = NextResponse.next();
+  if (pathname.startsWith("/api")) {
+    const corsHeaders = getCorsHeaders(origin);
+    Object.entries(corsHeaders).forEach(([key, val]) => {
+      response.headers.set(key, val);
+    });
+  }
+
+  return response;
 }
 
 export const config = {
