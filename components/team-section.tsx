@@ -11,6 +11,7 @@ type Member = {
   tag?: string;
   tags?: string[];
   avatar: string;
+  avatarPosition?: string;
   initials: string;
   description?: string;
   github?: string;
@@ -144,7 +145,7 @@ const DEPARTMENTS: Department[] = [
     members: [
       { name: "Ayush Kumar", role: "Volunteer (Coding Club)", tag: "Ground Support", initials: "AK", avatar: "https://drive.google.com/thumbnail?id=1aVFuQ2r9OImnuSKEX2rc4ez7Xk_M0HQn&sz=w500", linkedin: "https://www.linkedin.com/in/ayush-kumar-b97886315" },
       { name: "Sisir Raj", role: "Volunteer (Alterino)", tag: "Ground Support", initials: "SR", avatar: "https://drive.google.com/thumbnail?id=1ZhJ_wpvxfbLHy4T80-fx2O_XI5Mm6VMi&sz=w500", linkedin: "https://www.linkedin.com/in/sisir-raj-388bba331" },
-      { name: "Eklavya Agarwal", role: "Volunteer (Coding Club)", tag: "Ground Support", initials: "EA", avatar: "https://drive.google.com/thumbnail?id=12jrBZqNIwVZxibXcoLy_t6UcSvkAiM2H&sz=w500", linkedin: "https://www.linkedin.com/in/eklavya-agarwal-156509375/", github: "https://github.com/agarwaleklavya575-sudo" },
+      { name: "Eklavya Agarwal", role: "Volunteer (Coding Club)", tag: "Ground Support", initials: "EA", avatar: "https://drive.google.com/thumbnail?id=12jrBZqNIwVZxibXcoLy_t6UcSvkAiM2H&sz=w500", avatarPosition: "object-top", linkedin: "https://www.linkedin.com/in/eklavya-agarwal-156509375/", github: "https://github.com/agarwaleklavya575-sudo" },
       { name: "Sajja Chaulagain", role: "Volunteer (Coding Club)", tag: "Ground Support", initials: "SC", avatar: "https://drive.google.com/thumbnail?id=17K3f_0FHSVIXpAmFueifFfrfdUGyEIIB&sz=w500", linkedin: "https://www.linkedin.com/in/sajja-chaulagain-5a6204334" },
       { name: "Prateek Mitra", role: "Volunteer (Coding Club)", tag: "Ground Support", initials: "PM", avatar: "", linkedin: "https://www.linkedin.com/in/prateek-mitra-7953522aa/", github: "https://github.com/Prateek07-code" },
       { name: "Shlesha Singh Thakuri", role: "Volunteer (Coding Club)", tag: "Ground Support", initials: "ST", avatar: "https://drive.google.com/thumbnail?id=1toyRzMw1raM9WhfJYi6m6s4RneyVT3Nw&sz=w500" },
@@ -165,7 +166,7 @@ function MemberAvatar({ member }: { member: Member }) {
           fill
           unoptimized
           onError={() => setImgError(true)}
-          className="object-cover group-hover:scale-110 transition-transform duration-300"
+          className={`object-cover ${member.avatarPosition || "object-center"} group-hover:scale-110 transition-transform duration-300`}
         />
       ) : (
         <span className="font-display text-xs uppercase font-black tracking-wider text-yellow">
