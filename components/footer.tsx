@@ -103,13 +103,13 @@ export function Footer() {
           <p className="font-display text-[14px] uppercase tracking-tight text-ink font-black">
             © 2026 NIRMAAN 2026
           </p>
-          <p className="text-xs font-semibold text-ink/75">
+          <p className="text-xs font-bold text-ink">
             Designed &amp; Built by{" "}
             <a
               href="https://arnavpaniya.netlify.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-bold text-ink underline decoration-red/60 hover:text-red transition-colors"
+              className="font-extrabold text-ink underline decoration-red hover:text-red transition-colors"
             >
               Arnav Paniya
             </a>{" "}
@@ -118,7 +118,7 @@ export function Footer() {
               href="https://my-portfolio-black-seven-97.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-bold text-ink underline decoration-blue/60 hover:text-blue transition-colors"
+              className="font-extrabold text-ink underline decoration-blue hover:text-blue transition-colors"
             >
               Shashikiran B S
             </a>
