@@ -73,7 +73,7 @@ const TRACK_SPECIAL_PRIZES = [
   {
     id: "open-1",
     track: "Open Innovation",
-    title: "Best Open Innovation #1",
+    title: "Best Innovation #1",
     amount: "₹7,500",
     rawAmount: 7500,
     badge: "SPECIAL TRACK AWARD",
@@ -88,7 +88,7 @@ const TRACK_SPECIAL_PRIZES = [
   {
     id: "open-2",
     track: "Open Innovation",
-    title: "Best Open Innovation #2",
+    title: "Best Innovation #2",
     amount: "₹7,500",
     rawAmount: 7500,
     badge: "SPECIAL TRACK AWARD",
