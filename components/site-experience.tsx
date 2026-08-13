@@ -30,6 +30,7 @@ import { Marquee, SectionTitle } from "./helpers";
 import { AnimatePresence } from "framer-motion";
 import { Preloader } from "./preloader";
 import { LobbyNotificationListener } from "./lobby-notification";
+import { WhatsappFloatingButton } from "./whatsapp-floating-button";
 
 const MARQUEE_ONE_ITEMS = ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"];
 const MARQUEE_TWO_ITEMS = ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"];
@@ -428,6 +429,7 @@ export function SiteExperience() {
       
       <ParticipationModal open={modalOpen} onClose={() => setModalOpen(false)} returnFocusRef={lastModalTriggerRef} />
       <LobbyNotificationListener />
+      {!loading && <WhatsappFloatingButton />}
     </>
   );
 }

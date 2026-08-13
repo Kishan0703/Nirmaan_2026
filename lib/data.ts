@@ -84,7 +84,7 @@ export const eventFlowCards: EventFlowCard[] = [
   {
     title: "Plan",
     subtitle: "Shape the build brief",
-    image: "/assets/images/nirmaan-hero.png",
+    image: "/assets/images/1.png",
     speed: "fast",
     details: ["Tracks, rules, and rubrics", "Timeline and prize structure", "Challenge briefs published"]
   },
