@@ -8,7 +8,8 @@ import { Folder, ChevronRight, ArrowUpRight } from "lucide-react";
 type Member = {
   name: string;
   role: string;
-  tag: string;
+  tag?: string;
+  tags?: string[];
   avatar: string;
   initials: string;
   description?: string;
@@ -42,11 +43,11 @@ const DEPARTMENTS: Department[] = [
     textColor: "text-red",
     description: "The core leadership and overall organizers steering Nirmaan 2026.",
     members: [
-      { name: "Anmol Narayan", role: "Head (Coding Club)", tag: "President", initials: "AN", avatar: "https://drive.google.com/thumbnail?id=13sVKpdiAgg2vJ4Z5vZbLR-z3WwQx2KU_&sz=w500", linkedin: "https://www.linkedin.com/in/anmol-narayan-8133a532a", github: "https://github.com/anmolnarayan" },
+      { name: "Anmol Narayan", role: "Head (Coding Club)", tag: "President", tags: ["President", "Head"], initials: "AN", avatar: "https://drive.google.com/thumbnail?id=13sVKpdiAgg2vJ4Z5vZbLR-z3WwQx2KU_&sz=w500", linkedin: "https://www.linkedin.com/in/anmol-narayan-8133a532a", github: "https://github.com/anmolnarayan" },
       { name: "Amey Vikram Singh", role: "Head (Alterino)", tag: "Head", initials: "AVS", avatar: "/assets/images/team/amey.jpg", linkedin: "https://www.linkedin.com/in/amey-vikram-singh-610039333/", instagram: "https://www.instagram.com/ameyvikramsingh.bisen/" },
       { name: "Alok Verma", role: "Co-Head (Coding Club)", tag: "Co-Head", initials: "AV", avatar: "https://drive.google.com/thumbnail?id=18tgb1zLyUjvYDq53OgFufxgTFkb3nVMO&sz=w500" },
       { name: "Dheeksha N", role: "Co-Head (Coding Club)", tag: "Co-Head", initials: "DN", avatar: "https://drive.google.com/thumbnail?id=10DKueLQJbU-9gpz-rwP7WCfSeCrW2lzF&sz=w500", linkedin: "https://www.linkedin.com/in/dheekshanaveen/", github: "https://github.com/dheekshanaveen" },
-      { name: "Shashikiran B S", role: "Co-Head (Coding Club)", tag: "Co-Head", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG&sz=w500", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
+      { name: "Shashikiran B S", role: "Co-Head (Coding Club)", tag: "Co-Head", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG&sz=w500", website: "https://my-portfolio-black-seven-97.vercel.app/", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
       { name: "Saurabh Kumar", role: "Co-Head (Alterino)", tag: "Co-Head", initials: "SK", avatar: "https://drive.google.com/thumbnail?id=1XincBkx8sKuO5QbTtiP2aAKqmXXAWM5d&sz=w500", linkedin: "https://www.linkedin.com/in/saurabh-kumar-6358a433b" },
     ],
   },
@@ -60,7 +61,7 @@ const DEPARTMENTS: Department[] = [
     textColor: "text-blue",
     description: "Engineering the digital platform, hackathon portals, and judge scoreboards.",
     members: [
-      { name: "Shashikiran B S", role: "Technical Head (Coding Club)", tag: "Head", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG&sz=w500", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
+      { name: "Shashikiran B S", role: "Technical Head (Coding Club)", tag: "Head", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG&sz=w500", website: "https://my-portfolio-black-seven-97.vercel.app/", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
       { name: "Arnav Paniya", role: "UI/UX Head (Coding Club)", tag: "UI/UX Head", initials: "AP", avatar: "/assets/images/team/arnav.jpg", description: "VLSI & AI Enthusiast | Freelancer", website: "https://arnavpaniya.netlify.app/", linkedin: "https://www.linkedin.com/in/arnav-paniya/", github: "https://github.com/arnavpaniya" },
       { name: "Swapnil Biswas", role: "Web Engineer (Coding Club)", tag: "Web Developer", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=10VGrCW4Mjl1a1tVf6vF3kMYRrPH9AJMk&sz=w500", description: "Full Stack developer and robotics enthusiast focused on creating scalable software and intelligent systems.", linkedin: "https://www.linkedin.com/in/swapnil-biswas-b33b35399/", github: "https://github.com/Swapnil-Biswas" },
       { name: "Kishan MN", role: "Web Engineer & Marketing Head", tag: "Web Developer", initials: "KMN", avatar: "/assets/images/team/kishan.jpg", website: "https://www.kishanmn.dev/", linkedin: "https://www.linkedin.com/in/kishan-mn-898b67334", github: "https://github.com/Kishan0703" },
@@ -362,10 +363,17 @@ export function TeamSection() {
                               </p>
                             )}
 
-                            {/* Skill Tag Pill */}
-                            <span className="mt-1.5 inline-block rounded-full bg-ink text-yellow px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black tracking-wider shadow-sm truncate max-w-full">
-                              {member.tag}
-                            </span>
+                            {/* Skill Tag Pills */}
+                            <div className="mt-1.5 flex flex-wrap gap-1">
+                              {(member.tags || (member.tag ? [member.tag] : [])).map((t, i) => (
+                                <span
+                                  key={i}
+                                  className="inline-block rounded-full bg-ink text-yellow px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black tracking-wider shadow-sm truncate max-w-full"
+                                >
+                                  {t}
+                                </span>
+                              ))}
+                            </div>
                           </div>
                         </div>
 

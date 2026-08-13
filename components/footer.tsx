@@ -103,6 +103,26 @@ export function Footer() {
           <p className="font-display text-[14px] uppercase tracking-tight text-ink font-black">
             © 2026 NIRMAAN 2026
           </p>
+          <p className="text-xs font-semibold text-ink/75">
+            Designed &amp; Built by{" "}
+            <a
+              href="https://arnavpaniya.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-ink underline decoration-red/60 hover:text-red transition-colors"
+            >
+              Arnav Paniya
+            </a>{" "}
+            &amp;{" "}
+            <a
+              href="https://my-portfolio-black-seven-97.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-ink underline decoration-blue/60 hover:text-blue transition-colors"
+            >
+              Shashikiran B S
+            </a>
+          </p>
         </div>
 
         {/* Outline Pill navigation items */}
