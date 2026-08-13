@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { verifyPassword, createSessionToken } from "@/lib/auth/security";
-import { findUserByEmail } from "@/lib/auth/db";
+import { verifyPassword, createSessionToken, createRefreshToken, hashToken } from "@/lib/auth/security";
+import { findUserByEmail, saveRefreshTokenRecord } from "@/lib/auth/db";
 import { checkRateLimit } from "@/lib/auth/rate-limit";
 
 export async function POST(req: Request) {
@@ -24,17 +24,14 @@ export async function POST(req: Request) {
 
     const user = findUserByEmail(email);
     if (!user) {
-      // Generic response prevents account enumeration
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
-    // Verify Password Hash
     const isPasswordValid = await verifyPassword(password, user.passwordHash);
     if (!isPasswordValid) {
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
-    // Email verification check
     if (!user.emailVerified) {
       return NextResponse.json(
         { error: "Email address is not verified. Please verify your email first." },
@@ -42,8 +39,20 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create 15-minute expiring session token
-    const token = createSessionToken({ userId: user.id, email: user.email }, 15 * 60);
+    // 1. Create Access Token (15 mins)
+    const accessToken = createSessionToken({ userId: user.id, email: user.email, role: user.role }, 15 * 60);
+
+    // 2. Create Refresh Token (7 days) for Rotation
+    const { refreshToken, tokenId, expiresAt } = createRefreshToken(user.id);
+    const [, rawSecret] = refreshToken.split(".");
+
+    saveRefreshTokenRecord({
+      tokenId,
+      userId: user.id,
+      tokenHash: hashToken(rawSecret),
+      expiresAt,
+      revoked: false,
+    });
 
     const response = NextResponse.json({
       success: true,
@@ -52,15 +61,24 @@ export async function POST(req: Request) {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
     });
 
-    // Set Secure HTTP-Only Cookie
-    response.cookies.set("session_token", token, {
+    // Set HttpOnly Cookies (Never stored in localStorage)
+    response.cookies.set("session_token", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 15 * 60, // 15 Minutes session expiration
+      maxAge: 15 * 60, // 15 mins
+      path: "/",
+    });
+
+    response.cookies.set("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60, // 7 days
       path: "/",
     });
 

@@ -5,6 +5,7 @@ export type UserRecord = {
   id: string;
   email: string;
   name: string;
+  role: "admin" | "user";
   passwordHash: string;
   emailVerified: boolean;
   verificationTokenHash?: string;
@@ -14,10 +15,19 @@ export type UserRecord = {
   createdAt: string;
 };
 
+export type RefreshTokenRecord = {
+  tokenId: string;
+  userId: string;
+  tokenHash: string;
+  expiresAt: string;
+  revoked: boolean;
+};
+
 const DB_DIR = path.join(process.cwd(), "data");
 const USERS_FILE = path.join(DB_DIR, "users.json");
+const REFRESH_TOKENS_FILE = path.join(DB_DIR, "refresh_tokens.json");
 
-function ensureUsersDb(): void {
+function ensureDbFiles(): void {
   try {
     if (!fs.existsSync(DB_DIR)) {
       fs.mkdirSync(DB_DIR, { recursive: true });
@@ -25,14 +35,17 @@ function ensureUsersDb(): void {
     if (!fs.existsSync(USERS_FILE)) {
       fs.writeFileSync(USERS_FILE, JSON.stringify([], null, 2), "utf-8");
     }
+    if (!fs.existsSync(REFRESH_TOKENS_FILE)) {
+      fs.writeFileSync(REFRESH_TOKENS_FILE, JSON.stringify([], null, 2), "utf-8");
+    }
   } catch (error) {
-    console.error("Error creating users DB:", error);
+    console.error("Error initializing auth database files:", error);
   }
 }
 
 export function getAllUsers(): UserRecord[] {
   try {
-    ensureUsersDb();
+    ensureDbFiles();
     if (fs.existsSync(USERS_FILE)) {
       const data = fs.readFileSync(USERS_FILE, "utf-8");
       return JSON.parse(data);
@@ -45,7 +58,7 @@ export function getAllUsers(): UserRecord[] {
 
 export function saveUsers(users: UserRecord[]): void {
   try {
-    ensureUsersDb();
+    ensureDbFiles();
     fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf-8");
   } catch (error) {
     console.error("Error writing users DB:", error);
@@ -72,10 +85,11 @@ export function findUserByResetTokenHash(hashedToken: string): UserRecord | null
   return users.find((u) => u.resetTokenHash === hashedToken) || null;
 }
 
-export function createUser(userData: Omit<UserRecord, "id" | "createdAt">): UserRecord {
+export function createUser(userData: Omit<UserRecord, "id" | "createdAt" | "role"> & { role?: "admin" | "user" }): UserRecord {
   const users = getAllUsers();
   const newUser: UserRecord = {
     ...userData,
+    role: userData.role || "user",
     id: `usr_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
     createdAt: new Date().toISOString(),
   };
@@ -92,4 +106,62 @@ export function updateUser(id: string, updates: Partial<UserRecord>): UserRecord
   users[index] = { ...users[index], ...updates };
   saveUsers(users);
   return users[index];
+}
+
+// === Refresh Token Management for Rotation ===
+
+function getAllRefreshTokens(): RefreshTokenRecord[] {
+  try {
+    ensureDbFiles();
+    if (fs.existsSync(REFRESH_TOKENS_FILE)) {
+      const data = fs.readFileSync(REFRESH_TOKENS_FILE, "utf-8");
+      return JSON.parse(data);
+    }
+  } catch (error) {
+    console.error("Error reading refresh tokens DB:", error);
+  }
+  return [];
+}
+
+function saveRefreshTokens(tokens: RefreshTokenRecord[]): void {
+  try {
+    ensureDbFiles();
+    fs.writeFileSync(REFRESH_TOKENS_FILE, JSON.stringify(tokens, null, 2), "utf-8");
+  } catch (error) {
+    console.error("Error writing refresh tokens DB:", error);
+  }
+}
+
+export function saveRefreshTokenRecord(record: RefreshTokenRecord): void {
+  const tokens = getAllRefreshTokens();
+  tokens.push(record);
+  saveRefreshTokens(tokens);
+}
+
+export function findRefreshTokenRecord(tokenId: string): RefreshTokenRecord | null {
+  const tokens = getAllRefreshTokens();
+  return tokens.find((t) => t.tokenId === tokenId) || null;
+}
+
+export function revokeRefreshTokenRecord(tokenId: string): void {
+  const tokens = getAllRefreshTokens();
+  const index = tokens.findIndex((t) => t.tokenId === tokenId);
+  if (index !== -1) {
+    tokens[index].revoked = true;
+    saveRefreshTokens(tokens);
+  }
+}
+
+export function revokeAllUserRefreshTokens(userId: string): void {
+  const tokens = getAllRefreshTokens();
+  let updated = false;
+  tokens.forEach((t) => {
+    if (t.userId === userId && !t.revoked) {
+      t.revoked = true;
+      updated = true;
+    }
+  });
+  if (updated) {
+    saveRefreshTokens(tokens);
+  }
 }
