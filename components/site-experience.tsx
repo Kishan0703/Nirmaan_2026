@@ -32,10 +32,7 @@ import { AnimatePresence } from "framer-motion";
 import { LobbyNotificationListener } from "./lobby-notification";
 import { WhatsappFloatingButton } from "./whatsapp-floating-button";
 
-const Preloader = dynamic(
-  () => import("./preloader").then((mod) => mod.Preloader),
-  { ssr: false }
-);
+import { Preloader } from "./preloader";
 
 const MARQUEE_ONE_ITEMS = ["Matchmaking Lobby", "Spawn quest brief", "Speedrun build", "Game Master rating", "Loot distribution", "Hall of Fame"];
 const MARQUEE_TWO_ITEMS = ["Campus Rigs", "Online Lobby", "Hybrid Hub", "Game rules", "Retro scoreboards", "Claim achievement badges"];
