@@ -15,7 +15,7 @@ import {
 
 export async function POST() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const rawRefreshToken = cookieStore.get("refresh_token")?.value;
 
     if (!rawRefreshToken) {

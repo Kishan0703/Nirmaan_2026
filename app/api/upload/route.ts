@@ -53,7 +53,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const sessionToken = cookieStore.get("session_token")?.value;
     const payload = sessionToken ? verifySessionToken(sessionToken) : null;
 

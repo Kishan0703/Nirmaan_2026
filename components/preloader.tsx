@@ -319,9 +319,14 @@ function ConsoleBlock({ lineIndex }: { lineIndex: number }) {
 /* ─── Main Preloader ───────────────────────────────────── */
 
 export function Preloader({ onComplete }: { onComplete: () => void }) {
+  const [mounted, setMounted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [lineIdx, setLineIdx] = useState(0);
   const completedRef = useRef(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const allFrames = useMemo(() => generateFullAnimationSequence(), []);
   const [currentFrame, setCurrentFrame] = useState<number[][]>(allFrames[0]);
@@ -365,6 +370,8 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
     const step = Math.ceil(100 / consoleLines.length);
     setLineIdx(Math.min(Math.floor(progress / step), consoleLines.length - 1));
   }, [progress]);
+
+  if (!mounted) return null;
 
   return (
     <motion.div

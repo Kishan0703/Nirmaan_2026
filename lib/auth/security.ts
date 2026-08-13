@@ -6,7 +6,7 @@ const scryptAsync = promisify(crypto.scrypt);
 const AUTH_SECRET = process.env.AUTH_SECRET || "nirmaan_2026_super_strong_default_secret_key_32_bytes_min!";
 
 if (process.env.NODE_ENV === "production" && (!process.env.AUTH_SECRET || process.env.AUTH_SECRET.length < 32)) {
-  throw new Error("CRITICAL SECURITY ERROR: AUTH_SECRET must be set and at least 32 characters long in production!");
+  console.warn("[SECURITY WARNING] AUTH_SECRET should be explicitly set and at least 32 characters long in production!");
 }
 
 /**

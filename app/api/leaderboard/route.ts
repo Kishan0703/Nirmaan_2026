@@ -21,7 +21,7 @@ export async function GET() {
 // DELETE: Strict Admin Authorization Check (Prevents Unauthorized Clearing)
 export async function DELETE() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const sessionToken = cookieStore.get("session_token")?.value;
     const payload = sessionToken ? verifySessionToken(sessionToken) : null;
 
@@ -44,7 +44,7 @@ export async function DELETE() {
 // POST: Enforce Session Ownership (IDOR Protection)
 export async function POST(request: Request) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const sessionToken = cookieStore.get("session_token")?.value;
     const payload = sessionToken ? verifySessionToken(sessionToken) : null;
 
