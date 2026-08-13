@@ -371,8 +371,6 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
     setLineIdx(Math.min(Math.floor(progress / step), consoleLines.length - 1));
   }, [progress]);
 
-  if (!mounted) return null;
-
   return (
     <motion.div
       initial={{ opacity: 1 }}
