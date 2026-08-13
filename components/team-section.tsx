@@ -42,7 +42,7 @@ const DEPARTMENTS: Department[] = [
     textColor: "text-red",
     description: "The core leadership and overall organizers steering Nirmaan 2026.",
     members: [
-      { name: "Anmol Narayan", role: "Head (Coding Club)", tag: "Head", initials: "AN", avatar: "https://drive.google.com/thumbnail?id=13sVKpdiAgg2vJ4Z5vZbLR-z3WwQx2KU_&sz=w500", linkedin: "https://www.linkedin.com/in/anmol-narayan-8133a532a", github: "https://github.com/anmolnarayan" },
+      { name: "Anmol Narayan", role: "Head (Coding Club)", tag: "President", initials: "AN", avatar: "https://drive.google.com/thumbnail?id=13sVKpdiAgg2vJ4Z5vZbLR-z3WwQx2KU_&sz=w500", linkedin: "https://www.linkedin.com/in/anmol-narayan-8133a532a", github: "https://github.com/anmolnarayan" },
       { name: "Amey Vikram Singh", role: "Head (Alterino)", tag: "Head", initials: "AVS", avatar: "/assets/images/team/amey.jpg", linkedin: "https://www.linkedin.com/in/amey-vikram-singh-610039333/", instagram: "https://www.instagram.com/ameyvikramsingh.bisen/" },
       { name: "Alok Verma", role: "Co-Head (Coding Club)", tag: "Co-Head", initials: "AV", avatar: "https://drive.google.com/thumbnail?id=18tgb1zLyUjvYDq53OgFufxgTFkb3nVMO&sz=w500" },
       { name: "Dheeksha N", role: "Co-Head (Coding Club)", tag: "Co-Head", initials: "DN", avatar: "https://drive.google.com/thumbnail?id=10DKueLQJbU-9gpz-rwP7WCfSeCrW2lzF&sz=w500", linkedin: "https://www.linkedin.com/in/dheekshanaveen/", github: "https://github.com/dheekshanaveen" },
