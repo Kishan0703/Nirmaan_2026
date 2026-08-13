@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import fs from "fs";
 import path from "path";
 import { getNeonMessages, saveNeonMessage, clearNeonTables, LobbyMessage } from "@/lib/neon";
+import { verifySessionToken } from "@/lib/auth/security";
+import { findUserById } from "@/lib/auth/db";
 
 export const dynamic = 'force-dynamic';
 
@@ -69,6 +72,7 @@ function writeDB(messages: LobbyMessage[]) {
   }
 }
 
+// GET is public read-only
 export async function GET() {
   if (process.env.DATABASE_URL) {
     const neonMsgs = await getNeonMessages();
@@ -81,7 +85,21 @@ export async function GET() {
   return NextResponse.json({ success: true, messages });
 }
 
+// DELETE: Strict Admin Authorization Check (Prevents Unauthorized Wiping / IDOR)
 export async function DELETE() {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+  const payload = sessionToken ? verifySessionToken(sessionToken) : null;
+
+  if (!payload) {
+    return NextResponse.json({ error: "Authentication required to clear messages." }, { status: 401 });
+  }
+
+  const user = findUserById(payload.userId);
+  if (!user || user.role !== "admin") {
+    return NextResponse.json({ error: "Forbidden: Admin access required." }, { status: 403 });
+  }
+
   writeDB([]);
   if (process.env.DATABASE_URL) {
     await clearNeonTables();
@@ -89,27 +107,40 @@ export async function DELETE() {
   return NextResponse.json({ success: true, messages: [] });
 }
 
+// POST: Enforce Authenticated Session & Verify Identity (Prevents Sender Impersonation / IDOR)
 export async function POST(req: Request) {
   try {
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get("session_token")?.value;
+    const payload = sessionToken ? verifySessionToken(sessionToken) : null;
+
+    if (!payload) {
+      return NextResponse.json({ error: "Authentication required to post messages." }, { status: 401 });
+    }
+
+    const user = findUserById(payload.userId);
+    if (!user) {
+      return NextResponse.json({ error: "Invalid user session." }, { status: 401 });
+    }
+
     const body = await req.json();
-    const { sender, text } = body;
+    const { text } = body;
 
     if (!text || !text.trim()) {
       return NextResponse.json({ success: false, error: "Text is required" }, { status: 400 });
     }
 
-    const nameTrimmed = (sender || "Builder").trim();
+    // IDOR Protection: Always bind sender to verified authenticated user name
+    const nameTrimmed = user.name.trim();
     const nameLower = nameTrimmed.toLowerCase();
 
-    // Strict server-side verification against TEAM_MEMBERS_DATABASE
-    const isTeamMember = TEAM_MEMBERS_DATABASE.some((teamName) => {
+    // Verify whether authenticated user is on team roster or has admin role
+    const isTeamMember = user.role === "admin" || TEAM_MEMBERS_DATABASE.some((teamName) => {
       if (!nameLower) return false;
       return nameLower === teamName || (nameLower.length >= 3 && (nameLower.includes(teamName) || teamName.includes(nameLower)));
     });
 
     const currentTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    
-    // Only verified roster members can post ANNOUNCEMENT / REPLY. Everyone else is QUERY.
     const msgType = isTeamMember ? "ANNOUNCEMENT" : "QUERY";
 
     const newMsg: LobbyMessage = {
@@ -142,7 +173,6 @@ export async function POST(req: Request) {
       }
     }
 
-    // Local fallback if DATABASE_URL is not set or Neon query failed
     const messages = readDB();
     messages.push(newMsg);
     if (autoReceipt) {
