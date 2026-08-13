@@ -10,6 +10,7 @@ const QR_CODE_SRC = "/assets/images/whatsapp-qr.png";
 
 export function WhatsappFloatingButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [copied, setCopied] = useState(false);
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
 
@@ -47,59 +48,93 @@ export function WhatsappFloatingButton() {
     setIsOpen(true);
   };
 
+  const handleCollapse = () => {
+    setIsCollapsed(true);
+  };
+
+  const handleExpand = () => {
+    setIsCollapsed(false);
+  };
+
   return (
     <>
-      {/* ── WATER DROPLET FLOATING BUTTON ── */}
-      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3">
-        {/* Water Droplet Action Button */}
-        <motion.button
-          onClick={handleButtonClick}
-          aria-label="Open Idea Lab WhatsApp Community"
-          whileHover={{ scale: 1.08, rotate: [0, -3, 3, 0] }}
-          whileTap={{ scale: 0.92 }}
-          animate={{
-            y: [0, -6, 0],
-            borderRadius: [
-              "50% 50% 50% 50% / 60% 60% 40% 40%",
-              "45% 55% 48% 52% / 55% 45% 55% 45%",
-              "52% 48% 55% 45% / 48% 52% 45% 55%",
-              "50% 50% 50% 50% / 60% 60% 40% 40%",
-            ],
-          }}
-          transition={{
-            y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-            borderRadius: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-          }}
-          className="relative group h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center bg-gradient-to-br from-[#128C7E] via-[#075E54] to-[#032d28] text-white shadow-[0_10px_35px_rgba(7,94,84,0.7)] border-2 border-white/80 ring-2 ring-ink/50 overflow-hidden cursor-pointer backdrop-blur-md"
-        >
-          {/* Glossy liquid reflection highlights */}
-          <div className="absolute top-1 left-2 w-5 h-2.5 bg-white/40 rounded-full blur-[1px] transform -rotate-45 pointer-events-none" />
-          <div className="absolute bottom-1 right-2 w-3 h-1.5 bg-white/20 rounded-full blur-[1px] pointer-events-none" />
-
-          {/* Water Splash Ripples */}
-          {ripples.map((r) => (
-            <motion.span
-              key={r.id}
-              initial={{ scale: 0, opacity: 0.8 }}
-              animate={{ scale: 3.5, opacity: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              style={{ top: r.y, left: r.x }}
-              className="absolute h-6 w-6 rounded-full bg-white/50 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            />
-          ))}
-
-          {/* Ambient pulse ring */}
-          <span className="absolute inset-0 rounded-full bg-[#25D366]/30 animate-ping pointer-events-none" />
-
-          {/* WhatsApp Icon */}
-          <svg
-            className="h-7 w-7 sm:h-8 sm:w-8 fill-current drop-shadow-md z-10 transition-transform group-hover:scale-110"
-            viewBox="0 0 24 24"
+      {/* ── COMMUNITY PROMPT FLOATING CTA ── */}
+      <AnimatePresence>
+        {isCollapsed ? (
+          <motion.button
+            key="community-mini"
+            type="button"
+            onClick={handleExpand}
+            initial={{ opacity: 0, scale: 0.85, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.85, y: 12 }}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.94 }}
+            className="fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full border-2 border-ink bg-gradient-to-br from-[#25D366] to-[#075E54] text-white shadow-[4px_4px_0px_0px_#18181b] sm:bottom-6 sm:right-6"
+            aria-label="Show Idea Lab community prompt"
           >
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.461c-1.817 0-3.596-.484-5.163-1.402l-.37-.218-3.836 1.006 1.024-3.74-.243-.387c-1.007-1.604-1.54-3.468-1.54-5.385 0-5.592 4.549-10.141 10.14-10.141 2.709 0 5.257 1.056 7.173 2.973 1.916 1.917 2.971 4.465 2.971 7.172 0 5.594-4.548 10.142-10.139 10.142M12 0C5.373 0 0 5.373 0 12c0 2.124.555 4.195 1.613 6.012L0 24l6.165-1.618C7.94 23.398 9.949 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z" />
-          </svg>
-        </motion.button>
-      </div>
+            <span className="absolute inset-0 rounded-full bg-[#25D366]/30 animate-ping pointer-events-none" />
+            <svg className="relative z-10 h-7 w-7 fill-current drop-shadow-md" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.461c-1.817 0-3.596-.484-5.163-1.402l-.37-.218-3.836 1.006 1.024-3.74-.243-.387c-1.007-1.604-1.54-3.468-1.54-5.385 0-5.592 4.549-10.141 10.14-10.141 2.709 0 5.257 1.056 7.173 2.973 1.916 1.917 2.971 4.465 2.971 7.172 0 5.594-4.548 10.142-10.139 10.142M12 0C5.373 0 0 5.373 0 12c0 2.124.555 4.195 1.613 6.012L0 24l6.165-1.618C7.94 23.398 9.949 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z" />
+            </svg>
+          </motion.button>
+        ) : (
+          <motion.div
+            key="community-card"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 18 }}
+            className="fixed inset-x-4 bottom-4 z-50 ml-auto w-auto max-w-[380px] rounded-xl border-2 border-ink bg-paper text-ink shadow-[6px_6px_0px_0px_#18181b] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-[380px]"
+          >
+            <div className="h-1.5 rounded-t-[10px] bg-gradient-to-r from-[#25D366] via-yellow to-blue" />
+            <button
+              type="button"
+              onClick={handleCollapse}
+              className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-full border border-ink/15 bg-white/70 text-ink/70 transition-colors hover:bg-white hover:text-ink"
+              aria-label="Collapse community prompt"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            <div className="grid gap-3 p-4 pr-11 sm:p-5 sm:pr-12">
+              <div className="space-y-1.5">
+                <p className="font-display text-[10px] font-black uppercase tracking-widest text-[#128C7E]">
+                  Idea Lab Community
+                </p>
+                <p className="text-base font-black leading-snug text-ink">
+                  Don&apos;t have an idea yet?
+                </p>
+                <p className="text-sm font-semibold leading-relaxed text-ink/75">
+                  Join our community. Let&apos;s brainstorm, find teammates, and build something together.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleButtonClick}
+                aria-label="Open Idea Lab WhatsApp Community"
+                className="relative flex w-fit items-center gap-2 overflow-hidden rounded-lg border-2 border-ink bg-[#25D366] px-3.5 py-2 font-display text-xs font-black uppercase text-ink shadow-[3px_3px_0px_0px_#18181b] transition-transform hover:-translate-y-0.5"
+              >
+                {ripples.map((r) => (
+                  <motion.span
+                    key={r.id}
+                    initial={{ scale: 0, opacity: 0.8 }}
+                    animate={{ scale: 8, opacity: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    style={{ top: r.y, left: r.x }}
+                    className="absolute h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/40 pointer-events-none"
+                  />
+                ))}
+
+                <svg className="relative h-4 w-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.461c-1.817 0-3.596-.484-5.163-1.402l-.37-.218-3.836 1.006 1.024-3.74-.243-.387c-1.007-1.604-1.54-3.468-1.54-5.385 0-5.592 4.549-10.141 10.14-10.141 2.709 0 5.257 1.056 7.173 2.973 1.916 1.917 2.971 4.465 2.971 7.172 0 5.594-4.548 10.142-10.139 10.142M12 0C5.373 0 0 5.373 0 12c0 2.124.555 4.195 1.613 6.012L0 24l6.165-1.618C7.94 23.398 9.949 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z" />
+                </svg>
+                Join WhatsApp
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── POP-UP MODAL ── */}
       <AnimatePresence>
