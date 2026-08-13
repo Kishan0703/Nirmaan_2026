@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  devIndicators: false,
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -46,7 +47,7 @@ const nextConfig = {
           // Content Security Policy (CSP)
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https:; frame-src 'self' https://maps.google.com https://www.google.com https://*.google.com https://www.youtube.com https://www.youtube-nocookie.com; frame-ancestors 'none';",
           },
         ],
       },
