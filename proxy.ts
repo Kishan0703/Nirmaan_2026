@@ -71,7 +71,7 @@ async function verifyJwtEdge(token: string): Promise<{ userId: string; email: st
   }
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const origin = request.headers.get("origin");
 
