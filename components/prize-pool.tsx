@@ -10,6 +10,7 @@ type CashItem = {
   rotate: number;
   icon: string;
   size: number;
+  duration: number;
 };
 
 const PRIZES = [
@@ -130,6 +131,7 @@ export function PrizePoolSection() {
       rotate: Math.random() * 360,
       icon: icons[Math.floor(Math.random() * icons.length)],
       size: Math.floor(Math.random() * 16) + 20,
+      duration: Number((Math.random() * 1.5 + 1.8).toFixed(2)),
     }));
 
     setCashBurst(newItems);
@@ -151,7 +153,7 @@ export function PrizePoolSection() {
               scale: [1, 1.2, 0.9],
             }}
             exit={{ opacity: 0 }}
-            transition={{ duration: Math.random() * 1.5 + 1.8, ease: "easeOut" }}
+            transition={{ duration: item.duration, ease: "easeOut" }}
             style={{ fontSize: `${item.size}px` }}
             className="pointer-events-none absolute z-50 select-none font-black text-yellow drop-shadow-md"
           >

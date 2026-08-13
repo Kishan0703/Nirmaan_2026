@@ -18,15 +18,28 @@ const consoleLines = [
 
 const letters = "nirmaan".split("");
 
-const particles = Array.from({ length: 18 }, (_, i) => ({
-  id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  size: Math.random() * 6 + 3,
-  duration: Math.random() * 4 + 3,
-  delay: Math.random() * 2,
-  color: ["#ef333a", "#ffb200", "#0072e3", "#00aa3c", "#ff6100", "#ab54f7"][i % 6],
-}));
+function pseudoRandom(seed: number): number {
+  const x = Math.sin(seed + 1) * 10000;
+  return x - Math.floor(x);
+}
+
+const particles = Array.from({ length: 18 }, (_, i) => {
+  const r1 = pseudoRandom(i * 5 + 1);
+  const r2 = pseudoRandom(i * 5 + 2);
+  const r3 = pseudoRandom(i * 5 + 3);
+  const r4 = pseudoRandom(i * 5 + 4);
+  const r5 = pseudoRandom(i * 5 + 5);
+  return {
+    id: i,
+    x: Number((r1 * 100).toFixed(2)),
+    y: Number((r2 * 100).toFixed(2)),
+    size: Number((r3 * 6 + 3).toFixed(2)),
+    duration: Number((r4 * 4 + 3).toFixed(2)),
+    delay: Number((r5 * 2).toFixed(2)),
+    offset: r1 > 0.5 ? 8 : -8,
+    color: ["#ef333a", "#ffb200", "#0072e3", "#00aa3c", "#ff6100", "#ab54f7"][i % 6],
+  };
+});
 
 /* ─── High-Res 22x22 Pixel Matrix Generator ─────────────── */
 
@@ -372,7 +385,7 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
           initial={{ x: `${p.x}vw`, y: `${p.y}vh`, opacity: 0, scale: 0 }}
           animate={{
             y: [`${p.y}vh`, `${p.y - 20}vh`, `${p.y}vh`],
-            x: [`${p.x}vw`, `${p.x + (Math.random() > 0.5 ? 8 : -8)}vw`, `${p.x}vw`],
+            x: [`${p.x}vw`, `${p.x + p.offset}vw`, `${p.x}vw`],
             opacity: [0, 0.5, 0],
             scale: [0, 1, 0],
           }}
