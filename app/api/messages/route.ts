@@ -6,9 +6,18 @@ import { getNeonMessages, saveNeonMessage, clearNeonTables, LobbyMessage } from 
 import { verifySessionToken } from "@/lib/auth/security";
 import { findUserById } from "@/lib/auth/db";
 
+import os from "os";
+
 export const dynamic = 'force-dynamic';
 
-const DB_PATH = path.join(process.cwd(), "data", "messages.json");
+const getDbPath = () => {
+  if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+    return path.join(os.tmpdir(), "nirmaan_messages.json");
+  }
+  return path.join(process.cwd(), "data", "messages.json");
+};
+
+const DB_PATH = getDbPath();
 
 const TEAM_MEMBERS_DATABASE = [
   "anmol narayan", "anmol",

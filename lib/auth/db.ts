@@ -1,5 +1,17 @@
 import fs from "fs";
 import path from "path";
+import os from "os";
+
+const getDbDir = () => {
+  if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+    return path.join(os.tmpdir(), "nirmaan_data");
+  }
+  return path.join(process.cwd(), "data");
+};
+
+const DB_DIR = getDbDir();
+const USERS_FILE = path.join(DB_DIR, "users.json");
+const REFRESH_TOKENS_FILE = path.join(DB_DIR, "refresh_tokens.json");
 
 export type UserRecord = {
   id: string;
@@ -22,10 +34,6 @@ export type RefreshTokenRecord = {
   expiresAt: string;
   revoked: boolean;
 };
-
-const DB_DIR = path.join(process.cwd(), "data");
-const USERS_FILE = path.join(DB_DIR, "users.json");
-const REFRESH_TOKENS_FILE = path.join(DB_DIR, "refresh_tokens.json");
 
 function ensureDbFiles(): void {
   try {
