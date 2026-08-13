@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Folder, ChevronRight, ArrowUpRight } from "lucide-react";
+import { sanitizeUrl } from "@/lib/security-sanitize";
 
 type Member = {
   name: string;
@@ -386,7 +387,7 @@ export function TeamSection() {
                           <div className="flex flex-wrap items-center gap-1">
                             {member.website && (
                               <a
-                                href={member.website}
+                                href={sanitizeUrl(member.website)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-purple transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
@@ -396,7 +397,7 @@ export function TeamSection() {
                             )}
                             {member.github && (
                               <a
-                                href={member.github}
+                                href={sanitizeUrl(member.github)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-red transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
@@ -406,7 +407,7 @@ export function TeamSection() {
                             )}
                             {member.linkedin && (
                               <a
-                                href={member.linkedin}
+                                href={sanitizeUrl(member.linkedin)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-blue transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
@@ -416,7 +417,7 @@ export function TeamSection() {
                             )}
                             {member.instagram && (
                               <a
-                                href={member.instagram}
+                                href={sanitizeUrl(member.instagram)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-red transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
@@ -426,7 +427,7 @@ export function TeamSection() {
                             )}
                             {member.twitter && (
                               <a
-                                href={member.twitter}
+                                href={sanitizeUrl(member.twitter)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="rounded-full bg-ink text-white px-2 py-0.5 font-display text-[8px] sm:text-[9px] uppercase font-black hover:bg-orange transition-all flex items-center gap-0.5 shadow-sm active:translate-y-0.5"
