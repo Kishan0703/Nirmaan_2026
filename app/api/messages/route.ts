@@ -8,8 +8,7 @@ import { findUserById } from "@/lib/auth/db";
 
 export const dynamic = 'force-dynamic';
 
-const dbRelativePath = process.env.COMMUNITY_DB_PATH || "data/messages.json";
-const DB_PATH = path.join(process.cwd(), dbRelativePath);
+const DB_PATH = path.join(process.cwd(), "data", "messages.json");
 
 const TEAM_MEMBERS_DATABASE = [
   "anmol narayan", "anmol",
