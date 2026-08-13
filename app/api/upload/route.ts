@@ -33,7 +33,16 @@ function verifyMagicBytes(buffer: Buffer): string | null {
   return null;
 }
 
-const STORAGE_DIR = path.join(process.cwd(), "storage", "uploads");
+import os from "os";
+
+const getStorageDir = () => {
+  if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+    return path.join(os.tmpdir(), "nirmaan_uploads");
+  }
+  return path.join(process.cwd(), "storage", "uploads");
+};
+
+const STORAGE_DIR = getStorageDir();
 
 function ensureStorageDir(): void {
   if (!fs.existsSync(STORAGE_DIR)) {
@@ -94,7 +103,7 @@ export async function POST(req: Request) {
     const safeFilename = `${safeUUID}${allowedExtension}`;
 
     ensureStorageDir();
-    const safePath = path.join(STORAGE_DIR, safeFilename);
+    const safePath = path.join(/*turbopackIgnore: true*/ STORAGE_DIR, safeFilename);
 
     fs.writeFileSync(safePath, buffer);
 

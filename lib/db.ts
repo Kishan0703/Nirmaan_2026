@@ -1,10 +1,18 @@
 import fs from "fs";
 import path from "path";
+import os from "os";
 import { getNeonLeaderboard, saveNeonLeaderboardScore, LeaderboardEntry } from "./neon";
 
 export type { LeaderboardEntry };
 
-const DB_DIR = path.join(process.cwd(), "data");
+const getDbDir = () => {
+  if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+    return path.join(os.tmpdir(), "nirmaan_data");
+  }
+  return path.join(process.cwd(), "data");
+};
+
+const DB_DIR = getDbDir();
 const DB_FILE = path.join(DB_DIR, "leaderboard.json");
 
 const initialSeed: LeaderboardEntry[] = [];
