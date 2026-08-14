@@ -1,15 +1,19 @@
 import { NextResponse } from "next/server";
 import { verifyWebhookSignature } from "@/lib/auth/webhook";
 
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || "nirmaan_2026_webhook_secret_key_32_bytes_min!";
-
 export async function POST(req: Request) {
   try {
+    const webhookSecret = process.env.WEBHOOK_SECRET;
+    if (!webhookSecret || webhookSecret.length < 32) {
+      console.error("WEBHOOK_SECRET is not configured or is too short.");
+      return NextResponse.json({ error: "Webhook endpoint is not configured." }, { status: 503 });
+    }
+
     const rawBody = await req.text();
     const signatureHeader = req.headers.get("x-webhook-signature") || req.headers.get("stripe-signature");
 
     // 1. Strict HMAC Signature & Timestamp Replay Protection
-    const verification = verifyWebhookSignature(rawBody, signatureHeader, WEBHOOK_SECRET, 300); // 5 minute max age
+    const verification = verifyWebhookSignature(rawBody, signatureHeader, webhookSecret, 300); // 5 minute max age
 
     if (!verification.isValid) {
       console.warn(`SECURITY ALERT: Webhook validation failed. Reason: ${verification.reason}`);

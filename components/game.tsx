@@ -4,13 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Medal, User, Edit2, Check, RefreshCw } from "lucide-react";
 
-const GAME_DURATION_SECONDS = 30;
 const HIGH_SCORE_STORAGE_KEY = "nirmaan_high_score";
 const PLAYER_NAME_KEY = "nirmaan_player_name";
 const PLAYER_ID_KEY = "nirmaan_player_id";
 const BUG_SIZE = 40;
-const BUG_LIFETIME_MS = 2000;
-const BUG_SPAWN_INTERVAL_MS = 700;
 
 type Bug = {
   id: number;
@@ -29,7 +26,14 @@ export function BugSquasherGame() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(GAME_DURATION_SECONDS);
+
+  // Dynamic game parameters from admin API
+  const [gameDuration, setGameDuration] = useState(30);
+  const [pointsPerBug, setPointsPerBug] = useState(10);
+  const [spawnIntervalMs, setSpawnIntervalMs] = useState(700);
+  const [bugLifetimeMs, setBugLifetimeMs] = useState(2000);
+
+  const [timeLeft, setTimeLeft] = useState(30);
   const [bugs, setBugs] = useState<Bug[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const bugTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -64,7 +68,28 @@ export function BugSquasherGame() {
     bugTimeoutsRef.current = [];
   }, []);
 
-  // Initialize player profile & high score
+  // Fetch dynamic game settings from admin API
+  const fetchGameSettings = async () => {
+    try {
+      const res = await fetch("/api/game-settings");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.config) {
+          if (data.config.gameDuration) {
+            setGameDuration(data.config.gameDuration);
+            setTimeLeft(data.config.gameDuration);
+          }
+          if (data.config.pointsPerBug) setPointsPerBug(data.config.pointsPerBug);
+          if (data.config.spawnIntervalMs) setSpawnIntervalMs(data.config.spawnIntervalMs);
+          if (data.config.bugLifetimeMs) setBugLifetimeMs(data.config.bugLifetimeMs);
+        }
+      }
+    } catch {
+      // Fallback to defaults
+    }
+  };
+
+  // Initialize player profile, game settings & high score
   useEffect(() => {
     const savedScore = localStorage.getItem(HIGH_SCORE_STORAGE_KEY);
     const parsedScore = savedScore ? Number.parseInt(savedScore, 10) : 0;
@@ -83,6 +108,7 @@ export function BugSquasherGame() {
     setPlayerName(savedName);
     setTempNameInput(savedName);
 
+    fetchGameSettings();
     fetchLeaderboard();
 
     return clearBugTimeouts;
@@ -202,12 +228,12 @@ export function BugSquasherGame() {
 
     const timeout = setTimeout(() => {
       setBugs((current) => current.filter((b) => b.id !== newBug.id));
-    }, BUG_LIFETIME_MS);
+    }, bugLifetimeMs);
 
     bugTimeoutsRef.current.push(timeout);
-  }, []);
+  }, [bugLifetimeMs]);
 
-  const currentSpawnInterval = Math.max(300, BUG_SPAWN_INTERVAL_MS - Math.floor(score / 50) * 50);
+  const currentSpawnInterval = Math.max(200, spawnIntervalMs - Math.floor(score / 50) * 50);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -220,7 +246,7 @@ export function BugSquasherGame() {
 
   const squashBug = (id: number) => {
     setScore((s) => {
-      const next = s + 10;
+      const next = s + pointsPerBug;
       scoreRef.current = next;
       return next;
     });
@@ -236,7 +262,7 @@ export function BugSquasherGame() {
     setBugs([]);
     setScore(0);
     scoreRef.current = 0;
-    setTimeLeft(GAME_DURATION_SECONDS);
+    setTimeLeft(gameDuration);
     setLastSubmittedRank(null);
     setIsPlaying(true);
   };

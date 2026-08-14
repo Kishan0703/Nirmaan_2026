@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { verifyPassword, createSessionToken, createRefreshToken, hashToken } from "@/lib/auth/security";
 import { findUserByEmail, saveRefreshTokenRecord } from "@/lib/auth/db";
 import { checkRateLimit } from "@/lib/auth/rate-limit";
+import { logAuthEvent, logSecurityAlert, logStructuredEvent } from "@/lib/auth/logger";
 
 export async function POST(req: Request) {
   try {
@@ -10,6 +11,7 @@ export async function POST(req: Request) {
     // Rate Limit: Max 5 failed login attempts per 15 mins
     const rateLimit = checkRateLimit(`login:${clientIp}`, 5, 15 * 60 * 1000);
     if (!rateLimit.success) {
+      logSecurityAlert("RATE_LIMIT_EXCEEDED", clientIp, { route: "auth/login", scope: "ip" });
       return NextResponse.json(
         { error: "Too many login attempts. Please try again in 15 minutes." },
         { status: 429, headers: { "Retry-After": String(rateLimit.retryAfterSeconds) } }
@@ -18,21 +20,34 @@ export async function POST(req: Request) {
 
     const { email, password } = await req.json();
 
-    if (!email || !password) {
+    if (typeof email !== "string" || typeof password !== "string" || !email.trim() || !password || password.length > 256) {
       return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
     }
 
-    const user = findUserByEmail(email);
+    const normalizedEmail = email.trim().toLowerCase();
+    const emailRateLimit = checkRateLimit(`login:email:${normalizedEmail}`, 5, 15 * 60 * 1000);
+    if (!emailRateLimit.success) {
+      logSecurityAlert("RATE_LIMIT_EXCEEDED", clientIp, { route: "auth/login", scope: "email" });
+      return NextResponse.json(
+        { error: "Too many login attempts. Please try again later." },
+        { status: 429, headers: { "Retry-After": String(emailRateLimit.retryAfterSeconds) } }
+      );
+    }
+
+    const user = findUserByEmail(normalizedEmail);
     if (!user) {
+      logAuthEvent("LOGIN_FAILED", undefined, clientIp, { reason: "invalid_credentials" });
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
     const isPasswordValid = await verifyPassword(password, user.passwordHash);
     if (!isPasswordValid) {
+      logAuthEvent("LOGIN_FAILED", user.id, clientIp, { reason: "invalid_credentials" });
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
     if (!user.emailVerified) {
+      logAuthEvent("LOGIN_FAILED", user.id, clientIp, { reason: "email_unverified" });
       return NextResponse.json(
         { error: "Email address is not verified. Please verify your email first." },
         { status: 403 }
@@ -82,9 +97,11 @@ export async function POST(req: Request) {
       path: "/",
     });
 
+    logAuthEvent("LOGIN_SUCCESS", user.id, clientIp);
+
     return response;
   } catch (error) {
-    console.error("Login Error:", error);
+    logStructuredEvent("ERROR", "API_ERROR", { route: "auth/login", errorName: error instanceof Error ? error.name : "UnknownError" });
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

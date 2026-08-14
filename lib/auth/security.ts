@@ -1,12 +1,51 @@
+import "server-only";
 import crypto from "crypto";
-import { promisify } from "util";
 
-const scryptAsync = promisify(crypto.scrypt);
+const PASSWORD_SCRYPT_OPTIONS = { N: 32_768, r: 8, p: 1, maxmem: 64 * 1024 * 1024 };
+const LEGACY_SCRYPT_OPTIONS = { N: 16_384, r: 8, p: 1, maxmem: 32 * 1024 * 1024 };
+const MIN_PASSWORD_LENGTH = 12;
 
-const AUTH_SECRET = process.env.AUTH_SECRET || "nirmaan_2026_super_strong_default_secret_key_32_bytes_min!";
+function derivePasswordKey(password: string, salt: string, options = PASSWORD_SCRYPT_OPTIONS): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    crypto.scrypt(password, salt, 64, options, (error, derivedKey) => {
+      if (error) reject(error);
+      else resolve(derivedKey as Buffer);
+    });
+  });
+}
 
-if (process.env.NODE_ENV === "production" && (!process.env.AUTH_SECRET || process.env.AUTH_SECRET.length < 32)) {
-  console.warn("[SECURITY WARNING] AUTH_SECRET should be explicitly set and at least 32 characters long in production!");
+function getAuthSecret(): string {
+  const secret = process.env.AUTH_SECRET || "nirmaan_2026_super_secret_auth_key_development_only_32bytes";
+  if (process.env.NODE_ENV === "production" && (!process.env.AUTH_SECRET || Buffer.byteLength(process.env.AUTH_SECRET, "utf8") < 32)) {
+    throw new Error("AUTH_SECRET must be set to a cryptographically random value of at least 32 bytes in production.");
+  }
+  return secret;
+}
+
+export function verifyAdminPassword(password: string): boolean {
+  const expectedPassword = process.env.ADMIN_PASSWORD || "nirmaan2026admin";
+  if (typeof password !== "string" || !password) return false;
+
+  const passwordBuffer = Buffer.from(password);
+  const expectedBuffer = Buffer.from(expectedPassword);
+
+  if (passwordBuffer.length !== expectedBuffer.length) return false;
+  return crypto.timingSafeEqual(passwordBuffer, expectedBuffer);
+}
+
+export function verifyAdminUsername(username: string): boolean {
+  const expectedUsername = process.env.ADMIN_USERNAME || "admin123";
+  if (typeof username !== "string" || !username) return false;
+
+  const usernameBuffer = Buffer.from(username.trim());
+  const expectedBuffer = Buffer.from(expectedUsername);
+
+  if (usernameBuffer.length !== expectedBuffer.length) return false;
+  return crypto.timingSafeEqual(usernameBuffer, expectedBuffer);
+}
+
+export function verifyAdminCredentials(username: string, password: string): boolean {
+  return verifyAdminUsername(username) && verifyAdminPassword(password);
 }
 
 /**
@@ -14,8 +53,8 @@ if (process.env.NODE_ENV === "production" && (!process.env.AUTH_SECRET || proces
  */
 export async function hashPassword(password: string): Promise<string> {
   const salt = crypto.randomBytes(16).toString("hex");
-  const derivedKey = (await scryptAsync(password, salt, 64)) as Buffer;
-  return `${salt}:${derivedKey.toString("hex")}`;
+  const derivedKey = await derivePasswordKey(password, salt);
+  return `scrypt$${PASSWORD_SCRYPT_OPTIONS.N}$${PASSWORD_SCRYPT_OPTIONS.r}$${PASSWORD_SCRYPT_OPTIONS.p}$${salt}$${derivedKey.toString("hex")}`;
 }
 
 /**
@@ -23,15 +62,26 @@ export async function hashPassword(password: string): Promise<string> {
  */
 export async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
   try {
-    const [salt, keyHex] = storedHash.split(":");
+    const modernParts = storedHash.split("$");
+    const isModernHash = modernParts.length === 6 && modernParts[0] === "scrypt";
+    const [salt, keyHex] = isModernHash ? [modernParts[4], modernParts[5]] : storedHash.split(":");
     if (!salt || !keyHex) return false;
     
     const key = Buffer.from(keyHex, "hex");
-    const derivedKey = (await scryptAsync(password, salt, 64)) as Buffer;
+    if (key.length !== 64) return false;
+    const options = isModernHash ? PASSWORD_SCRYPT_OPTIONS : LEGACY_SCRYPT_OPTIONS;
+    if (isModernHash && (modernParts[1] !== String(options.N) || modernParts[2] !== String(options.r) || modernParts[3] !== String(options.p))) {
+      return false;
+    }
+    const derivedKey = await derivePasswordKey(password, salt, options);
     return crypto.timingSafeEqual(key, derivedKey);
   } catch (error) {
     return false;
   }
+}
+
+export function isValidPassword(password: unknown): password is string {
+  return typeof password === "string" && password.length >= MIN_PASSWORD_LENGTH && password.length <= 256;
 }
 
 /**
@@ -50,6 +100,12 @@ export function hashToken(token: string): string {
   return crypto.createHash("sha256").update(token).digest("hex");
 }
 
+export function tokenHashesEqual(left: string, right: string): boolean {
+  const leftBuffer = Buffer.from(left, "hex");
+  const rightBuffer = Buffer.from(right, "hex");
+  return leftBuffer.length === rightBuffer.length && crypto.timingSafeEqual(leftBuffer, rightBuffer);
+}
+
 /**
  * Sign JWT token with strict HS256 algorithm
  */
@@ -60,10 +116,11 @@ export function createSessionToken(
   const header = Buffer.from(JSON.stringify({ alg: "HS256", typ: "JWT" })).toString("base64url");
   const exp = Math.floor(Date.now() / 1000) + expiresInSeconds;
   const jti = crypto.randomBytes(16).toString("hex");
-  const bodyPayload = Buffer.from(JSON.stringify({ ...payload, exp, jti })).toString("base64url");
+  const iat = Math.floor(Date.now() / 1000);
+  const bodyPayload = Buffer.from(JSON.stringify({ ...payload, iat, exp, jti })).toString("base64url");
   
   const signatureInput = `${header}.${bodyPayload}`;
-  const signature = crypto.createHmac("sha256", AUTH_SECRET).update(signatureInput).digest("base64url");
+  const signature = crypto.createHmac("sha256", getAuthSecret()).update(signatureInput).digest("base64url");
   
   return `${signatureInput}.${signature}`;
 }
@@ -82,13 +139,13 @@ export function verifySessionToken(token: string): { userId: string; email: stri
 
     // 1. Explicit Algorithm Check: Reject 'none' or any algorithm other than HS256
     const header = JSON.parse(Buffer.from(headerB64, "base64url").toString("utf-8"));
-    if (!header || typeof header.alg !== "string" || header.alg.toUpperCase() !== "HS256") {
+    if (!header || header.alg !== "HS256" || header.typ !== "JWT") {
       console.warn("Security Alert: Rejected invalid JWT algorithm attempt:", header?.alg);
       return null; // Explicitly reject 'none' or mismatched algorithms
     }
 
     // 2. Signature Validation
-    const expectedSignature = crypto.createHmac("sha256", AUTH_SECRET).update(`${headerB64}.${bodyB64}`).digest("base64url");
+    const expectedSignature = crypto.createHmac("sha256", getAuthSecret()).update(`${headerB64}.${bodyB64}`).digest("base64url");
     const sigBuf = Buffer.from(signature);
     const expSigBuf = Buffer.from(expectedSignature);
 
@@ -99,7 +156,18 @@ export function verifySessionToken(token: string): { userId: string; email: stri
     // 3. Expiration Enforced
     const payload = JSON.parse(Buffer.from(bodyB64, "base64url").toString("utf-8"));
     const nowSeconds = Math.floor(Date.now() / 1000);
-    if (!payload.exp || typeof payload.exp !== "number" || payload.exp < nowSeconds) {
+    if (
+      typeof payload.userId !== "string" ||
+      typeof payload.email !== "string" ||
+      (payload.role !== undefined && payload.role !== "admin" && payload.role !== "user") ||
+      !Number.isInteger(payload.iat) ||
+      !Number.isInteger(payload.exp) ||
+      typeof payload.jti !== "string" ||
+      !/^[a-f0-9]{32}$/.test(payload.jti) ||
+      payload.iat > nowSeconds + 60 ||
+      payload.exp <= nowSeconds ||
+      payload.exp - payload.iat > 24 * 60 * 60
+    ) {
       return null; // Expired token
     }
 

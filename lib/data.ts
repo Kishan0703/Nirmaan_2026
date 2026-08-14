@@ -172,13 +172,7 @@ export const sponsorTiers = [
   { name: "Community Backer", slots: "8 slots", perks: ["Prize support", "Workshop slot", "Project archive badge"] }
 ];
 
-export const projectSubmissions = [
-  { team: "Team Cantilever", track: "Embedded Systems", status: "Prototype live", score: "86" },
-  { team: "Null Junction", track: "IoT & Automation", status: "Judge review", score: "91" },
-  { team: "Ledger Lane", track: "Embedded Systems", status: "Demo ready", score: "78" },
-  { team: "CareGrid", track: "Hardware Prototyping", status: "Needs mentor", score: "72" },
-  { team: "Signal Forge", track: "Hardware Innovation", status: "Prototype live", score: "84" }
-];
+export const projectSubmissions: { team: string; track: string; status: string; score: string }[] = [];
 
 
 

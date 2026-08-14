@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
-import { getNeonLeaderboard, saveNeonLeaderboardScore, LeaderboardEntry } from "./neon";
+import { clearNeonLeaderboard, getNeonLeaderboard, saveNeonLeaderboardScore, LeaderboardEntry } from "./neon";
 
 export type { LeaderboardEntry };
 
@@ -15,7 +15,21 @@ const getDbDir = () => {
 const DB_DIR = getDbDir();
 const DB_FILE = path.join(DB_DIR, "leaderboard.json");
 
-const initialSeed: LeaderboardEntry[] = [];
+const initialSeed: LeaderboardEntry[] = [
+  { id: "lb_1", name: "Hlo", score: 700, date: "2026-08-14" },
+  { id: "lb_2", name: "Faizkilulli", score: 680, date: "2026-08-14" },
+  { id: "lb_3", name: "Vikram on phone", score: 680, date: "2026-08-14" },
+  { id: "lb_4", name: "Swapnil", score: 650, date: "2026-08-14" },
+  { id: "lb_5", name: "Haggu bhai", score: 580, date: "2026-08-14" },
+  { id: "lb_6", name: "Umarkiluli", score: 440, date: "2026-08-14" },
+  { id: "lb_7", name: "yaboi", score: 420, date: "2026-08-14" },
+  { id: "lb_8", name: "Umar", score: 260, date: "2026-08-14" },
+  { id: "lb_9", name: "who am i", score: 240, date: "2026-08-14" },
+  { id: "lb_10", name: "pipo", score: 230, date: "2026-08-14" },
+  { id: "lb_11", name: "Shashikiran B S", score: 160, date: "2026-08-14" },
+  { id: "lb_12", name: "hello", score: 140, date: "2026-08-14" },
+  { id: "lb_13", name: "azman", score: 120, date: "2026-08-14" },
+];
 
 function ensureDbFile(): void {
   try {
@@ -68,9 +82,8 @@ export function saveFileLeaderboardScore(entry: { id: string; name: string; scor
     const cleanName = String(entry.name).trim().slice(0, 20) || "Anonymous Bug Squasher";
     const dateStr = new Date().toISOString().split("T")[0];
 
-    const existingIndex = current.findIndex(
-      (e) => e.id === entry.id || e.name.toLowerCase() === cleanName.toLowerCase()
-    );
+    // Only the authenticated user's immutable ID may address an existing score.
+    const existingIndex = current.findIndex((e) => e.id === entry.id);
 
     if (existingIndex !== -1) {
       if (entry.score > current[existingIndex].score) {
@@ -115,8 +128,7 @@ export async function clearLeaderboard(): Promise<boolean> {
       fs.writeFileSync(DB_FILE, JSON.stringify([], null, 2), "utf-8");
     }
     if (process.env.DATABASE_URL) {
-      const { clearNeonTables } = await import("./neon");
-      await clearNeonTables();
+      await clearNeonLeaderboard();
     }
     return true;
   } catch (error) {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifySessionToken } from "@/lib/auth/security";
 import { findUserById } from "@/lib/auth/db";
+import { logStructuredEvent } from "@/lib/auth/logger";
 
 export async function GET() {
   try {
@@ -34,7 +35,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("Auth Me Error:", error);
+    logStructuredEvent("ERROR", "API_ERROR", { route: "auth/me", errorName: error instanceof Error ? error.name : "UnknownError" });
     return NextResponse.json({ authenticated: false, error: "Internal server error" }, { status: 500 });
   }
 }

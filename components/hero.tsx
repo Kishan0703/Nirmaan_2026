@@ -1,12 +1,36 @@
-"use client";
-
-import type { CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "@/components/icons";
 import { InteractiveTiltCard } from "./helpers";
 import { REGISTRATION_URL } from "@/lib/config";
-import { liveMetrics } from "@/lib/data";
+import { liveMetrics as defaultLiveMetrics } from "@/lib/data";
 
 export function Hero({ onBook }: { onBook?: () => void }) {
+  const [metrics, setMetrics] = useState<[string, string][]>(defaultLiveMetrics as [string, string][]);
+
+  useEffect(() => {
+    async function fetchMetrics() {
+      try {
+        const res = await fetch("/api/game-settings");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.config) {
+            setMetrics([
+              ["Registrations", data.config.registrationsCount || "0"],
+              ["Teams formed", data.config.teamsFormedCount || "0"],
+              ["Submissions", data.config.submissionsCount || "0 drafts"],
+              ["Judges assigned", data.config.judgesAssignedCount || "0"],
+            ]);
+          }
+        }
+      } catch {
+        // Fallback
+      }
+    }
+    fetchMetrics();
+    const interval = setInterval(fetchMetrics, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   const registerCtaClassName =
     "clay-card rounded-pill bg-yellow text-ink px-6 py-3.5 text-base sm:text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30 flex items-center gap-2 shadow-xl";
 
@@ -66,7 +90,7 @@ export function Hero({ onBook }: { onBook?: () => void }) {
               <span className="pulse-dot" aria-hidden="true" />
             </div>
             <div className="grid grid-cols-2 gap-2.5">
-              {liveMetrics.map(([label, value]) => (
+              {metrics.map(([label, value]) => (
                 <div key={label} className="rounded-[14px] bg-[#f4e9e1]/70 p-3 text-ink shadow-xs border border-ink/5">
                   <p className="text-[9px] font-bold uppercase tracking-wider text-ink/60">{label}</p>
                   <p className="mt-0.5 font-display text-sm font-black leading-none text-ink">{value}</p>
@@ -119,7 +143,7 @@ export function Hero({ onBook }: { onBook?: () => void }) {
                   <span className="pulse-dot" aria-hidden="true" />
                 </div>
                 <div className="mt-4 grid grid-cols-2 gap-3">
-                  {liveMetrics.map(([label, value]) => (
+                  {metrics.map(([label, value]) => (
                     <div key={label} className="rounded-[14px] bg-white/70 px-4 py-3 text-ink shadow-sm border border-white/40">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-ink/60">{label}</p>
                       <p className="mt-1 font-display text-[18px] leading-none uppercase font-black text-ink">{value}</p>

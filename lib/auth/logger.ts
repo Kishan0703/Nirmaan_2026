@@ -9,6 +9,18 @@ export type AuditLogPayload = {
   details?: Record<string, any>;
 };
 
+const SENSITIVE_FIELD = /(authorization|cookie|password|secret|token|api[_-]?key|credential)/i;
+
+function redactDetails(details: Record<string, unknown> = {}): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(details).map(([key, value]) => {
+      if (SENSITIVE_FIELD.test(key)) return [key, "[REDACTED]"];
+      if (value && typeof value === "object" && !Array.isArray(value)) return [key, redactDetails(value as Record<string, unknown>)];
+      return [key, value];
+    })
+  );
+}
+
 /**
  * Structured JSON Logger for SIEM & Log Aggregators (Datadog, CloudWatch, Loki)
  */
@@ -25,24 +37,24 @@ export function logStructuredEvent(
     event,
     clientIp: clientIp || "unknown",
     userId: userId || "anonymous",
-    details: details || {},
+    details: redactDetails(details),
   };
 
   const jsonLog = JSON.stringify(payload);
 
   switch (level) {
     case "SECURITY_ALERT":
-      console.warn(`[SECURITY_ALERT] ${jsonLog}`);
+      console.warn(jsonLog);
       break;
     case "ERROR":
-      console.error(`[ERROR_LOG] ${jsonLog}`);
+      console.error(jsonLog);
       break;
     case "WARN":
-      console.warn(`[WARN_LOG] ${jsonLog}`);
+      console.warn(jsonLog);
       break;
     case "INFO":
     default:
-      console.log(`[AUDIT_LOG] ${jsonLog}`);
+      console.log(jsonLog);
       break;
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Award, Medal, Sparkles, Gift, Zap, Pizza, CheckCircle2, DollarSign, Coins } from "lucide-react";
 
@@ -111,9 +111,27 @@ const EXTRA_PERKS = [
 
 export function PrizePoolSection() {
   const [cashBurst, setCashBurst] = useState<CashItem[]>([]);
+  const [prizePoolTotal, setPrizePoolTotal] = useState("₹8L");
 
   const [expandedPrizes, setExpandedPrizes] = useState<Record<string, boolean>>({});
   const [expandedSpecialPrizes, setExpandedSpecialPrizes] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    async function fetchPrizeConfig() {
+      try {
+        const res = await fetch("/api/game-settings");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.config?.prizePoolTotal) {
+            setPrizePoolTotal(data.config.prizePoolTotal);
+          }
+        }
+      } catch {
+        // Fallback
+      }
+    }
+    fetchPrizeConfig();
+  }, []);
 
   const togglePrize = (rank: string) => {
     setExpandedPrizes((prev) => ({ ...prev, [rank]: !prev[rank] }));
@@ -173,7 +191,7 @@ export function PrizePoolSection() {
             </span>
           </div>
           <h2 className="font-display text-section uppercase text-ink font-black mt-1 flex items-center gap-2">
-            <span>₹1,00,000 Total Prize Pool</span>
+            <span>{prizePoolTotal} Total Prize Pool</span>
             <span className="text-xl">💸</span>
           </h2>
         </div>
