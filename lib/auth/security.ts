@@ -23,8 +23,8 @@ function getAuthSecret(): string {
 }
 
 export function verifyAdminPassword(password: string): boolean {
-  const expectedPassword = process.env.ADMIN_PASSWORD || "nirmaan2026admin";
-  if (typeof password !== "string" || !password) return false;
+  const expectedPassword = process.env.ADMIN_PASSWORD || "";
+  if (typeof password !== "string" || !password || !expectedPassword) return false;
 
   const passwordBuffer = Buffer.from(password);
   const expectedBuffer = Buffer.from(expectedPassword);
@@ -34,8 +34,8 @@ export function verifyAdminPassword(password: string): boolean {
 }
 
 export function verifyAdminUsername(username: string): boolean {
-  const expectedUsername = process.env.ADMIN_USERNAME || "admin123";
-  if (typeof username !== "string" || !username) return false;
+  const expectedUsername = process.env.ADMIN_USERNAME || "";
+  if (typeof username !== "string" || !username || !expectedUsername) return false;
 
   const usernameBuffer = Buffer.from(username.trim());
   const expectedBuffer = Buffer.from(expectedUsername);
