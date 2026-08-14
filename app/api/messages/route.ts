@@ -128,11 +128,8 @@ export async function POST(req: Request) {
     const nameTrimmed = (sender || "Anonymous").toString().trim();
     const nameLower = nameTrimmed.toLowerCase();
 
-    // Check if sender is a known team/roster member
-    const isTeamMember = TEAM_MEMBERS_DATABASE.some((teamName) => {
-      if (!nameLower) return false;
-      return nameLower === teamName || (nameLower.length >= 3 && (nameLower.includes(teamName) || teamName.includes(nameLower)));
-    });
+    // Check if sender exactly matches a known team/roster member name
+    const isTeamMember = TEAM_MEMBERS_DATABASE.some((teamName) => nameLower === teamName);
 
     const currentTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     const msgType = isTeamMember ? "ANNOUNCEMENT" : "QUERY";
