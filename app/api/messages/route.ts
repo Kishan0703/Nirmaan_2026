@@ -115,35 +115,21 @@ export async function DELETE() {
   return NextResponse.json({ success: true, messages: [] });
 }
 
-// POST: Enforce Authenticated Session & Verify Identity (Prevents Sender Impersonation / IDOR)
+// POST: Open — sender name comes from request body (no login required)
 export async function POST(req: Request) {
   try {
-    const cookieStore = await cookies();
-    const sessionToken = cookieStore.get("session_token")?.value;
-    const payload = sessionToken ? verifySessionToken(sessionToken) : null;
-
-    if (!payload) {
-      return NextResponse.json({ error: "Authentication required to post messages." }, { status: 401 });
-    }
-
-    const user = findUserById(payload.userId);
-    if (!user) {
-      return NextResponse.json({ error: "Invalid user session." }, { status: 401 });
-    }
-
     const body = await req.json();
-    const { text } = body;
+    const { sender, text } = body;
 
     if (!text || !text.trim()) {
       return NextResponse.json({ success: false, error: "Text is required" }, { status: 400 });
     }
 
-    // IDOR Protection: Always bind sender to verified authenticated user name
-    const nameTrimmed = user.name.trim();
+    const nameTrimmed = (sender || "Anonymous").toString().trim();
     const nameLower = nameTrimmed.toLowerCase();
 
-    // Verify whether authenticated user is on team roster or has admin role
-    const isTeamMember = user.role === "admin" || TEAM_MEMBERS_DATABASE.some((teamName) => {
+    // Check if sender is a known team/roster member
+    const isTeamMember = TEAM_MEMBERS_DATABASE.some((teamName) => {
       if (!nameLower) return false;
       return nameLower === teamName || (nameLower.length >= 3 && (nameLower.includes(teamName) || teamName.includes(nameLower)));
     });
@@ -194,3 +180,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }
+
