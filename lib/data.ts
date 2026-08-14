@@ -126,8 +126,8 @@ export const eventStats = [
 ];
 
 export const liveMetrics = [
-  ["Registrations", "0"],
-  ["Teams formed", "0"],
+  ["Registrations", "11"],
+  ["Teams formed", "4"],
   ["Submissions", "0 drafts"],
   ["Judges assigned", "0"]
 ];
