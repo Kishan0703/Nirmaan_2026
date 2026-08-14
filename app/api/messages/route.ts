@@ -8,6 +8,8 @@ import { findUserById } from "@/lib/auth/db";
 
 import os from "os";
 
+type MessageType = "ANNOUNCEMENT" | "QUERY" | "REPLY";
+
 export const dynamic = 'force-dynamic';
 
 const getDbPath = () => {
@@ -119,20 +121,16 @@ export async function DELETE() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { sender, text } = body;
+    const { sender, text, type } = body;
 
     if (!text || !text.trim()) {
       return NextResponse.json({ success: false, error: "Text is required" }, { status: 400 });
     }
 
     const nameTrimmed = (sender || "Anonymous").toString().trim();
-    const nameLower = nameTrimmed.toLowerCase();
-
-    // Check if sender exactly matches a known team/roster member name
-    const isTeamMember = TEAM_MEMBERS_DATABASE.some((teamName) => nameLower === teamName);
+    const msgType: MessageType = type === "ANNOUNCEMENT" ? "ANNOUNCEMENT" : "QUERY";
 
     const currentTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    const msgType = isTeamMember ? "ANNOUNCEMENT" : "QUERY";
 
     const newMsg: LobbyMessage = {
       id: `msg-${Date.now()}`,
@@ -143,7 +141,7 @@ export async function POST(req: Request) {
     };
 
     let autoReceipt: LobbyMessage | null = null;
-    if (!isTeamMember && msgType === "QUERY") {
+    if (msgType === "QUERY") {
       autoReceipt = {
         id: `bot-${Date.now() + 1}`,
         sender: "Nirmaan Organizers",
