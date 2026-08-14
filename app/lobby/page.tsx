@@ -89,6 +89,7 @@ export default function LobbyPage() {
         body: JSON.stringify({
           sender: senderToSend,
           text: textToSend,
+          type: activeFilter === "ANNOUNCEMENT" ? "ANNOUNCEMENT" : "QUERY",
         }),
       });
       const data = await res.json();
