@@ -121,7 +121,32 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 3. Admin API Authorization Protection
+  // 3. Admin Page Route Protection (server-side redirect before page renders)
+  const isAdminLoginPage = pathname === "/admin/login";
+  const isAdminPage = pathname.startsWith("/admin") && !isAdminLoginPage;
+
+  if (isAdminPage || isAdminLoginPage) {
+    const sessionToken = request.cookies.get("session_token")?.value;
+    const payload = sessionToken ? await verifyJwtEdge(sessionToken) : null;
+    const isAuthenticated = payload !== null && payload.role === "admin";
+
+    if (isAdminPage && !isAuthenticated) {
+      // Not logged in — redirect to login
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/admin/login";
+      logStructuredEvent("WARN", "ADMIN_PAGE_UNAUTHORIZED", { path: pathname }, clientIp);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    if (isAdminLoginPage && isAuthenticated) {
+      // Already logged in — redirect to dashboard
+      const dashboardUrl = request.nextUrl.clone();
+      dashboardUrl.pathname = "/admin";
+      return NextResponse.redirect(dashboardUrl);
+    }
+  }
+
+  // 4. Admin API Authorization Protection
   const isPublicAdminApi = pathname === "/api/admin/login";
   const isAdminApiRoute = pathname.startsWith("/api/admin") && !isPublicAdminApi;
 
@@ -139,7 +164,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 4. Attach CORS Headers to all API responses
+  // 5. Attach CORS Headers to all API responses
   const response = NextResponse.next();
   if (pathname.startsWith("/api")) {
     const corsHeaders = getCorsHeaders(origin);

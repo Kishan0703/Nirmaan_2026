@@ -128,7 +128,20 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
-    loadDashboardData();
+    const init = async () => {
+      try {
+        const meRes = await fetch("/api/admin/me");
+        if (!meRes.ok) {
+          router.replace("/admin/login");
+          return;
+        }
+      } catch {
+        router.replace("/admin/login");
+        return;
+      }
+      loadDashboardData();
+    };
+    init();
   }, []);
 
   // Admin Logout Handler
