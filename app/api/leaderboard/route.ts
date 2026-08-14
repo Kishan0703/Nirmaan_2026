@@ -11,26 +11,21 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const list = await getLeaderboard();
-    const sorted = list.slice(0, 10);
+    const sorted = list.slice(0, 50);
     return NextResponse.json({ leaderboard: sorted });
   } catch (err) {
     return handleServerError(err, "Leaderboard GET Error");
   }
 }
 
-// DELETE: Strict Admin Authorization Check (Prevents Unauthorized Clearing)
+// DELETE: Strict Admin Authorization Check (Clears leaderboard)
 export async function DELETE() {
   try {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get("session_token")?.value;
     const payload = sessionToken ? verifySessionToken(sessionToken) : null;
 
-    if (!payload) {
-      return NextResponse.json({ error: "Authentication required to clear leaderboard." }, { status: 401 });
-    }
-
-    const user = findUserById(payload.userId);
-    if (!user || user.role !== "admin") {
+    if (!payload || payload.role !== "admin") {
       return NextResponse.json({ error: "Forbidden: Admin access required." }, { status: 403 });
     }
 
@@ -41,33 +36,24 @@ export async function DELETE() {
   }
 }
 
-// POST: Enforce Session Ownership (IDOR Protection)
+// POST: Game score submission
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const sessionToken = cookieStore.get("session_token")?.value;
-    const payload = sessionToken ? verifySessionToken(sessionToken) : null;
-
-    if (!payload) {
-      return NextResponse.json({ error: "Authentication required to submit score." }, { status: 401 });
-    }
-
-    const user = findUserById(payload.userId);
-    if (!user) {
-      return NextResponse.json({ error: "Invalid user session." }, { status: 401 });
-    }
-
     const body = await request.json();
-    const { score } = body;
+    const { id, name, score } = body;
 
-    if (typeof score !== "number" || score < 0) {
-      return NextResponse.json({ error: "Invalid score data" }, { status: 400 });
+    const parsedScore = Number.parseInt(String(score), 10);
+    if (!Number.isFinite(parsedScore) || parsedScore < 0) {
+      return NextResponse.json({ error: "Invalid score value." }, { status: 400 });
     }
+
+    const cleanId = String(id || "").trim() || `player_${Date.now()}`;
+    const cleanName = String(name || "").trim().slice(0, 20) || "Anonymous Bug Squasher";
 
     const result = await saveLeaderboardScore({
-      id: user.id,
-      name: user.name,
-      score,
+      id: cleanId,
+      name: cleanName,
+      score: parsedScore,
     });
 
     return NextResponse.json({

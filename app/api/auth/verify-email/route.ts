@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { hashToken } from "@/lib/auth/security";
 import { findUserByVerificationTokenHash, updateUser } from "@/lib/auth/db";
+import { logAuthEvent, logStructuredEvent } from "@/lib/auth/logger";
 
 export async function POST(req: Request) {
   try {
     const { token } = await req.json();
 
-    if (!token) {
+    if (typeof token !== "string" || token.length !== 64) {
       return NextResponse.json({ error: "Verification token is required." }, { status: 400 });
     }
 
@@ -18,7 +19,12 @@ export async function POST(req: Request) {
     }
 
     // Check expiration
-    if (user.verificationExpiresAt && new Date(user.verificationExpiresAt) < new Date()) {
+    const verificationExpiresAt = user.verificationExpiresAt ? Date.parse(user.verificationExpiresAt) : NaN;
+    if (!Number.isFinite(verificationExpiresAt) || verificationExpiresAt <= Date.now()) {
+      updateUser(user.id, {
+        verificationTokenHash: undefined,
+        verificationExpiresAt: undefined,
+      });
       return NextResponse.json({ error: "Verification token has expired. Please request a new one." }, { status: 400 });
     }
 
@@ -29,9 +35,11 @@ export async function POST(req: Request) {
       verificationExpiresAt: undefined,
     });
 
+    logAuthEvent("EMAIL_VERIFIED", user.id, req.headers.get("x-forwarded-for")?.split(",")[0].trim());
+
     return NextResponse.json({ success: true, message: "Email verified successfully! You can now log in." });
   } catch (error) {
-    console.error("Verify Email Error:", error);
+    logStructuredEvent("ERROR", "API_ERROR", { route: "auth/verify-email", errorName: error instanceof Error ? error.name : "UnknownError" });
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

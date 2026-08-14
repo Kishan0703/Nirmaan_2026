@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import fs from "fs";
 import path from "path";
-import { getNeonMessages, saveNeonMessage, clearNeonTables, LobbyMessage } from "@/lib/neon";
+import { getNeonMessages, saveNeonMessage, clearNeonMessages, LobbyMessage } from "@/lib/neon";
 import { verifySessionToken } from "@/lib/auth/security";
 import { findUserById } from "@/lib/auth/db";
 
@@ -110,7 +110,7 @@ export async function DELETE() {
 
   writeDB([]);
   if (process.env.DATABASE_URL) {
-    await clearNeonTables();
+    await clearNeonMessages();
   }
   return NextResponse.json({ success: true, messages: [] });
 }

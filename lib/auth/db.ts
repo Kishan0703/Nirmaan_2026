@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
+import crypto from "crypto";
 
 const getDbDir = () => {
   if (process.env.VERCEL || process.env.NODE_ENV === "production") {
@@ -98,7 +99,7 @@ export function createUser(userData: Omit<UserRecord, "id" | "createdAt" | "role
   const newUser: UserRecord = {
     ...userData,
     role: userData.role || "user",
-    id: `usr_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+    id: `usr_${crypto.randomUUID()}`,
     createdAt: new Date().toISOString(),
   };
   users.push(newUser);

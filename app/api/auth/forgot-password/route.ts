@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { generateSecureToken } from "@/lib/auth/security";
 import { findUserByEmail, updateUser } from "@/lib/auth/db";
 import { checkRateLimit } from "@/lib/auth/rate-limit";
+import { logStructuredEvent } from "@/lib/auth/logger";
 
 export async function POST(req: Request) {
   try {
@@ -18,16 +19,14 @@ export async function POST(req: Request) {
 
     const { email } = await req.json();
 
-    if (!email) {
+    if (typeof email !== "string" || !email.trim()) {
       return NextResponse.json({ error: "Email is required." }, { status: 400 });
     }
 
-    const user = findUserByEmail(email);
-
-    let resetTokenResponse: string | undefined = undefined;
+    const user = findUserByEmail(email.trim().toLowerCase());
 
     if (user) {
-      const { rawToken, hashedToken } = generateSecureToken();
+      const { hashedToken } = generateSecureToken();
       // Hard 15-minute expiration limit for password resets
       const resetTokenExpiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
@@ -36,17 +35,15 @@ export async function POST(req: Request) {
         resetTokenExpiresAt,
       });
 
-      resetTokenResponse = rawToken;
     }
 
     // Generic response prevents account enumeration vulnerabilities
     return NextResponse.json({
       success: true,
-      message: "If an account with that email exists, a password reset token has been generated.",
-      resetToken: resetTokenResponse, // Exposed in JSON for local testing
+      message: "If an account with that email exists, password reset instructions will be delivered through the configured email service.",
     });
   } catch (error) {
-    console.error("Forgot Password Error:", error);
+    logStructuredEvent("ERROR", "API_ERROR", { route: "auth/forgot-password", errorName: error instanceof Error ? error.name : "UnknownError" });
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

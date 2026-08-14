@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import {
   hashToken,
+  tokenHashesEqual,
   createSessionToken,
   createRefreshToken,
 } from "@/lib/auth/security";
@@ -12,6 +13,7 @@ import {
   saveRefreshTokenRecord,
   findUserById,
 } from "@/lib/auth/db";
+import { logSecurityAlert, logStructuredEvent } from "@/lib/auth/logger";
 
 export async function POST() {
   try {
@@ -34,7 +36,7 @@ export async function POST() {
 
     // Reuse Detection: If token is already revoked, an attacker or compromised client attempted reuse!
     if (record.revoked) {
-      console.warn(`SECURITY ALERT: Refresh token reuse detected for user ${record.userId}! Revoking all sessions.`);
+      logSecurityAlert("TOKEN_REUSE_DETECTED", undefined, { userId: record.userId });
       revokeAllUserRefreshTokens(record.userId);
       
       const response = NextResponse.json({ error: "Security alert: Token reuse detected. All sessions revoked." }, { status: 401 });
@@ -44,20 +46,21 @@ export async function POST() {
     }
 
     // Check expiration
-    if (new Date(record.expiresAt) < new Date()) {
+    const refreshExpiresAt = Date.parse(record.expiresAt);
+    if (!Number.isFinite(refreshExpiresAt) || refreshExpiresAt <= Date.now()) {
       revokeRefreshTokenRecord(tokenId);
       return NextResponse.json({ error: "Refresh token expired." }, { status: 401 });
     }
 
     // Validate hash match
     const hashedSecret = hashToken(rawSecret);
-    if (record.tokenHash !== hashedSecret) {
+    if (!tokenHashesEqual(record.tokenHash, hashedSecret)) {
       revokeRefreshTokenRecord(tokenId);
       return NextResponse.json({ error: "Invalid refresh token secret." }, { status: 401 });
     }
 
     const user = findUserById(record.userId);
-    if (!user) {
+    if (!user || !user.emailVerified) {
       return NextResponse.json({ error: "User not found." }, { status: 401 });
     }
 
@@ -99,7 +102,7 @@ export async function POST() {
 
     return response;
   } catch (error) {
-    console.error("Refresh Token Error:", error);
+    logStructuredEvent("ERROR", "API_ERROR", { route: "auth/refresh", errorName: error instanceof Error ? error.name : "UnknownError" });
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

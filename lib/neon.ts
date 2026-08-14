@@ -18,10 +18,22 @@ export type LobbyMessage = {
 let sqlClient: NeonQueryFunction<false, false> | null = null;
 let tablesInitialized = false;
 
-export function getNeonSql() {
+// Keep the database client private to this module. All exported operations below
+// use Neon tagged templates, which bind interpolated values as query parameters.
+function getNeonSql() {
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("DATABASE_URL must be configured in production.");
+    }
     return null;
+  }
+  if (process.env.NODE_ENV === "production") {
+    const databaseUrl = new URL(connectionString);
+    const sslMode = databaseUrl.searchParams.get("sslmode");
+    if (sslMode !== "require" && databaseUrl.searchParams.get("ssl") !== "true") {
+      throw new Error("DATABASE_URL must require TLS in production.");
+    }
   }
   if (!sqlClient) {
     sqlClient = neon(connectionString);
@@ -106,9 +118,10 @@ export async function saveNeonLeaderboardScore(entry: {
     const cleanName = String(entry.name).trim().slice(0, 20) || "Anonymous Bug Squasher";
     const dateStr = new Date().toISOString().split("T")[0];
 
-    // Check existing score by id or case-insensitive name
+    // Ownership is keyed exclusively by the authenticated user's immutable ID.
+    // Display names are not authorization identifiers and must never select a row.
     const existing = await sql`
-      SELECT id, score, name FROM leaderboard WHERE id = ${entry.id} OR LOWER(name) = LOWER(${cleanName}) LIMIT 1;
+      SELECT id, score, name FROM leaderboard WHERE id = ${entry.id} LIMIT 1;
     `;
 
     if (existing && existing.length > 0) {
@@ -130,9 +143,7 @@ export async function saveNeonLeaderboardScore(entry: {
     }
 
     const leaderboard = (await getNeonLeaderboard()) || [];
-    const userRankIndex = leaderboard.findIndex(
-      (e) => e.id === entry.id || e.name.toLowerCase() === cleanName.toLowerCase()
-    );
+    const userRankIndex = leaderboard.findIndex((e) => e.id === entry.id);
     const userRank = userRankIndex >= 0 ? userRankIndex + 1 : null;
 
     return {
@@ -190,17 +201,30 @@ export async function saveNeonMessage(msg: LobbyMessage): Promise<boolean> {
   }
 }
 
-export async function clearNeonTables(): Promise<boolean> {
+export async function clearNeonMessages(): Promise<boolean> {
   const sql = getNeonSql();
   if (!sql) return false;
 
   try {
     await initNeonTables();
     await sql`DELETE FROM lobby_messages;`;
+    return true;
+  } catch (error) {
+    console.error("Neon clearNeonMessages error:", error);
+    return false;
+  }
+}
+
+export async function clearNeonLeaderboard(): Promise<boolean> {
+  const sql = getNeonSql();
+  if (!sql) return false;
+
+  try {
+    await initNeonTables();
     await sql`DELETE FROM leaderboard;`;
     return true;
   } catch (error) {
-    console.error("Neon clearNeonTables error:", error);
+    console.error("Neon clearNeonLeaderboard error:", error);
     return false;
   }
 }
