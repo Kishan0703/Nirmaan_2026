@@ -89,6 +89,7 @@ const DEPARTMENTS: Department[] = [
       { name: "Sajja Chaulagain", role: "Creative Designer (Coding Club)", tag: "Visual Art", initials: "SC", avatar: "https://drive.google.com/thumbnail?id=17K3f_0FHSVIXpAmFueifFfrfdUGyEIIB&sz=w500", linkedin: "https://www.linkedin.com/in/sajja-chaulagain-5a6204334" },
       { name: "Kanishk Upadhyay", role: "Design Specialist (Coding Club)", tag: "Design Assets", initials: "KU", avatar: "https://drive.google.com/thumbnail?id=1bdg_Dn6renQ4HQDlF70WXEC3CSPIW5-6&sz=w500" },
       { name: "Madhusudhan C N", role: "Brand Designer (Alterino)", tag: "Brand Design", initials: "MC", avatar: "https://drive.google.com/thumbnail?id=1iWPRDb06OYUaBYJw6L7xtDfdZz5_gmWh&sz=w500", linkedin: "https://www.linkedin.com/in/madhusudhan-c-n-a985a3337", github: "https://github.com/MadhusudhanCN" },
+      { name: "Ayush Y A", role: "Secretary (Coding Club)", tag: "Design Associate", initials: "AYA", avatar: "https://drive.google.com/thumbnail?id=18v4LdQri5D6UoP6wZjvRa33TS_bzgg36&sz=w500", linkedin: "https://www.linkedin.com/in/ayush-y-a-99018032a" },
     ],
   },
   {
