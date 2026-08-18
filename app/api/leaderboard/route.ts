@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getLeaderboard, saveLeaderboardScore, clearLeaderboard } from "@/lib/db";
+import { getGameConfig } from "@/lib/game-config";
+import { validateGameScore } from "@/lib/game-score";
 import { verifySessionToken } from "@/lib/auth/security";
 import { findUserById } from "@/lib/auth/db";
 import { handleServerError } from "@/lib/auth/error-handler";
@@ -42,9 +44,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { id, name, score } = body;
 
-    const parsedScore = Number.parseInt(String(score), 10);
-    if (!Number.isFinite(parsedScore) || parsedScore < 0) {
-      return NextResponse.json({ error: "Invalid score value." }, { status: 400 });
+    const gameConfig = await getGameConfig();
+    const scoreResult = validateGameScore(score, gameConfig);
+    if (!scoreResult.ok) {
+      return NextResponse.json({ error: scoreResult.error }, { status: 400 });
     }
 
     const cleanId = String(id || "").trim() || `player_${Date.now()}`;
@@ -53,7 +56,7 @@ export async function POST(request: Request) {
     const result = await saveLeaderboardScore({
       id: cleanId,
       name: cleanName,
-      score: parsedScore,
+      score: scoreResult.score,
     });
 
     return NextResponse.json({

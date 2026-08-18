@@ -168,11 +168,6 @@ export function BugSquasherGame() {
     localStorage.setItem(PLAYER_NAME_KEY, clean);
     setIsEditingName(false);
     setShowNameModal(false);
-
-    const activeScore = Math.max(scoreRef.current, highScore);
-    if (activeScore > 0) {
-      submitScoreToLeaderboard(activeScore, clean);
-    }
   };
 
   const endGame = useCallback(() => {
