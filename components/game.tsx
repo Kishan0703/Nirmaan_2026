@@ -22,12 +22,22 @@ type LeaderboardItem = {
   date: string;
 };
 
+type GameSession = {
+  id: string;
+  player_id: string;
+  player_name: string;
+  session_token: string;
+  game_duration: number;
+  points_per_bug: number;
+  spawn_interval_ms: number;
+  bug_lifetime_ms: number;
+};
+
 export function BugSquasherGame() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
 
-  // Dynamic game parameters from admin API
   const [gameDuration, setGameDuration] = useState(30);
   const [pointsPerBug, setPointsPerBug] = useState(10);
   const [spawnIntervalMs, setSpawnIntervalMs] = useState(700);
@@ -38,22 +48,23 @@ export function BugSquasherGame() {
   const containerRef = useRef<HTMLDivElement>(null);
   const bugTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  // User identity state
   const [playerName, setPlayerName] = useState<string>("");
   const [playerId, setPlayerId] = useState<string>("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempNameInput, setTempNameInput] = useState("");
   const [showNameModal, setShowNameModal] = useState(false);
 
-  // Leaderboard state
+  const [session, setSession] = useState<GameSession | null>(null);
+  const [isCreatingSession, setIsCreatingSession] = useState(false);
+
   const [leaderboard, setLeaderboard] = useState<LeaderboardItem[]>([]);
   const [isLoadingLeaderboard, setIsLoadingLeaderboard] = useState(true);
   const [lastSubmittedRank, setLastSubmittedRank] = useState<number | null>(null);
 
-  // Score & player refs for deterministic async submissions
   const scoreRef = useRef(0);
   const playerNameRef = useRef(playerName);
   const playerIdRef = useRef(playerId);
+  const sessionRef = useRef<GameSession | null>(null);
 
   useEffect(() => {
     playerNameRef.current = playerName;
@@ -63,12 +74,15 @@ export function BugSquasherGame() {
     playerIdRef.current = playerId;
   }, [playerId]);
 
+  useEffect(() => {
+    sessionRef.current = session;
+  }, [session]);
+
   const clearBugTimeouts = useCallback(() => {
     bugTimeoutsRef.current.forEach(clearTimeout);
     bugTimeoutsRef.current = [];
   }, []);
 
-  // Fetch dynamic game settings from admin API
   const fetchGameSettings = async () => {
     try {
       const res = await fetch("/api/game-settings");
@@ -89,7 +103,6 @@ export function BugSquasherGame() {
     }
   };
 
-  // Initialize player profile, game settings & high score
   useEffect(() => {
     const savedScore = localStorage.getItem(HIGH_SCORE_STORAGE_KEY);
     const parsedScore = savedScore ? Number.parseInt(savedScore, 10) : 0;
@@ -97,12 +110,10 @@ export function BugSquasherGame() {
       setHighScore(parsedScore);
     }
 
-    let savedId = localStorage.getItem(PLAYER_ID_KEY);
-    if (!savedId) {
-      savedId = `player_${Math.random().toString(36).substring(2, 9)}_${Date.now()}`;
-      localStorage.setItem(PLAYER_ID_KEY, savedId);
+    const savedId = localStorage.getItem(PLAYER_ID_KEY);
+    if (savedId) {
+      setPlayerId(savedId);
     }
-    setPlayerId(savedId);
 
     const savedName = localStorage.getItem(PLAYER_NAME_KEY) || "";
     setPlayerName(savedName);
@@ -129,65 +140,132 @@ export function BugSquasherGame() {
     }
   };
 
-  const submitScoreToLeaderboard = useCallback(async (finalScore: number, customName?: string) => {
-    if (finalScore <= 0) return;
-
+  const createGameSession = async (name: string): Promise<GameSession | null> => {
     try {
-      const activeName = (customName || playerNameRef.current || localStorage.getItem(PLAYER_NAME_KEY) || "Anonymous Bug Squasher").trim();
-      const activeId = playerIdRef.current || localStorage.getItem(PLAYER_ID_KEY) || `player_${Date.now()}`;
-
-      const res = await fetch("/api/leaderboard", {
+      const res = await fetch("/api/game/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: activeId,
-          name: activeName,
-          score: finalScore,
-        }),
+        body: JSON.stringify({ player_name: name }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        if (data.leaderboard) {
-          setLeaderboard(data.leaderboard);
-        }
-        const rank = data.userRank ?? data.rank;
-        if (rank) {
-          setLastSubmittedRank(rank);
-        }
+      if (!res.ok) {
+        const err = await res.json();
+        console.error("Failed to create session:", err.error);
+        return null;
       }
-    } catch (err) {
-      console.error("Error submitting score:", err);
-    }
-  }, []);
 
-  const savePlayerName = (name: string) => {
-    const clean = name.trim().slice(0, 20) || "Anonymous Bug Squasher";
-    setPlayerName(clean);
-    playerNameRef.current = clean;
-    localStorage.setItem(PLAYER_NAME_KEY, clean);
-    setIsEditingName(false);
-    setShowNameModal(false);
+      const data = await res.json();
+      if (data.success && data.session) {
+        return data.session;
+      }
+      return null;
+    } catch (err) {
+      console.error("Error creating game session:", err);
+      return null;
+    }
   };
 
-  const endGame = useCallback(() => {
+  const sendClick = async (sessionToken: string): Promise<{ score: number; clicks_count: number } | null> => {
+    try {
+      const res = await fetch("/api/game/click", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_token: sessionToken }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        if (err.cheat_detected) {
+          console.warn("[CHEAT DETECTED] Click rate exceeded");
+        }
+        return null;
+      }
+
+      const data = await res.json();
+      if (data.success) {
+        return { score: data.score, clicks_count: data.clicks_count };
+      }
+      return null;
+    } catch (err) {
+      console.error("Error sending click:", err);
+      return null;
+    }
+  };
+
+  const finalizeGame = async (sessionToken: string) => {
+    try {
+      const res = await fetch("/api/game/finalize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_token: sessionToken }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        console.error("Failed to finalize game:", err.error);
+        return null;
+      }
+
+      const data = await res.json();
+      if (data.success) {
+        return data;
+      }
+      return null;
+    } catch (err) {
+      console.error("Error finalizing game:", err);
+      return null;
+    }
+  };
+
+  const startGame = async () => {
+    if (!playerName) {
+      setShowNameModal(true);
+      return;
+    }
+
+    setIsCreatingSession(true);
+    const newSession = await createGameSession(playerName);
+    setIsCreatingSession(false);
+
+    if (!newSession) {
+      alert("Failed to start game session. Please try again.");
+      return;
+    }
+
+    setSession(newSession);
+    clearBugTimeouts();
+    setBugs([]);
+    setScore(0);
+    scoreRef.current = 0;
+    setTimeLeft(newSession.game_duration);
+    setLastSubmittedRank(null);
+    setIsPlaying(true);
+  };
+
+  const endGame = useCallback(async () => {
     setIsPlaying(false);
     clearBugTimeouts();
     setBugs([]);
 
-    const finalScore = scoreRef.current;
-    if (finalScore > 0) {
-      setHighScore((currentHigh) => {
-        if (finalScore > currentHigh) {
-          localStorage.setItem(HIGH_SCORE_STORAGE_KEY, finalScore.toString());
-          return finalScore;
+    if (sessionRef.current?.session_token) {
+      const result = await finalizeGame(sessionRef.current.session_token);
+      if (result) {
+        setLeaderboard(result.leaderboard);
+        if (result.userRank) {
+          setLastSubmittedRank(result.userRank);
         }
-        return currentHigh;
-      });
-
-      submitScoreToLeaderboard(finalScore);
+        // Cache server-validated high score for instant UI display
+        if (result.final_score > 0) {
+          const cachedHigh = localStorage.getItem(HIGH_SCORE_STORAGE_KEY);
+          const cachedHighScore = cachedHigh ? Number.parseInt(cachedHigh, 10) : 0;
+          if (result.final_score > cachedHighScore) {
+            localStorage.setItem(HIGH_SCORE_STORAGE_KEY, result.final_score.toString());
+            setHighScore(result.final_score);
+          }
+        }
+      }
     }
-  }, [clearBugTimeouts, submitScoreToLeaderboard]);
+  }, [clearBugTimeouts]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -239,34 +317,30 @@ export function BugSquasherGame() {
     return () => clearInterval(interval);
   }, [isPlaying, currentSpawnInterval, spawnBug]);
 
-  const squashBug = (id: number) => {
-    setScore((s) => {
-      const next = s + pointsPerBug;
-      scoreRef.current = next;
-      return next;
-    });
+  const squashBug = async (id: number) => {
+    if (!sessionRef.current?.session_token) return;
+
+    const result = await sendClick(sessionRef.current.session_token);
+    if (result) {
+      setScore(result.score);
+      scoreRef.current = result.score;
+    }
     setBugs((b) => b.filter((bug) => bug.id !== id));
   };
 
-  const startGame = () => {
-    if (!playerName) {
-      setShowNameModal(true);
-      return;
-    }
-    clearBugTimeouts();
-    setBugs([]);
-    setScore(0);
-    scoreRef.current = 0;
-    setTimeLeft(gameDuration);
-    setLastSubmittedRank(null);
-    setIsPlaying(true);
+  const savePlayerName = (name: string) => {
+    const clean = name.trim().slice(0, 20) || "Anonymous Bug Squasher";
+    setPlayerName(clean);
+    playerNameRef.current = clean;
+    localStorage.setItem(PLAYER_NAME_KEY, clean);
+    setIsEditingName(false);
+    setShowNameModal(false);
   };
 
   return (
     <section id="game" className="my-gap" data-reveal>
       <div className="rounded-brand bg-red-light p-4 sm:p-box clay-card text-white flex flex-col gap-4 sm:gap-6 overflow-hidden">
 
-        {/* Top Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/20 pb-3 sm:pb-4">
           <div>
             <h2 className="font-display text-2xl sm:text-section uppercase text-white font-black leading-tight">
@@ -274,10 +348,8 @@ export function BugSquasherGame() {
             </h2>
           </div>
 
-          {/* User Profile + Stats */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
 
-            {/* Player Tag Profile */}
             <div className="clay-card rounded-[12px] bg-paper px-2.5 py-1 sm:px-3 sm:py-1.5 text-ink flex items-center gap-1.5 shadow-sm">
               <User size={14} className="text-gray-500 shrink-0" />
               {isEditingName ? (
@@ -329,6 +401,14 @@ export function BugSquasherGame() {
               <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-700">High Score</p>
               <p className="font-display text-sm sm:text-lg font-black">{highScore}</p>
             </div>
+            {isCreatingSession && (
+              <div className="clay-card rounded-[12px] bg-paper px-2.5 py-1 sm:px-3 sm:py-1.5 text-ink text-center shadow-sm">
+                <div className="flex items-center justify-center gap-1">
+                  <div className="w-3 h-3 border-2 border-red border-t-transparent rounded-full animate-spin" />
+                  <span className="text-xs font-bold">Starting...</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -336,10 +416,8 @@ export function BugSquasherGame() {
           Quickly click or tap the red bugs as they spawn on the board below! Compete on the global leaderboard.
         </p>
 
-        {/* Main Section Grid: Game Area + Leaderboard */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
 
-          {/* Game Canvas (2 Cols on LG) */}
           <div className="lg:col-span-2 flex flex-col gap-3">
             <div
               ref={containerRef}
@@ -358,9 +436,10 @@ export function BugSquasherGame() {
 
                   <button
                     onClick={startGame}
-                    className="clay-card rounded-pill bg-yellow px-6 py-2.5 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-display uppercase font-black text-ink hover:scale-105 transition-transform shadow-md"
+                    disabled={isCreatingSession}
+                    className="clay-card rounded-pill bg-yellow px-6 py-2.5 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-display uppercase font-black text-ink hover:scale-105 transition-transform shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {playerName ? "Start Lobby Game" : "Set Name & Play"}
+                    {isCreatingSession ? "Starting..." : playerName ? "Start Lobby Game" : "Set Name & Play"}
                   </button>
                 </div>
               )}
@@ -382,7 +461,6 @@ export function BugSquasherGame() {
             </div>
           </div>
 
-          {/* Leaderboard Column */}
           <div className="lg:col-span-1 flex flex-col gap-3">
             <div className="rounded-[18px] bg-ink/60 border border-white/15 p-3.5 sm:p-4 flex flex-col gap-3 h-[190px] sm:h-[320px]">
               <div className="flex items-center justify-between border-b border-white/10 pb-2">
@@ -433,7 +511,6 @@ export function BugSquasherGame() {
         </div>
       </div>
 
-      {/* Name Input Modal */}
       <AnimatePresence>
         {showNameModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/80 backdrop-blur-sm">

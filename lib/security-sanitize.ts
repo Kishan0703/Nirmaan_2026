@@ -25,3 +25,17 @@ export function sanitizeText(text?: string): string {
   if (!text || typeof text !== "string") return "";
   return text.replace(/[<>]/g, "").trim();
 }
+
+/**
+ * Sanitize player name for leaderboard - alphanumeric + basic punctuation only, max 20 chars
+ */
+export function sanitizePlayerName(name?: string): string {
+  if (!name || typeof name !== "string") return "";
+  // Allow alphanumeric, spaces, hyphens, underscores, and basic punctuation
+  const sanitized = name
+    .replace(/[<>]/g, "") // Remove HTML brackets
+    .replace(/[^\w\s\-_.,!?]/g, "") // Keep alphanumeric, space, hyphen, underscore, period, comma, exclamation, question
+    .trim()
+    .slice(0, 20);
+  return sanitized || "Anonymous Bug Squasher";
+}
