@@ -47,6 +47,7 @@ export function BugSquasherGame() {
   const [bugs, setBugs] = useState<Bug[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const bugTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const clickedBugIdsRef = useRef<Set<number>>(new Set());
 
   const [playerName, setPlayerName] = useState<string>("");
   const [playerId, setPlayerId] = useState<string>("");
@@ -320,12 +321,23 @@ export function BugSquasherGame() {
   const squashBug = async (id: number) => {
     if (!sessionRef.current?.session_token) return;
 
-    const result = await sendClick(sessionRef.current.session_token);
-    if (result) {
-      setScore(result.score);
-      scoreRef.current = result.score;
-    }
+    // Ignore duplicate clicks for the same bug id
+    if (clickedBugIdsRef.current.has(id)) return;
+    clickedBugIdsRef.current.add(id);
+
+    // Remove the bug locally immediately to prevent multiple clicks
     setBugs((b) => b.filter((bug) => bug.id !== id));
+
+    try {
+      const result = await sendClick(sessionRef.current.session_token);
+      if (result) {
+        setScore(result.score);
+        scoreRef.current = result.score;
+      }
+    } finally {
+      // Allow garbage collection of the id after handling
+      clickedBugIdsRef.current.delete(id);
+    }
   };
 
   const savePlayerName = (name: string) => {
