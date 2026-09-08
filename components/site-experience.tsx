@@ -87,7 +87,7 @@ function Rail({ onBook }: { onBook: () => void }) {
         </a>
       </nav>
 
-      {/* Bottom Legal / Year Box & Social Icons */}
+      {/* Bottom Legal / Year Box & Socials Button */}
       <div className="flex flex-col gap-1.5 pt-1.5 border-t border-ink/10 shrink-0">
         <a
           href="#top"
@@ -96,27 +96,15 @@ function Rail({ onBook }: { onBook: () => void }) {
           <span className="font-aeonik text-[10px] uppercase tracking-wider font-bold text-gray-700">Nirmaan 2026</span>
         </a>
 
-        {/* Social Media Icons Row */}
-        <div className="flex items-center justify-center gap-2.5 px-1">
-          <a
-            href="https://www.instagram.com/codingclub_bmsit/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            className="flex h-7 w-7 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-red hover:scale-110 transition-all shadow-sm"
-          >
-            <SocialInstagram className="w-3 h-3" />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/codingclub-bmsit/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="flex h-7 w-7 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue hover:scale-110 transition-all shadow-sm"
-          >
-            <SocialLinkedin className="w-3 h-3" />
-          </a>
-        </div>
+        {/* Socials Button */}
+        <a
+          href="/socials"
+          className="group clay-card flex items-center justify-center gap-2 rounded-[10px] bg-purple py-2 px-3 text-white transition-all hover:scale-[1.02] hover:bg-purple-light shadow-sm"
+        >
+          <SocialInstagram className="w-3.5 h-3.5" />
+          <SocialLinkedin className="w-3.5 h-3.5" />
+          <span className="font-aeonik text-[10px] uppercase tracking-wider font-bold">Socials</span>
+        </a>
       </div>
     </header>
   );
@@ -163,27 +151,19 @@ function MobileHeader({ open, setOpen, onBook }: { open: boolean; setOpen: (valu
           </a>
         ))}
 
-        {/* Mobile Social Bar */}
-        <div className="flex items-center justify-center gap-4 pt-3 border-t border-ink/10">
-          <a
-            href="https://www.instagram.com/codingclub_bmsit/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-red transition-all"
-          >
+        {/* Mobile Socials Link */}
+        <a
+          href="/socials"
+          onClick={() => setOpen(false)}
+          tabIndex={open ? 0 : -1}
+          className="clay-card rounded-[12px] p-4 bg-purple text-white font-display text-lg uppercase flex items-center justify-between"
+        >
+          <span className="flex items-center gap-2">
             <SocialInstagram className="w-4 h-4" />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/codingclub-bmsit/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="flex h-10 w-10 items-center justify-center rounded-full clay-card bg-ink text-white hover:bg-blue transition-all"
-          >
             <SocialLinkedin className="w-4 h-4" />
-          </a>
-        </div>
+            <span>Socials</span>
+          </span>
+        </a>
       </div>
     </header>
   );
