@@ -21,7 +21,7 @@
 | Submission of PPT Opens | 16 Aug 2026 (3:30 AM) | Submission of PPT opens |
 | Submission of PPT Closes | 6 Sep 2026 (5:29 AM) | Submission of PPT closes |
 | Declaration of Round-1 Results | 12 Sep 2026 (9:00 PM–10:00 PM) | Declaration of Round-1 Results |
-| Registration for Second Round Opens | 13 Sep 2026 (3:30 AM) | Registration for Second Round opens |
+| Registration for Second Round Opens | 13 Sep 2026 (10:00 AM) | Registration for Second Round opens |
 | Second Round Registration Closes | 21 Sep 2026 (3:30 AM) | Second Round Registration closes |
 | On-Site Check-In & Grand Finale Begins | 25 Sep 2026 (9:30 AM–11:00 AM Check-In, 11:30 AM Finale) | On-Site Check-In & Grand Finale begins |
 | Grand Finale Ends & Prize Distribution | 26 Sep 2026 (12:30 PM Finale End, 12:30–1:30 PM Prizes, 4:00 PM Event End) | Grand Finale ends & Prize Distribution |
@@ -56,7 +56,7 @@
 - **Submission of PPT opens:** 16 Aug 2026 (3:30 AM)
 - **Submission of PPT closes:** 6 Sep 2026 (5:29 AM)
 - **Declaration of Round-1 Results:** 12 Sep 2026 (9:00 PM–10:00 PM)
-- **Registration for Second Round:** 13 Sep 2026 (3:30 AM) – 21 Sep 2026 (3:30 AM)
+- **Registration for Second Round:** 13 Sep 2026 (10:00 AM) – 21 Sep 2026 (3:30 AM)
 - **Grand Finale begins:** 25 Sep 2026 (11:30 AM, Check-In 9:30 AM–11:00 AM)
 - **Grand Finale ends:** 26 Sep 2026 (12:30 PM, Prizes 12:30–1:30 PM, Event End 4:00 PM)
 

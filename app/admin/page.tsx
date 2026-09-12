@@ -19,6 +19,9 @@ import {
   CheckCircle2,
   ExternalLink,
   X,
+  Search,
+  FileSpreadsheet,
+  User,
 } from "lucide-react";
 import type { GameConfig } from "@/lib/game-config";
 
@@ -32,6 +35,7 @@ type LeaderboardItem = {
 type ProjectSubmission = {
   id: string;
   team: string;
+  leader?: string;
   track: string;
   status: string;
   score: string;
@@ -83,13 +87,26 @@ export default function AdminDashboardPage() {
   // Submissions State
   const [submissions, setSubmissions] = useState<ProjectSubmission[]>([]);
   const [submissionModalOpen, setSubmissionModalOpen] = useState(false);
+  const [submissionSearch, setSubmissionSearch] = useState("");
+  const [submissionStatusFilter, setSubmissionStatusFilter] = useState<"all" | "finalist" | "waitlist">("all");
+  const [googleSheetUrl, setGoogleSheetUrl] = useState(
+    "https://docs.google.com/spreadsheets/d/18SaW_YjbLqOf1sWIHk6BSk7ke6DqmNKZ9Bxf7E7NWeg/edit?gid=0#gid=0"
+  );
+  const [syncingSheet, setSyncingSheet] = useState(false);
   const [submissionForm, setSubmissionForm] = useState<{
     id?: string;
     team: string;
-    track: string;
+    leader: string;
+    track?: string;
     status: string;
-    score: string;
-  }>({ team: "", track: "Embedded Systems", status: "Prototype live", score: "85" });
+    score?: string;
+  }>({
+    team: "",
+    leader: "",
+    track: "",
+    status: "Qualified for Finale",
+    score: "",
+  });
 
   const showToast = (message: string, type: "success" | "error" = "success") => {
     setToast({ message, type });
@@ -285,6 +302,28 @@ export default function AdminDashboardPage() {
 
   // ── SUBMISSIONS ACTIONS ──
 
+  const handleSyncGoogleSheet = async () => {
+    setSyncingSheet(true);
+    try {
+      const res = await fetch("/api/admin/submissions/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sheetUrl: googleSheetUrl }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showToast(data.message || `Synced ${data.count} teams from Google Sheet!`);
+        if (data.submissions) setSubmissions(data.submissions);
+      } else {
+        showToast(data.error || "Failed to sync from Google Sheet.", "error");
+      }
+    } catch (err) {
+      showToast("Error syncing with Google Sheet.", "error");
+    } finally {
+      setSyncingSheet(false);
+    }
+  };
+
   const handleSaveSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -296,15 +335,21 @@ export default function AdminDashboardPage() {
 
       const data = await res.json();
       if (res.ok && data.success) {
-        showToast("Project submission saved!");
+        showToast("Round 1 team saved!");
         setSubmissionModalOpen(false);
-        setSubmissionForm({ team: "", track: "Embedded Systems", status: "Prototype live", score: "85" });
+        setSubmissionForm({
+          team: "",
+          leader: "",
+          track: "",
+          status: "Qualified for Finale",
+          score: "",
+        });
         if (data.submissions) setSubmissions(data.submissions);
       } else {
-        showToast(data.error || "Failed to save submission.", "error");
+        showToast(data.error || "Failed to save team.", "error");
       }
     } catch (err) {
-      showToast("Error saving project submission.", "error");
+      showToast("Error saving team.", "error");
     }
   };
 
@@ -480,7 +525,7 @@ export default function AdminDashboardPage() {
             }`}
           >
             <FolderGit2 size={16} />
-            <span>Submissions ({submissions.length})</span>
+            <span>Round 1 Results ({submissions.length})</span>
           </button>
         </div>
 
@@ -537,14 +582,18 @@ export default function AdminDashboardPage() {
                       </p>
                     </div>
 
-                    <div className="rounded-2xl border-3 border-ink bg-green/10 p-4 shadow-[4px_4px_0px_0px_#18181b]">
+                    <div
+                      onClick={() => setActiveTab("submissions")}
+                      className="rounded-2xl border-3 border-ink bg-green/10 p-4 shadow-[4px_4px_0px_0px_#18181b] cursor-pointer hover:bg-green/15 transition-all"
+                    >
                       <div className="flex items-center justify-between text-green mb-2">
-                        <span className="font-display text-xs uppercase font-black">Project Submissions</span>
+                        <span className="font-display text-xs uppercase font-black">Round 1 Shortlist</span>
                         <FolderGit2 size={18} />
                       </div>
-                      <p className="font-display text-2xl font-black text-ink">{submissions.length} Projects</p>
-                      <p className="text-[11px] font-bold text-ink/60 mt-1">
-                        Active tracks configured
+                      <p className="font-display text-2xl font-black text-ink">{submissions.length} Teams</p>
+                      <p className="text-[11px] font-bold text-ink/60 mt-1 flex items-center justify-between">
+                        <span>Google Sheet connected</span>
+                        <span className="text-green font-black">Manage →</span>
                       </p>
                     </div>
                   </div>
@@ -948,27 +997,151 @@ export default function AdminDashboardPage() {
                 </div>
               )}
 
-              {/* TAB 5: PROJECT SUBMISSIONS */}
+              {/* TAB 5: PROJECT SUBMISSIONS / ROUND 1 SHORTLIST */}
               {activeTab === "submissions" && (
                 <div className="flex flex-col gap-6">
+                  {/* Top Header */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div>
-                      <h2 className="font-display text-2xl uppercase font-black">Project Submissions Board</h2>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="px-2.5 py-0.5 rounded-full bg-yellow text-ink border border-ink font-display text-[10px] font-black uppercase">
+                          Dynamic Google Sheet Linked
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full bg-green/15 text-green border border-green/30 font-display text-[10px] font-black uppercase">
+                          {submissions.length} Teams Loaded
+                        </span>
+                      </div>
+                      <h2 className="font-display text-2xl uppercase font-black">Round 1 Teams & Shortlist</h2>
                       <p className="font-sans text-xs font-bold text-ink/70">
-                        Manage submitted hackathon projects, tracks, status indicators, and scores.
+                        Manage shortlisted hackathon teams, team leaders, and qualification status.
                       </p>
                     </div>
                     <button
                       type="button"
                       onClick={() => {
-                        setSubmissionForm({ team: "", track: "Embedded Systems", status: "Prototype live", score: "85" });
+                        setSubmissionForm({
+                          team: "",
+                          leader: "",
+                          track: "",
+                          status: "Qualified for Finale",
+                          score: "",
+                        });
                         setSubmissionModalOpen(true);
                       }}
                       className="px-4 py-2.5 rounded-2xl border-3 border-ink bg-green text-white font-display text-xs uppercase font-black shadow-[3px_3px_0px_0px_#18181b] hover:bg-green-light transition-all shrink-0 flex items-center gap-1.5"
                     >
                       <Plus size={16} />
-                      <span>Add New Project</span>
+                      <span>Add New Team</span>
                     </button>
+                  </div>
+
+                  {/* Google Sheet Live Sync Card */}
+                  <div className="rounded-2xl border-3 border-ink bg-gradient-to-r from-amber-50 via-green-50/50 to-blue-50/50 p-4 sm:p-5 shadow-[4px_4px_0px_0px_#18181b] flex flex-col gap-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 rounded-xl bg-green text-white border-2 border-ink shadow-2xs">
+                          <FileSpreadsheet size={20} />
+                        </div>
+                        <div>
+                          <h3 className="font-display text-sm uppercase font-black text-ink flex items-center gap-2">
+                            <span>Google Sheets Dynamic Sync</span>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-ink text-yellow uppercase font-black">
+                              Live
+                            </span>
+                          </h3>
+                          <p className="text-xs text-ink/70 font-bold">
+                            Sync names and leaders directly from your official evaluation spreadsheet.
+                          </p>
+                        </div>
+                      </div>
+                      <a
+                        href={googleSheetUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border-2 border-ink bg-white font-display text-[11px] font-black uppercase text-ink hover:bg-yellow shadow-xs transition-all w-fit"
+                      >
+                        <ExternalLink size={13} />
+                        <span>Open Sheet</span>
+                      </a>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-stretch gap-2 pt-1">
+                      <input
+                        type="url"
+                        value={googleSheetUrl}
+                        onChange={(e) => setGoogleSheetUrl(e.target.value)}
+                        placeholder="Paste Google Sheets URL..."
+                        className="flex-1 bg-white text-ink font-sans font-bold text-xs p-2.5 border-2 border-ink rounded-xl outline-none focus:border-green"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSyncGoogleSheet}
+                        disabled={syncingSheet}
+                        className="px-4 py-2.5 rounded-xl border-2 border-ink bg-ink text-yellow font-display text-xs uppercase font-black shadow-[2px_2px_0px_0px_#18181b] hover:bg-yellow hover:text-ink disabled:opacity-50 transition-all flex items-center justify-center gap-2 shrink-0"
+                      >
+                        <RefreshCw size={14} className={syncingSheet ? "animate-spin" : ""} />
+                        <span>{syncingSheet ? "Syncing..." : "Sync from Sheet"}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Search & Status Filters */}
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                    <div className="relative flex-1 max-w-md">
+                      <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/40" />
+                      <input
+                        type="text"
+                        value={submissionSearch}
+                        onChange={(e) => setSubmissionSearch(e.target.value)}
+                        placeholder="Search team name or leader..."
+                        className="w-full pl-9 pr-3 py-2 text-xs font-bold rounded-xl border-2 border-ink bg-white outline-none focus:border-green"
+                      />
+                      {submissionSearch && (
+                        <button
+                          onClick={() => setSubmissionSearch("")}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase text-ink/50 hover:text-ink"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Status Quick Filters */}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setSubmissionStatusFilter("all")}
+                        className={`px-3 py-1.5 rounded-xl font-display text-xs uppercase font-black border-2 border-ink transition-all ${
+                          submissionStatusFilter === "all"
+                            ? "bg-ink text-yellow shadow-2xs"
+                            : "bg-white text-ink/70 hover:text-ink hover:bg-paper"
+                        }`}
+                      >
+                        All ({submissions.length})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSubmissionStatusFilter("finalist")}
+                        className={`px-3 py-1.5 rounded-xl font-display text-xs uppercase font-black border-2 border-ink transition-all ${
+                          submissionStatusFilter === "finalist"
+                            ? "bg-green text-white shadow-2xs"
+                            : "bg-white text-ink/70 hover:text-ink hover:bg-paper"
+                        }`}
+                      >
+                        Finalists ({submissions.filter((s) => !s.status.toLowerCase().includes("waitlist")).length})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSubmissionStatusFilter("waitlist")}
+                        className={`px-3 py-1.5 rounded-xl font-display text-xs uppercase font-black border-2 border-ink transition-all ${
+                          submissionStatusFilter === "waitlist"
+                            ? "bg-amber-400 text-ink shadow-2xs"
+                            : "bg-white text-ink/70 hover:text-ink hover:bg-paper"
+                        }`}
+                      >
+                        Waitlist ({submissions.filter((s) => s.status.toLowerCase().includes("waitlist")).length})
+                      </button>
+                    </div>
                   </div>
 
                   {/* Submissions Table */}
@@ -976,55 +1149,91 @@ export default function AdminDashboardPage() {
                     <table className="w-full text-left text-xs font-bold">
                       <thead className="bg-ink text-white font-display text-xs uppercase font-black border-b-3 border-ink">
                         <tr>
+                          <th className="p-3 w-16 text-center">S.No</th>
                           <th className="p-3">Team Name</th>
-                          <th className="p-3">Challenge Track</th>
+                          <th className="p-3">Team Leader</th>
                           <th className="p-3">Status</th>
-                          <th className="p-3">Judge Score</th>
                           <th className="p-3 text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y-2 divide-ink/10 bg-white">
-                        {submissions.length === 0 ? (
-                          <tr>
-                            <td colSpan={5} className="p-6 text-center text-gray-500 font-bold">
-                              No project submissions configured yet.
-                            </td>
-                          </tr>
-                        ) : (
-                          submissions.map((item) => (
+                        {submissions
+                          .filter((item) => {
+                            const q = submissionSearch.trim().toLowerCase();
+                            const matchesQuery =
+                              !q ||
+                              item.team.toLowerCase().includes(q) ||
+                              (item.leader && item.leader.toLowerCase().includes(q));
+
+                            const isWaitlist = item.status.toLowerCase().includes("waitlist");
+                            const matchesStatus =
+                              submissionStatusFilter === "all" ||
+                              (submissionStatusFilter === "waitlist" ? isWaitlist : !isWaitlist);
+
+                            return matchesQuery && matchesStatus;
+                          })
+                          .sort((a, b) => {
+                            const aWait = a.status.toLowerCase().includes("waitlist");
+                            const bWait = b.status.toLowerCase().includes("waitlist");
+                            if (aWait && bWait) return 0; // preserve Drive order for waitlist
+                            if (!aWait && !bWait) {
+                              return a.team.localeCompare(b.team, undefined, { numeric: true, sensitivity: "base" });
+                            }
+                            return aWait ? 1 : -1;
+                          })
+                          .map((item, idx) => (
                             <tr key={item.id} className="hover:bg-amber-50/50">
-                              <td className="p-3 font-display font-black text-ink text-sm">{item.team}</td>
-                              <td className="p-3 text-gray-700">{item.track}</td>
+                              <td className="p-3 text-center text-ink/50 font-display font-black">
+                                {idx + 1}
+                              </td>
+                              <td className="p-3 font-display font-black text-ink text-sm">
+                                {item.team}
+                              </td>
+                              <td className="p-3 text-ink/80 flex items-center gap-1.5 pt-3.5">
+                                <User size={13} className="text-purple shrink-0" />
+                                <span>{item.leader || "—"}</span>
+                              </td>
                               <td className="p-3">
-                                <span className="inline-block px-2.5 py-1 rounded-full bg-blue/10 border border-blue text-blue font-display text-[10px] font-black uppercase">
+                                <span
+                                  className={`inline-block px-2.5 py-1 rounded-full border font-display text-[10px] font-black uppercase ${
+                                    item.status.toLowerCase().includes("waitlist")
+                                      ? "bg-amber-100 border-amber-300 text-amber-900"
+                                      : "bg-green/15 border-green text-green"
+                                  }`}
+                                >
                                   {item.status}
                                 </span>
                               </td>
-                              <td className="p-3 font-display font-black text-purple">{item.score} / 100</td>
                               <td className="p-3 text-right">
                                 <div className="flex items-center justify-end gap-2">
                                   <button
                                     onClick={() => {
-                                      setSubmissionForm(item);
+                                      setSubmissionForm({
+                                        id: item.id,
+                                        team: item.team,
+                                        leader: item.leader || "",
+                                        track: item.track || "",
+                                        status: item.status,
+                                        score: item.score || "",
+                                      });
                                       setSubmissionModalOpen(true);
                                     }}
                                     className="p-1.5 rounded-lg border border-ink bg-amber-100 hover:bg-yellow text-ink transition-all"
-                                    title="Edit Submission"
+                                    title="Edit Team"
                                   >
                                     <Edit2 size={13} />
                                   </button>
                                   <button
                                     onClick={() => handleDeleteSubmission(item.id, item.team)}
                                     className="p-1.5 rounded-lg border border-ink bg-red/10 hover:bg-red hover:text-white text-red transition-all"
-                                    title="Delete Submission"
+                                    title="Delete Team"
                                   >
                                     <Trash2 size={13} />
                                   </button>
                                 </div>
                               </td>
                             </tr>
-                          ))
-                        )}
+                          ))}
                       </tbody>
                     </table>
                   </div>
@@ -1047,7 +1256,7 @@ export default function AdminDashboardPage() {
             </button>
 
             <h3 className="font-display text-xl uppercase font-black">
-              {submissionForm.id ? "Edit Submission" : "Add Project Submission"}
+              {submissionForm.id ? "Edit Round 1 Result" : "Add Round 1 Team Result"}
             </h3>
 
             <form onSubmit={handleSaveSubmission} className="flex flex-col gap-3">
@@ -1057,43 +1266,56 @@ export default function AdminDashboardPage() {
                   type="text"
                   value={submissionForm.team}
                   onChange={(e) => setSubmissionForm({ ...submissionForm, team: e.target.value })}
-                  placeholder="e.g. Team Cantilever"
+                  placeholder="e.g. Team AeroShield"
                   required
                   className="bg-white text-ink font-sans font-bold text-xs p-3 border-2 border-ink rounded-xl outline-none"
                 />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="font-display text-xs uppercase font-black">Challenge Track</label>
+                <label className="font-display text-xs uppercase font-black">Team Leader</label>
                 <input
                   type="text"
-                  value={submissionForm.track}
-                  onChange={(e) => setSubmissionForm({ ...submissionForm, track: e.target.value })}
-                  placeholder="e.g. Embedded Systems"
-                  required
+                  value={submissionForm.leader}
+                  onChange={(e) => setSubmissionForm({ ...submissionForm, leader: e.target.value })}
+                  placeholder="e.g. Lakshmi J Shastry"
                   className="bg-white text-ink font-sans font-bold text-xs p-3 border-2 border-ink rounded-xl outline-none"
                 />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="font-display text-xs uppercase font-black">Status Indicator</label>
+                <div className="flex items-center justify-between">
+                  <label className="font-display text-xs uppercase font-black">Status Indicator</label>
+                  <div className="flex gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setSubmissionForm({ ...submissionForm, status: "Qualified for Finale" })}
+                      className={`px-2 py-0.5 rounded-lg text-[10px] font-black border transition-all ${
+                        submissionForm.status === "Qualified for Finale"
+                          ? "bg-green text-white border-ink shadow-2xs"
+                          : "bg-paper text-ink/70 border-ink/20 hover:bg-white"
+                      }`}
+                    >
+                      Qualified
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSubmissionForm({ ...submissionForm, status: "Waitlisted" })}
+                      className={`px-2 py-0.5 rounded-lg text-[10px] font-black border transition-all ${
+                        submissionForm.status.toLowerCase().includes("waitlist")
+                          ? "bg-amber-400 text-ink border-ink shadow-2xs"
+                          : "bg-paper text-ink/70 border-ink/20 hover:bg-white"
+                      }`}
+                    >
+                      Waitlist
+                    </button>
+                  </div>
+                </div>
                 <input
                   type="text"
                   value={submissionForm.status}
                   onChange={(e) => setSubmissionForm({ ...submissionForm, status: e.target.value })}
-                  placeholder="e.g. Prototype live / Judge review"
-                  required
-                  className="bg-white text-ink font-sans font-bold text-xs p-3 border-2 border-ink rounded-xl outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-display text-xs uppercase font-black">Score (Out of 100)</label>
-                <input
-                  type="text"
-                  value={submissionForm.score}
-                  onChange={(e) => setSubmissionForm({ ...submissionForm, score: e.target.value })}
-                  placeholder="e.g. 92"
+                  placeholder="e.g. Qualified for Finale / Waitlisted"
                   required
                   className="bg-white text-ink font-sans font-bold text-xs p-3 border-2 border-ink rounded-xl outline-none"
                 />

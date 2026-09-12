@@ -7,22 +7,24 @@ import { sanitizeText } from "@/lib/security-sanitize";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, team, track, status, score } = body;
+    const { id, team, leader, track, status, score } = body;
 
     const cleanTeam = sanitizeText(team);
     if (!cleanTeam) {
       return NextResponse.json({ error: "Team name is required." }, { status: 400 });
     }
 
-    const cleanTrack = sanitizeText(track) || "General Innovation";
-    const cleanStatus = sanitizeText(status) || "Under Review";
-    const cleanScore = sanitizeText(String(score)) || "80";
+    const cleanLeader = sanitizeText(leader || "");
+    const cleanTrack = sanitizeText(track || "");
+    const cleanStatus = sanitizeText(status) || "Qualified for Finale";
+    const cleanScore = sanitizeText(score ? String(score) : "");
 
     const submissionId = id && typeof id === "string" ? id : `sub_${Date.now()}`;
 
     const updatedList = await saveSubmission({
       id: submissionId,
       team: cleanTeam,
+      leader: cleanLeader,
       track: cleanTrack,
       status: cleanStatus,
       score: cleanScore,

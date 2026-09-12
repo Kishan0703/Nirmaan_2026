@@ -1,5 +1,6 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "@/components/icons";
+import { Trophy } from "lucide-react";
 import { InteractiveTiltCard } from "./helpers";
 import { REGISTRATION_URL } from "@/lib/config";
 import { liveMetrics as defaultLiveMetrics } from "@/lib/data";
@@ -30,9 +31,6 @@ export function Hero({ onBook }: { onBook?: () => void }) {
     const interval = setInterval(fetchMetrics, 3000);
     return () => clearInterval(interval);
   }, []);
-
-  const registerCtaClassName =
-    "clay-card rounded-pill bg-yellow text-ink px-6 py-3.5 text-base sm:text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30 flex items-center gap-2 shadow-xl";
 
   return (
     <>
@@ -101,10 +99,18 @@ export function Hero({ onBook }: { onBook?: () => void }) {
 
           {/* Action CTAs */}
           <a
+            href="#round1-results"
+            className="w-full clay-card rounded-pill bg-yellow text-ink px-6 py-3.5 text-sm font-display uppercase font-black text-center border-2 border-ink flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_#18181b] mb-3 hover:-translate-y-0.5 transition-transform"
+          >
+            <Trophy className="h-4 w-4 text-ink shrink-0" />
+            <span>Round 1 Results</span>
+          </a>
+
+          <a
             href={REGISTRATION_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full clay-card rounded-pill bg-yellow text-ink px-6 py-3.5 text-sm font-display uppercase font-black text-center border-2 border-white/40 flex items-center justify-center gap-2 shadow-lg mb-3"
+            className="w-full clay-card rounded-pill bg-white text-ink px-6 py-3.5 text-sm font-display uppercase font-black text-center border-2 border-white/40 flex items-center justify-center gap-2 shadow-md mb-3"
           >
             <span>Register on MastryHub</span>
             <ArrowUpRight className="h-4 w-4" />
@@ -177,12 +183,20 @@ export function Hero({ onBook }: { onBook?: () => void }) {
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
+              <a
+                href="#round1-results"
+                className="clay-card rounded-pill bg-yellow text-ink px-7 py-4 text-base sm:text-body-xl font-display uppercase font-black transition-all hover:-translate-y-0.5 text-center border-2 border-ink flex items-center gap-2.5 shadow-[4px_4px_0px_0px_#18181b] hover:shadow-[5px_5px_0px_0px_#18181b]"
+              >
+                <Trophy className="h-5 w-5 text-ink shrink-0" />
+                <span>Round 1 Results</span>
+              </a>
+
               {REGISTRATION_URL ? (
                 <a
                   href={REGISTRATION_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={registerCtaClassName}
+                  className="clay-card rounded-pill bg-white text-ink px-6 py-3.5 text-base sm:text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30 flex items-center gap-2 shadow-xl"
                 >
                   <span>Register on MastryHub</span>
                   <ArrowUpRight className="h-[18px] w-[18px]" />
@@ -191,7 +205,7 @@ export function Hero({ onBook }: { onBook?: () => void }) {
                 <button
                   type="button"
                   onClick={onBook}
-                  className={registerCtaClassName}
+                  className="clay-card rounded-pill bg-white text-ink px-6 py-3.5 text-base sm:text-body-xl font-display uppercase font-black transition-transform hover:-translate-y-0.5 text-center border-2 border-white/30 flex items-center gap-2 shadow-xl"
                 >
                   <span>Register on MastryHub</span>
                   <ArrowUpRight className="h-[18px] w-[18px]" />

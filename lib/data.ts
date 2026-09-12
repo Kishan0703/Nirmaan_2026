@@ -172,7 +172,58 @@ export const sponsorTiers = [
   { name: "Community Backer", slots: "8 slots", perks: ["Prize support", "Workshop slot", "Project archive badge"] }
 ];
 
-export const projectSubmissions: { team: string; track: string; status: string; score: string }[] = [];
+export const projectSubmissions: { team: string; leader?: string; track: string; status: string; score: string }[] = [
+  { team: "3 byte builders", leader: "Amith H. P", track: "Open Innovation", status: "Qualified for Finale", score: "87.0" },
+  { team: "Aeronex", leader: "Ashwath", track: "Smart Mobility & Aerospace", status: "Qualified for Finale", score: "89.5" },
+  { team: "Arigato Algorithms", leader: "Navya Nawal", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "90.8" },
+  { team: "Axiom", leader: "Tharjun S", track: "Open Innovation", status: "Qualified for Finale", score: "89.2" },
+  { team: "Byte Benders", leader: "Ankit S Kulkarni", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "91.8" },
+  { team: "Byte_me", leader: "Abhiram Sharma", track: "Open Innovation", status: "Qualified for Finale", score: "91.0" },
+  { team: "CacheUs", leader: "Aadvik Nandisha Gowda", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "92.2" },
+  { team: "ChaCha", leader: "Ranjiv Krishnan", track: "Open Innovation", status: "Qualified for Finale", score: "93.2" },
+  { team: "CLASHERS", leader: "Rajath DK", track: "Open Innovation", status: "Qualified for Finale", score: "86.8" },
+  { team: "codalist", leader: "Mohar barat", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "96.2" },
+  { team: "Code Crew", leader: "SRUJAN S", track: "Open Innovation", status: "Qualified for Finale", score: "95.5" },
+  { team: "codegeeks", leader: "avanthi", track: "Open Innovation", status: "Qualified for Finale", score: "88.2" },
+  { team: "CODEXA", leader: "Jahnavi N", track: "Open Innovation", status: "Qualified for Finale", score: "90.5" },
+  { team: "Ctrl+care", leader: "Padma Varshini D", track: "HealthTech & Bio-Wearables", status: "Qualified for Finale", score: "86.2" },
+  { team: "Cyber Citadel", leader: "Akshita Raj", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "91.5" },
+  { team: "DOCKER DUCKS", leader: "Madiha Anjum", track: "Open Innovation", status: "Qualified for Finale", score: "96.5" },
+  { team: "EdgeVital", leader: "Harshita Shakya", track: "HealthTech & Bio-Wearables", status: "Qualified for Finale", score: "93.5" },
+  { team: "Electrified", leader: "Soumili Mitra", track: "Smart Mobility & Aerospace", status: "Qualified for Finale", score: "86.0" },
+  { team: "Embedded Minds", leader: "Shivam Shantkumar", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "88.0" },
+  { team: "Error404:NotFound", leader: "MILANRAJ", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "90.0" },
+  { team: "FLEETMIND", leader: "Bhumika U", track: "Smart Mobility & Aerospace", status: "Qualified for Finale", score: "94.8" },
+  { team: "Frequency Fusion", leader: "BHUVAN M H", track: "Smart Mobility & Aerospace", status: "Qualified for Finale", score: "92.5" },
+  { team: "God Valley", leader: "Ajay Krishna", track: "Open Innovation", status: "Qualified for Finale", score: "95.2" },
+  { team: "HACKCORE", leader: "Akash P", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "95.0" },
+  { team: "Logic Forge", leader: "Vamshi Krishna K M", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "85.5" },
+  { team: "MergeInfinity", leader: "Dhruv Save", track: "Open Innovation", status: "Qualified for Finale", score: "86.5" },
+  { team: "Muggles", leader: "Sagar N M", track: "Open Innovation", status: "Qualified for Finale", score: "94.0" },
+  { team: "nexbyte", leader: "Luzain Sara", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "96.8" },
+  { team: "NightCrawler", leader: "Sumukha R", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "91.2" },
+  { team: "Paritrana", leader: "Vishwas CM", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "93.8" },
+  { team: "QuadCore", leader: "Udit Singhi", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "87.8" },
+  { team: "Rasam", leader: "Samanvitha G Nayak", track: "AgriTech", status: "Qualified for Finale", score: "92.8" },
+  { team: "RehabGrip", leader: "Khush Chadha", track: "HealthTech & Bio-Wearables", status: "Qualified for Finale", score: "88.8" },
+  { team: "Shadow quant", leader: "Utsav B raikar", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "88.5" },
+  { team: "Silicon Syndicate(Rishika)", leader: "RISHIKA RANJAN", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "94.5" },
+  { team: "teck spark", leader: "pikki Gouthami", track: "Smart Mobility & Aerospace", status: "Qualified for Finale", score: "89.8" },
+  { team: "The big 4", leader: "Vishal GF", track: "Open Innovation", status: "Qualified for Finale", score: "92.0" },
+  { team: "The Ravagers", leader: "Sricharan S Sharma", track: "Open Innovation", status: "Qualified for Finale", score: "89.0" },
+  { team: "The Third Byte", leader: "Ankitha Narayan", track: "Open Innovation", status: "Qualified for Finale", score: "97.5" },
+  { team: "Tragic bytes", leader: "Lakshmi J Shastry", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "98.5" },
+  { team: "Triple Espresso", leader: "Avani Kollur", track: "Open Innovation", status: "Qualified for Finale", score: "96.0" },
+  { team: "Trojan Hex", leader: "Pothur Abhinav", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "85.8" },
+  { team: "UNO-PI", leader: "SRIVATSAN A", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "87.5" },
+  { team: "Value", leader: "Balaji G S", track: "Open Innovation", status: "Qualified for Finale", score: "94.2" },
+  { team: "VeriLoop Edge", leader: "Drakshayani", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "93.0" },
+  { team: "Virtual Soldiers", leader: "Vishal Raj", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "87.2" },
+  { team: "VORTEX", leader: "Sharan K U", track: "Cyber-Physical Security & Defense", status: "Qualified for Finale", score: "98.0" },
+  { team: "Vriddhi 2.0 Digital Farms", leader: "Abhilash Das", track: "AgriTech", status: "Qualified for Finale", score: "95.8" },
+  { team: "YantraVidya", leader: "Raj Shekhar Singh", track: "Deep Tech & Edge AI", status: "Qualified for Finale", score: "90.2" },
+  { team: "YoungDumb&Broke", leader: "Likithashri", track: "Smart Mobility & Aerospace", status: "Qualified for Finale", score: "97.0" },
+];
 
 
 
@@ -204,7 +255,7 @@ export const announcements = [
   { id: 2, date: "Aug 15, 2026 — 10:00 PM", tag: "PPT OPEN", content: "Submission of Round-1 PPT officially opens nationwide." },
   { id: 3, date: "Sep 05, 2026 — 11:59 PM", tag: "PPT CLOSE", content: "Submission of Round-1 PPT closes. Evaluation phase begins." },
   { id: 4, date: "Sep 12, 2026 — 10:00 PM", tag: "RESULTS", content: "Declaration of Round-1 Results! Shortlisted teams proceed to Round 2." },
-  { id: 5, date: "Sep 12, 2026 — 10:00 PM", tag: "ROUND 2", content: "Registration for Second Round opens for shortlisted teams." },
+  { id: 5, date: "Sep 13, 2026 — 10:00 AM", tag: "ROUND 2", content: "Registration for Second Round opens for shortlisted teams." },
   { id: 6, date: "Sep 25, 2026 — 11:00 AM", tag: "FINALE", content: "Grand Finale begins on-site at BMSIT campus Bangalore! Check-in starts 9:30 AM." }
 ];
 
