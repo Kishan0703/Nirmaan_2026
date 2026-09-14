@@ -15,6 +15,7 @@ type Member = {
   avatarPosition?: string;
   initials: string;
   description?: string;
+  contribution?: string;
   github?: string;
   linkedin?: string;
   instagram?: string;
@@ -65,7 +66,7 @@ const DEPARTMENTS: Department[] = [
     members: [
       { name: "Shashikiran B S", role: "Technical Head (Coding Club)", tag: "Head", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=1LuA9DgCAUfWujIEvEA_iyFJJqxgi4dSG&sz=w500", website: "https://my-portfolio-black-seven-97.vercel.app/", linkedin: "https://www.linkedin.com/in/shashikiran-bs/", github: "https://github.com/shashikiranbs2006" },
       { name: "Gaurav Nayak", role: "App Dev Head (Alterino)", tag: "Head", initials: "GN", avatar: "/assets/images/team/gaurav.jpg", description: "There’s a story behind every line of code. Wanna hear mine? Ping me.", website: "https://gauravnayakk.netlify.app", linkedin: "https://www.linkedin.com/in/gauravnayakk" },
-      { name: "Arnav Paniya", role: "UI/UX Associate (Alterino)", tag: "UI/UX Designer", initials: "AP", avatar: "/assets/images/team/arnav.jpg", description: "VLSI & AI Enthusiast | Freelancer", website: "https://arnavpaniya.netlify.app/", linkedin: "https://www.linkedin.com/in/arnav-paniya/", github: "https://github.com/arnavpaniya" },
+      { name: "Arnav Paniya", role: "UI/UX Associate (Alterino)", tag: "UI/UX Designer", initials: "AP", avatar: "/assets/images/team/arnav.jpg", contribution: "Contributed to the UI/UX, Visual Design & Web Experience", description: "VLSI & AI Enthusiast | Freelancer", website: "https://arnavpaniya.netlify.app/", linkedin: "https://www.linkedin.com/in/arnav-paniya/", github: "https://github.com/arnavpaniya" },
       { name: "Swapnil Biswas", role: "Web Engineer (Coding Club)", tag: "Web Developer", initials: "SB", avatar: "https://drive.google.com/thumbnail?id=10VGrCW4Mjl1a1tVf6vF3kMYRrPH9AJMk&sz=w500", description: "Full Stack developer and robotics enthusiast focused on creating scalable software and intelligent systems.", linkedin: "https://www.linkedin.com/in/swapnil-biswas-b33b35399/", github: "https://github.com/Swapnil-Biswas" },
       { name: "Kishan MN", role: "Web Engineer & Marketing Head", tag: "Web Developer", initials: "KMN", avatar: "/assets/images/team/kishan.jpg", website: "https://www.kishanmn.dev/", linkedin: "https://www.linkedin.com/in/kishan-mn-898b67334", github: "https://github.com/Kishan0703" },
     ],
@@ -362,6 +363,12 @@ export function TeamSection() {
                             <p className="text-[10px] sm:text-xs font-black text-ink/75 mt-0.5 truncate">
                               {member.role}
                             </p>
+
+                            {member.contribution && (
+                              <p className="text-[9px] sm:text-[10px] font-bold text-ink/90 mt-1 leading-snug break-words">
+                                {member.contribution}
+                              </p>
+                            )}
 
                             {member.description && (
                               <p className="text-[9px] sm:text-[10px] font-semibold text-ink/80 mt-1 leading-snug break-words">
